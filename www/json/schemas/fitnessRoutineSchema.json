@@ -1,0 +1,44 @@
+{
+"$schema" : "http://json-schema.org/draft-04/schema#",
+"title" : "Fitness Routine",
+"type" : "array",
+"items":{
+	"title": "Routine",
+	"type": "object",
+	"properties":{
+
+		"routineName":{
+			"type":"string"
+		},
+		"exercise":{
+			
+			"type": "array",
+			"properties":{
+
+				"exerciseId":{
+					"description":"The unique identifier for an exercise",
+					"type":"number"
+				},
+				"exerciseName":{
+					"type": "string"
+				},
+				"exerciseReps":{
+					"type": "number"
+				},
+				"exerciseUnits":{
+					"type": "string"
+				},
+				"exerciseSets":{
+					"type": "number"
+				},
+				"calBurn":{
+					"type": "number"
+				}
+			},
+			"required":["exerciseId","exerciseName","exerciseReps","exerciseUnits","exerciseSets"]
+		},
+		"required":["routineName"]
+
+	}
+	}
+}
