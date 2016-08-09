@@ -7,7 +7,9 @@
     <!--link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"-->
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
+    <!--link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"-->
     <link href="css/style.css" rel="stylesheet">
+
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
@@ -15,6 +17,7 @@
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> 
+    <!--script type="text/javascript" src="js/bootstrap.min.js"></script-->
     <!--script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script-->
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -31,8 +34,9 @@
         </div>
       </ion-header-bar>
       <ion-content>
+       
       </ion-content>
-      <ion-footer-bar  ng-if="showFooter">
+      <ion-footer-bar ng-if="showFooter">
        <ion-nav-view></ion-nav-view>
       </ion-footer-bar>
 
@@ -54,10 +58,16 @@
       <ion-view>
         <ion-slide-box on-slide-changed="slideChange(index)">
           <ion-slide>
-            <h3>page one</h3>
+
+                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/scale.svg" alt=""></img>Weight</a>
+                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/measuring-tape.svg" alt=""></img>Measurements</a>
+                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/weight.svg" alt=""></img>Exercise Log</a>
+                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/cutlery.svg" alt=""></img>Food Intake</a>
+            
           </ion-slide>
           <ion-slide>
-            <h3>page two</h3>
+            <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/photo-camera.svg" alt=""></img>Images</a>
+            <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/calories.svg" alt=""></img>Calories Counter</a>
           </ion-slide>
         </ion-slide-box>
       </ion-view>
