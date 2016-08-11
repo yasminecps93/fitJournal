@@ -1,10 +1,22 @@
 
 angular.module('myApp', ['ionic'])
+
 .config(function($stateProvider, $urlRouterProvider){
-  $stateProvider.state('bottom-nav',{
+  $stateProvider
+  .state('main-page',{
+      url:'/main', 
+      templateUrl: 'main-page.html'
+  })
+  .state('bottom-nav',{
+    parent: 'main-page',
     url:'/', templateUrl: 'bottom-nav.html',
     controller:'SlideboxCtrl'
-  });
+  })
+  .state('profile',{
+   url:'/profile',
+   templateUrl:'templates/profile-details.html'  
+});
+  $urlRouterProvider.otherwise('/main');
 })
 
 .controller('MainCtrl', function($scope, $state){

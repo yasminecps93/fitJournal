@@ -19,7 +19,7 @@
 
 @font-face{
 	font-family: 'normalFonts';
-	src:url('../fonts/OpenSans-CondLight.ttf');
+	src:url('../fonts/Raleway-Regular.ttf');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -39,6 +39,14 @@ body{
 	background-color: #00293c;
 }
 
+.try{
+	color: black;
+}
+
+.nav-bar-block{
+	z-index: -1;
+	display: none;
+}
 /*others*/
 .overflow-scroll{
 	overflow-y: hidden;
@@ -87,7 +95,7 @@ body{
 .widget-button{
 	font-family: "normalFonts";
 	color: black !important;
-	font-size: 13px !important;
+	font-size: 10px !important;
 	width: 24%;
 }
 
