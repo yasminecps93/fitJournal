@@ -14,7 +14,7 @@ angular.module('myApp', ['ionic'])
   })
   .state('profile',{
    url:'/profile',
-   templateUrl:'templates/profile-details.html'  
+   templateUrl:'templates/profile-details.html'
 });
   $urlRouterProvider.otherwise('/main');
 })

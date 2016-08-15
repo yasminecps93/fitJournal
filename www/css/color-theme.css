@@ -1,0 +1,114 @@
+/*pink theme*/
+ion-header-bar{
+	background-color:  #f24f53 !important;
+}
+
+.main-content{
+	font-family: 'normalFonts'
+	background-color: #f2f2f2;
+	padding-top: 30px
+}
+
+ion-footer-bar{
+	background-color:  #f24f53 !important;
+}
+
+.bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #f24f53 !important;
+}
+
+.widget-button, .title, .button-icon{
+	color:	#fcf7e3 !important;
+}
+
+/*dark turqoise theme*/
+/*
+ion-header-bar{
+	background-color:  #0a8587 !important;
+}
+
+ion-content{
+	font-family: 'normalFonts'
+	background-color: #f2f2f2;
+}
+
+ion-footer-bar{
+	background-color:  #0a8587 !important;
+}
+
+.bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #0a8587 !important;
+}
+
+.widget-button, .title, .button-icon{
+	color:	#fcf7e3 !important;
+}*/
+
+/*orange red theme*/
+/*
+ion-header-bar, ion-footer-bar, .bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #f93b2b !important;
+}
+
+ion-content{
+	font-family: 'normalFonts'
+	background-color: #f2f2f2;
+}
+
+.widget-button, .title, .button-icon{
+	color:	#fcf7e3 !important;
+}*/
+
+/*maroon theme*/
+/*
+ion-header-bar, ion-footer-bar, .bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #800000 !important;
+}
+
+ion-content{
+	font-family: 'normalFonts'
+	background-color: #f2f2f2;
+}
+
+.widget-button, .title, .button-icon{
+	color:	#fcf7e3 !important;
+}*/
+
+/*wireframe theme*//*
+ion-header-bar, .bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #273240 !important;
+	
+}
+
+.main-content{
+	padding-top: 10px;
+	font-family: 'normalFonts';
+	background-color: #273240 !important;
+	color: #fcf7e3;
+}
+
+ion-footer-bar{
+	background-color:  #273240 !important;
+	border-color: #fcf7e3 !important;
+	border-width: 1px 0 0 0!important;
+}
+
+.widget-button, .title, .button-icon, .wb{
+	color:	#fcf7e3 !important;
+}
+
+.item-input{
+	width: 70%;
+}
+
+.item-stacked-label input, .item-stacked-label textarea, .item{
+	background-color: transparent;
+	border-width:0 !important;
+}
+
+.finput{
+	background-color: transparent !important;
+	color: #fcf7e3;
+	border-bottom-width: 10px !important;
+	border-bottom-color: #fcf7e3;
+}*/
