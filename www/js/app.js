@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic'])
+angular.module('myApp', ['ionic', 'ionic-datepicker'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
@@ -14,10 +14,30 @@ angular.module('myApp', ['ionic'])
   })
   .state('profile',{
    url:'/profile',
-   templateUrl:'templates/profile-details.html'
+   templateUrl:'templates/profile-details.html',
+   controller:'ProfileCtrl'
 });
-  $urlRouterProvider.otherwise('/main');
+  $urlRouterProvider.otherwise('/profile');
 })
+
+.config(function (ionicDatePickerProvider) {
+    var datePickerObj = {
+    inputDate: new Date(),
+    setLabel: 'Set',
+    todayLabel: 'Today',
+    closeLabel: 'Close',
+    mondayFirst: false,
+    weeksList:  ["S", "M", "T", "W", "T", "F", "S"],
+    monthsList: ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+    templateType: 'popup',
+    showTodayButton: true,
+    dateFormat: 'dd MMMM yyyy',
+    closeOnSelect: true,
+    disableWeekdays: [6],
+    from: new Date(2012, 8, 2)
+    };
+    ionicDatePickerProvider.configDatePicker(datePickerObj);
+  })
 
 .controller('MainCtrl', function($scope, $state){
     
@@ -59,6 +79,30 @@ angular.module('myApp', ['ionic'])
        $scope.$on('$destroy', function() {
          $scope.popover.remove();
       });
+})
+
+.controller('ProfileCtrl', function($scope, ionicDatePicker){
+  $scope.wUnit = "kg";
+  $scope.items=[{
+    wUnit: "kg"
+  }, {
+    wUnit: "lbs"
+  },];
+
+
+   var gDate = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        $scope.goalDate = new Date(val);
+        
+      }
+   };
+   $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(gDate);
+
+   };
+//    $scope.goalDate = new Date();
+
 })
 
 .run(function($ionicPlatform) {

@@ -4,12 +4,28 @@
 </ion-header-bar>
 	<ion-content class="main-content">
 		<form ng-submit="">
-			<div class="list">
-  				<label class="item item-input item-floating-label">
+			<div class="list list-inset ">
+
+  				<label class="item item-input item-floating-label p-item">
    					<span class="input-label">Current weight</span>
     				<input type="text" placeholder="Current weight">
  				</label>
-  			<div>
+ 				<select id="gWeight" class="item-select" ng-model="wUnit" ng-options="a.wUnit as a.wUnit for a in items">
+   				</select>
+
+ 				<label class="item item-input item-floating-label p-item">
+   					<span class="input-label">Goal weight</span>
+    				<input type="text" placeholder="Goal weight">
+    				<label class="label-inline">{{wUnit}}</label>
+ 				</label>
+
+ 				<label class="item item-input item-floating-label p-item">
+  					<span class="input-label">Goal date</span>
+ 					<input id="Text1" type="text" ng-value="goalDate" placeholder="Goal date">
+				</label>
+				<button id="datePicker" class="button icon ion-calendar" ng-click="openDatePicker($event)"></button>
+				
+  			</div>
 		</form>
 	</ion-content>
 </ion-view>

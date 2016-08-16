@@ -107,3 +107,56 @@ body{
 	line-height: 150% !important;
 }
 
+/*--------form styling------------*/
+.item{
+	border-width: 0px 0px 2px 0px;
+	
+}
+
+.p-item{
+	width: 60% !important;
+}
+
+.item-input{
+	padding-left:2px; 
+}
+
+.list-inset{
+	margin: 0px 20px;
+}
+
+#gWeight{
+	position: absolute;
+	right: 60px;
+	top: 35px;
+	border:0px;
+	width: 15%;
+	height: 30px;
+}
+
+ .item-select{
+
+ }
+
+.label-inline{
+	position: absolute;
+	right: 20px;
+	top: 40px;
+}
+
+#datePicker{
+	position: absolute;
+	right: 70px;
+	top: 160px;
+	background-color: transparent !important;
+
+}
+
+.input-label{
+	font-size: 15px;
+}
+
+input{
+	font-family: 'normalFonts';
+	font-size: 15px !important;
+}
