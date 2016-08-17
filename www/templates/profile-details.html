@@ -4,27 +4,39 @@
 </ion-header-bar>
 	<ion-content class="main-content">
 		<form ng-submit="">
-			<div class="list list-inset ">
+			<div class="list list-inset">
 
-  				<label class="item item-input item-floating-label p-item">
+  				<label class="item item-input item-stacked-label p-item">
    					<span class="input-label">Current weight</span>
-    				<input type="text" placeholder="Current weight">
+    				<input type="number" ng-model="weight.first" ng-change="calTotalWeight(weight.first, weight.second)"/>
  				</label>
  				<select id="gWeight" class="item-select" ng-model="wUnit" ng-options="a.wUnit as a.wUnit for a in items">
    				</select>
 
- 				<label class="item item-input item-floating-label p-item">
+ 				<label class="item item-input item-stacked-label p-item">
    					<span class="input-label">Goal weight</span>
-    				<input type="text" placeholder="Goal weight">
+    				<input type="number" ng-model="weight.second" ng-change="calTotalWeight(weight.first, weight.second)"/>
     				<label class="label-inline">{{wUnit}}</label>
  				</label>
 
- 				<label class="item item-input item-floating-label p-item">
+ 				<label class="item item-input item-stacked-label p-item">
   					<span class="input-label">Goal date</span>
- 					<input id="Text1" type="text" ng-value="goalDate" placeholder="Goal date">
+ 					<input id="Text1" type="text" ng-value="goalDate" readonly="true" /> 					
 				</label>
 				<button id="datePicker" class="button icon ion-calendar" ng-click="openDatePicker($event)"></button>
 				
+				<label class="item item-input item-stacked-label p-item">
+					<span class="input-label">Total weight loss</span>
+					<input  type="text" ng-model="tWeight" value="{{calTotalWeight(weight.first, weight.second)}}" readonly="true"/>
+					<label class="label-inline">{{wUnit}}</label>
+				</label>
+
+				<label class="item item-input item-stacked-label p-item">
+					<span class="input-label">Weekly weight loss</span>
+					<input  type="text" ng-model="wwl" value="{{weeklyWeightloss(tWeight)}}" readonly="true"/>
+					<label class="label-inline">{{wUnit}}</label>
+				</label>
+
   			</div>
 		</form>
 	</ion-content>

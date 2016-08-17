@@ -119,6 +119,7 @@ body{
 
 .item-input{
 	padding-left:2px; 
+	padding-top: 10px;
 }
 
 .list-inset{
@@ -141,22 +142,28 @@ body{
 .label-inline{
 	position: absolute;
 	right: 20px;
-	top: 40px;
+	top: 45px;
 }
 
 #datePicker{
 	position: absolute;
 	right: 70px;
-	top: 160px;
+	top: 170px;
 	background-color: transparent !important;
 
 }
 
 .input-label{
-	font-size: 15px;
+	font-size: 13px;
+	color: #A69E94;
 }
 
 input{
 	font-family: 'normalFonts';
-	font-size: 15px !important;
+	font-size: 18px !important;
+	padding-top: 10px !important;
+}
+
+input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.cloned-text-input), textarea[readonly]:not(.cloned-text-input), select[readonly]{
+	background-color: transparent;
 }

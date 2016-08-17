@@ -8,5 +8,6 @@ $(document).ready(function() {
     else
       $(this).removeClass('used');
   });
-  
+
 });
+
