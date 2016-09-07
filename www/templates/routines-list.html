@@ -1,0 +1,35 @@
+<ion-view >
+	<ion-header-bar>
+		<h1 class="title">Fitness Routine</h1>
+		<div class="buttons">
+	    	<button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+	  	</div>
+	</ion-header-bar>
+	<ion-content>
+		<ion-list show-delete="shouldShowDelete">
+	   		<ion-item class="item item-divider">
+	    		Click on a Routine
+	    	</ion-item>
+	    	<ion-item ng-show="loadingRoutines">
+	     		<ion-spinner icon="spiral"></ion-spinner>
+	    	</ion-item>
+	    	<ion-item ui-sref="routineDetails({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
+	    		{{routine.name}}, {{routine.id}}
+	    		<ion-delete-button class="ion-minus-circled" ng-click="deleteRoutine($index,routine.id)"></ion-delete-button>
+	    		<i class="icon ion-chevron-right"></i>
+	    	</ion-item>
+	   	</ion-list>
+	   	<ion-list>
+	    	<ion-item class="item item-divider">
+	    		Add New Routine
+	    	</ion-item>
+	    	<ion-item>
+				<input type="text" placeholder="Enter Routine Name" ng-model="newRoutine.name">
+	    	</ion-item>
+	   		<ion-item>
+	   			<button class="button button-block button-calm" ng-click="addNewRoutine()">Add</button>
+	   		</ion-item>
+	   	</ion-list>
+	</ion-content>
+</ion-view>
+

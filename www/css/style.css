@@ -167,3 +167,9 @@ input{
 input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.cloned-text-input), textarea[readonly]:not(.cloned-text-input), select[readonly]{
 	background-color: transparent;
 }
+
+.bottom-button{
+	color: white !important;
+	font-size: 18px !important;
+	width: 100%;
+}

@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic', 'ionic-datepicker'])
+angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'RoutinesList', 'RoutineDetails'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
@@ -16,8 +16,18 @@ angular.module('myApp', ['ionic', 'ionic-datepicker'])
    url:'/profile',
    templateUrl:'templates/profile-details.html',
    controller:'ProfileCtrl'
-});
-  $urlRouterProvider.otherwise('/profile');
+  })
+  .state('routinesList',{
+   url:'/routinesList',
+   templateUrl:'templates/routines-list.html',
+   controller:'RoutinesListCtrl'
+  })
+  .state('routineDetails',{
+   url:'/routineDetails/:id',
+   templateUrl:'js/routine-details/routine-details.html',
+   controller:'RoutineDetailsCtrl'
+  });
+  $urlRouterProvider.otherwise('/routinesList');
 })
 
 .config(function (ionicDatePickerProvider) {
@@ -146,12 +156,12 @@ angular.module('myApp', ['ionic', 'ionic-datepicker'])
     }
   };
    
-   $scope.openDatePicker = function(){
+  $scope.openDatePicker = function(){
       ionicDatePicker.openDatePicker(gDate);
-   };
-
+  };
 
 })
+
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

@@ -1,9 +1,9 @@
-<ion-view>
+<ion-view >
 <ion-header-bar>
 	<h1 class="title">Profile details</h1>
 </ion-header-bar>
-	<ion-content class="main-content">
-		<form ng-submit="">
+	<ion-content class="main-content" >
+		<form ng-submit="addToFile()">
 			<div class="list list-inset">
 
   				<label class="item item-input item-stacked-label p-item">
@@ -39,7 +39,12 @@
 
   			</div>
 		</form>
+		
 	</ion-content>
+	<ion-footer-bar>
+		<!--button class= "button-clear bottom-button">DONE</button-->
+		<input type="submit" value="DONE" class= "button-clear bottom-button" ng-controller='SaveProfileDataCtrl'>
+	</ion-footer-bar>
 </ion-view>
 
 
