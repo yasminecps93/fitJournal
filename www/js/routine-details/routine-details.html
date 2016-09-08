@@ -10,6 +10,7 @@
         <button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
       </div>
     </div>
+
     
   </ion-header-bar>
   <ion-content>
@@ -22,17 +23,7 @@
     	<ion-delete-button class="ion-minus-circled" ng-click="deleteEntry($index,entry.id)"></ion-delete-button>
     </ion-item>
    </ion-list>
-   <!--ion-list>
-    <ion-item class="item item-divider">
-    	Add New Value
-    </ion-item>
-    <ion-item>
-		<input type="number" placeholder="Enter Value for Today" ng-model="newEntry.value">
-    </ion-item>
-   	<ion-item>
-   		<button class="button button-block button-energized" ng-click="addNewEntry()">Add</button>
-   	</ion-item>
-   </ion-list-->
+   
   </ion-content>
 </ion-view>
 
@@ -45,10 +36,9 @@
       <span class="input-label">Unit</span>
       <input type="Number" ng-model="exeNumber.number"/>
   </label>
-  <select class="item-select" ng-model="exeUnit" ng-options="a.exeUnit as a.exeUnit for a in items">
+  <select ng-model="exeUnit.name">
+          <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
   </select>
-  <!--select class="item-select" ng-model="exeUnitList" ng-options="exeUnit as exeUnit.label for exeUnit in exeUnits">
-  </select-->
   <label class="item item-input item-stacked-label p-item">
       <span class="input-label">Sets</span>
       <input type="Number" ng-model="exeSet.set"/>

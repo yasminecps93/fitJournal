@@ -5,7 +5,6 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 		
 		initData();
 		initMethods();
-		
 
   		$scope.showPopup = function(){
   			$scope.data={}
@@ -40,32 +39,29 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
   		}
 
 		function initData(){
-			$scope.exeUnit = "reps";
+			// $scope.exeUnit = "reps";
 		
-			$scope.items=[{
-	   			exeUnit: "reps"
-	  		}, {
-	    		exeUnit: "km"
-	  		},{
-	    		exeUnit: "miles"
-	  		},{
-	    		exeUnit: "rounds"
-	  		},];
+			// $scope.items=[{
+	  //  			exeUnit: "reps"
+	  // 		}, {
+	  //   		exeUnit: "km"
+	  // 		},{
+	  //   		exeUnit: "miles"
+	  // 		},{
+	  //   		exeUnit: "rounds"
+	  // 		},];
 			
-			/*$scope.exeUnits=[{
-				value:'reps',
-				label:'reps'
-			},{
-				value:'km',
-				label:'km'
-			},{
-				value:'miles',
-				label:'miles'
-			},{
-				value:'rounds',
-				label:'rounds'
-			}];*/
-
+			$scope.units={
+				option: [
+				  {name: 'reps'},
+				  {name: 'kilometers'},
+				  {name: 'miles'},
+				  {name: 'rounds'}
+				]
+			};
+			$scope.exeUnit = {
+				name: 'reps'
+			};
 			$scope.exeName = {
 				name: ''
 			};
@@ -108,9 +104,10 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 
 		function addNewEntry()
 		{
+			//try testing now
 			try{
 				if($scope.exeName.name!= '' && $scope.exeNumber.number!= ''&& $scope.exeSet.set!= ''){
-				RoutineService.addNewEntry($scope.routineId,$scope.exeName.name,$scope.exeNumber.number,$scope.exeUnit,$scope.exeSet.set,$scope.exeCal.value)
+				RoutineService.addNewEntry($scope.routineId,$scope.exeName.name,$scope.exeNumber.number,$scope.exeUnit.name,$scope.exeSet.set,$scope.exeCal.value)
 				.then(function(response){
 				//	$scope.newEntry.value = 0;
 					alert("New Entry has been added.");
@@ -124,7 +121,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 						alert('Please enter a positive value.');
 					}
 			}catch(e){
-				alert("cannot enter addNewEntry function");
+				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
 			}
 			
 		}
