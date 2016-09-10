@@ -1,7 +1,0 @@
-JsonSchema fitnessSchema = JsonSchema.Parse(File.ReadAllText(@"Y:\semester 6\fitJournal\fitJournal\www\json\schemas\fitnessRoutineSchema.json"));
-
-using (StreamReader file = File.OpenText(@"Y:\semester 6\fitJournal\fitJournal\www\json\schemas\fitnessRoutineSchema.json"))
-using (JsonTextReader reader = new JsonTextReader(file))
-{
-
-}

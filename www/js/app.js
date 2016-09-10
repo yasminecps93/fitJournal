@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'RoutinesList', 'RoutineDetails'])
+angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
@@ -15,7 +15,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'RoutinesList
   .state('profile',{
    url:'/profile',
    templateUrl:'templates/profile-details.html',
-   controller:'ProfileCtrl'
+   controller:'ProfileDetailsCtrl'
   })
   .state('routinesList',{
    url:'/routinesList',
@@ -27,7 +27,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'RoutinesList
    templateUrl:'js/routine-details/routine-details.html',
    controller:'RoutineDetailsCtrl'
   });
-  $urlRouterProvider.otherwise('/routinesList');
+  $urlRouterProvider.otherwise('/profile');
 })
 
 .config(function (ionicDatePickerProvider) {
@@ -90,77 +90,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'RoutinesList
       });
 })
 
-.controller('ProfileCtrl', function($scope, ionicDatePicker){
-  $scope.wUnit = "kg";
-  $scope.tWeight = 0;
-  var todayDate = new Date();
-  var diffInDays = 0;
-  $scope.items=[{
-    wUnit: "kg"
-  }, {
-    wUnit: "lbs"
-  },];
 
-  $scope.$watch('tWeight', function(newValue,oldValue){
-      if(newValue != oldValue){
-        $scope.weeklyWeightloss(newValue);
-      }
-  });
-
-  $scope.calTotalWeight = function(a, b){
-
-    if(a>0 && b >0){
-      $scope.tWeight = a- b;
-    }
-  }
-  
-  var gDate = {
-    callback: function (val) {  //Mandatory
-      console.log('Return value from the datepicker popup is : ' + val, new Date(val));
-      var monthsList= ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-      var dateToString = "";
-      var oneDay = 24*60*60*1000;
-      var newDate = new Date(val);
-      displayDate = function(){
-        var i = new Date(val).getMonth();
-        var month = monthsList[i];
-        dateToString = new Date(val).getDate()+ " "+ month + " " + new Date(val).getFullYear();
-        $scope.goalDate =dateToString;   
-        console.log(dateToString);
-      }
-
-      numOfDays =function(){
-        diffInDays = Math.round((newDate-todayDate)/(oneDay)+1);
-        /*  console.log(newDate);
-          console.log(todayDate);*/
-          console.log(diffInDays);
-        }
-
-      displayDate();
-   
-      $scope.weeklyWeightloss = function(c){
-        numOfDays();
-        if(diffInDays>0){
-          if(c>0){
-     
-            if(diffInDays>7){
-              var numOfWeeks = Math.round(diffInDays/7);
-              var num = c/numOfWeeks;
-              $scope.wwl = num.toFixed(1);
-            }else{
-              $scope.wwl = $scope.tWeight;
-            }
-          }
-        }
-      }
-    }
-  };
-   
-  $scope.openDatePicker = function(){
-      ionicDatePicker.openDatePicker(gDate);
-  };
-
-})
 
 
 .run(function($ionicPlatform) {

@@ -39,17 +39,6 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
   		}
 
 		function initData(){
-			// $scope.exeUnit = "reps";
-		
-			// $scope.items=[{
-	  //  			exeUnit: "reps"
-	  // 		}, {
-	  //   		exeUnit: "km"
-	  // 		},{
-	  //   		exeUnit: "miles"
-	  // 		},{
-	  //   		exeUnit: "rounds"
-	  // 		},];
 			
 			$scope.units={
 				option: [

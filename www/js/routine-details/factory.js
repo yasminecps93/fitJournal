@@ -26,10 +26,9 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			  	alert("opened db");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	alert("Error in opening db" + e.message);
 			  }
-			//  db = $cordovaSQLite.openDB("myapp.db");
-
+			
 			   var query = "CREATE TABLE IF NOT EXISTS exercise_entries (id integer primary key autoincrement, routine_id integer , created_at datetime, exeName string, exeNumber double, exeUnit string, exeSet double, exeCal double)";
 			    runQuery(query,[],function(res) {
 			      alert("table created ");
@@ -61,7 +60,7 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			var query = "INSERT INTO exercise_entries (routine_id, created_at, exeName, exeNumber, exeUnit, exeSet, exeCal) VALUES (?,datetime(),?,?,?,?,?)";
 			runQuery(query,[routineId,exeName, exeNumber, exeUnit, exeSet, exeCal],function(response){
 				//Success Callback
-				alert("entry added successfully - "+exeUnit);
+			//	alert("entry added successfully - "+exeUnit);
 				console.log(response);
 				deferred.resolve(response);
 			},function(error){

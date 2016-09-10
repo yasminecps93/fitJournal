@@ -28,6 +28,8 @@
 
     <script src="js/routine-details/controller.js"></script>
     <script src="js/routine-details/factory.js"></script>
+    <script src="js/profile-details/controller.js"></script>
+    <script src="js/profile-details/factory.js"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/javaScripts.js"></script>
   </head>
@@ -60,7 +62,7 @@
         <ion-content>
           <div class="list">
               <a class="item item-icon-left side-menu" href="#/profile" ng-click="closePopover()"><i class="icon ion-person"></i>Profile details</a>
-              <a class="item item-icon-left side-menu"><i class="icon ion-clipboard"></i>Fitness routine</a>
+              <a class="item item-icon-left side-menu" ui-sref="routinesList" ng-click="closePopover()"><i class="icon ion-clipboard"></i>Fitness routine</a>
               <a class="item item-icon-left side-menu"><i class="icon ion-calendar"></i>Meal planner</a>
               <a class="item item-icon-left side-menu"><i class="icon ion-stats-bars"></i>Progress chart</a>
               <a class="item item-icon-left side-menu"><i class="icon ion-gear-b"></i>Settings</a>
