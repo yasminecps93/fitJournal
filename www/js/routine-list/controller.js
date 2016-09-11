@@ -61,7 +61,10 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 				$scope.routinesList = [];
 				for(var i=0;i<response.rows.length;i++)
 				{
-					$scope.routinesList.push({id:response.rows.item(i).id,name:response.rows.item(i).name});
+					$scope.routinesList.push({
+						id:response.rows.item(i).id,
+						name:response.rows.item(i).name
+					});
 				}
 			}else
 			{

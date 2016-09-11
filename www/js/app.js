@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails'])
+angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails', 'MealPlanner'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
@@ -26,8 +26,18 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
    url:'/routineDetails/:id',
    templateUrl:'js/routine-details/routine-details.html',
    controller:'RoutineDetailsCtrl'
+  })
+  .state('mealPlanner',{
+   url:'/mealPlanner',
+   templateUrl:'js/meal-planner/meal-planner.html',
+   controller:'MealPlannerListCtrl'
+  })
+  .state('mealsList',{
+   url:'/mealsList/:dateId',
+   templateUrl:'js/meals-list/meals-list.html',
+   controller:''
   });
-  $urlRouterProvider.otherwise('/profile');
+  $urlRouterProvider.otherwise('/mealPlanner');
 })
 
 .config(function (ionicDatePickerProvider) {

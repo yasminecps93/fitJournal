@@ -45,7 +45,9 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				  {name: 'reps'},
 				  {name: 'kilometers'},
 				  {name: 'miles'},
-				  {name: 'rounds'}
+				  {name: 'rounds'},
+				  {name: 'seconds'},
+				  {name: 'minutes'}
 				]
 			};
 			$scope.exeUnit = {

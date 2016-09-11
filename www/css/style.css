@@ -152,6 +152,13 @@ body{
 	background-color: transparent !important;
 
 }
+#datePicker2{
+	position: absolute;
+	right: 10px;
+/*	top: 0px;
+/*	background-color: transparent !important;*/
+
+}
 
 .input-label{
 	font-size: 13px;

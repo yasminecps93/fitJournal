@@ -1,0 +1,27 @@
+<ion-view>
+  <ion-header-bar class="bar-balanced">
+    <div class="buttons">
+      <button class="button button-dark" ui-sref="mealPlanner">Back</button>
+    </div>
+    <h1 class="title">{{mealName.name}}</h1>
+    <div class="buttons button-right">
+      <button class="button button-icon ion-android-add" ng-click="showPopup()"></button>
+    </div>    
+  </ion-header-bar>
+  <ion-content>
+    <ion-list show-delete="shouldShowDelete">
+      <ion-item ng-show="loadingRoutines">
+        <ion-spinner icon="spiral"></ion-spinner>
+      </ion-item>
+      <ion-item ng-repeat="entry in mealsList track by $index">
+        <strong>{{entry.exeName}}</strong> - {{entry.exeNumber}}, {{entry.exeUnit}}, {{entry.exeSet}}, {{entry.exeCal}}
+        <ion-delete-button class="ion-minus-circled" ng-click="deleteEntry($index,entry.id)"></ion-delete-button>
+      </ion-item>
+   </ion-list>
+  </ion-content>
+</ion-view>
+
+<script type="text/ng-template" id="add-meal-popup.html">
+  <input type="text" ng-model="mealName.name"/>
+  <input type="Number" ng-model="mealCal.number"/>
+</script>
