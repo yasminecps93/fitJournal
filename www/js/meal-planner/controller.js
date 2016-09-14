@@ -1,19 +1,29 @@
 var mealPlannerModule = angular.module('MealPlanner',['ngCordova','ionic','ionic-datepicker']);
 
-mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','MealsService',
-	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,MealsService){
+mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','MealsService','$ionicModal',
+	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,MealsService, $ionicModal){
 
 		initData();
 		initMethods();
-		$scope.date_id=0;
+		
 		function initData(){
 			$scope.newDate = {
 				dateName: ''
 			};
-			$scope.loadingMeals = false;
+			$scope.date_id=0;
+			$scope.foodName={
+				name: ''
+			};
+			$scope.foodCal={
+				value:0
+			};
+			$scope.loadingEntries = false;
 			$scope.isAvailable= false;
 			$scope.arrayAvailable= false;
 			$scope.isAdded= false;
+			$scope.headerToEdit = '';
+			$scope.shouldShowDelete = false;
+			$scope.editButtonLabel = "Edit";
 			MealsService.initDB();
 			fetchMeals();
 		}
@@ -21,8 +31,19 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		function initMethods() {
 			$scope.addNewMealPlanner = addNewMealPlanner;
 			$scope.checkExistingMealPlanner = checkExistingMealPlanner;
+			$scope.toggleEdit = toggleEdit;
+			$scope.deleteBreakfast = deleteBreakfast;
+			$scope.deleteLunch = deleteLunch;
+			$scope.deleteDinner = deleteDinner;
+			$scope.deleteSnack = deleteSnack;
+			$scope.fetchEntries = fetchEntries;
+			$scope.addNewEntry = addNewEntry;
+			$scope.setAsBreakfast = setAsBreakfast;
+			$scope.setAsLunch = setAsLunch;
+			$scope.setAsDinner = setAsDinner;
+			$scope.setAsSnack = setAsSnack;
 		//	$scope.deleteAllFromTable = deleteAllFromTable;
-		//	$scope.fetchMeals = fetchMeals;
+
 		}
 
 		function deleteAllFromTable(){
@@ -34,6 +55,13 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					alert("Error in clearing table");
 				});
 		}
+
+		function toggleEdit() {
+			$scope.shouldShowDelete = !$scope.shouldShowDelete;
+			$scope.editButtonLabel = $scope.shouldShowDelete ? "Done" : "Edit";
+		}
+
+		
 
 		var gDate = {
 		    callback: function (val) {  //Mandatory
@@ -61,7 +89,6 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 	  	};
 
 		function fetchMeals() {
-			$scope.loadingMeals = true;
 			MealsService.getAllMealPlanner()
 			.then(fetchMealPlannerSuccessCB,fetchMealPlannerErrorCB);
 		}
@@ -76,6 +103,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							$scope.isAvailable=true;
 							$scope.isAdded=false;
 							$scope.date_id=$scope.mealPlannerList[i].id;
+							fetchEntries();
 							break;
 						}else{
 							$scope.isAvailable=false;
@@ -109,6 +137,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 						$scope.isAdded=true;
 						alert("New MealPlanner has been added. "+($scope.newDate.dateName));
 						fetchMeals();	
+						
 					//	$scope.date_id=$scope.mealPlannerList[$scope.mealPlannerList.length].id;
 					},function(error){
 						alert("Error in adding new MealPlanner");
@@ -126,7 +155,6 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		function fetchMealPlannerSuccessCB(response)
 		{
 			try{
-				$scope.loadingMeals = false;
 			//	deleteAllFromTable();
 				var lastId= response.rows.length - 1;
 				if(response && response.rows && response.rows.length > 0)
@@ -143,6 +171,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					}
 					if($scope.isAdded==true){
 						$scope.date_id=$scope.mealPlannerList[lastId].id;
+						fetchEntries();
 					}
 				}else
 				{
@@ -157,8 +186,238 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 
 		function fetchMealPlannerErrorCB(error)
 		{
-			$scope.loadingMeals = false;
 			alert("Some error occurred in fetchMealPlanner");
 		}
+//---------------------------------------------------------------------------------
+//----------------------OPEN MODAL FUNCTIONS---------------------------------------
+//---------------------------------------------------------------------------------
 
+		$ionicModal.fromTemplateUrl('meals-modal.html',{
+			scope: $scope,
+			animation: 'slide-in-up'
+		}).then(function(modal){
+			$scope.modal = modal;
+		});
+
+		$scope.openModal = function(){
+			$scope.modal.show();
+			$scope.foodName={
+				name: ''
+			};
+			$scope.foodCal={
+				value:0
+			};
+		};
+		$scope.closeModal = function(){
+			alert("calling closeModal function");
+			$scope.modal.hide();
+		};
+		$scope.$on('$destroy', function(){
+			$scope.modal.remove();
+		});
+
+		function setAsBreakfast(){
+			$scope.headerToEdit = 'Breakfast';
+		}
+
+		function setAsLunch(){
+			$scope.headerToEdit = 'Lunch';
+		}
+		function setAsDinner(){
+			$scope.headerToEdit = 'Dinner';
+		}
+		function setAsSnack(){
+			$scope.headerToEdit = 'Snack';
+		}
+		
+//---------------------------------------------------------------------------------
+//------------------ENTRY CONTROLLER-------------------------------------------
+//---------------------------------------------------------------------------------
+
+
+		function fetchEntries() {
+			$scope.loadingEntries = true;
+			try{
+				alert("$scope.date_id is "+$scope.date_id);
+				MealsService.getAllEntries($scope.date_id)
+				.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
+			}catch(e){
+				alert("Error in fetchEntries "+ e.message);
+			}
+			
+		}
+
+		function fetchEntriesSuccessCB(response)
+		{
+			try{
+				$scope.loadingEntries = false;
+				if(response && response.rows && response.rows.length > 0)
+				{
+					alert("in fetchEntriesSuccessCB!!!!!!!!!!!!!!!!!!!");
+					$scope.entriesList = [];
+					$scope.breakfastList=[];
+					$scope.lunchList=[];
+					$scope.dinnerList=[];
+					$scope.snackList=[];
+					for(var i=0;i<response.rows.length;i++)
+					{
+						$scope.entriesList.push({
+							id:response.rows.item(i).id,
+							mealType:response.rows.item(i).mealType,
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+						});
+
+						if(response.rows.item(i).mealType=="Breakfast"){
+							$scope.breakfastList.push({
+							id:response.rows.item(i).id,
+							mealType:response.rows.item(i).mealType,
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+							});
+						}else if(response.rows.item(i).mealType=="Lunch"){
+							$scope.lunchList.push({
+							id:response.rows.item(i).id,
+							mealType:response.rows.item(i).mealType,
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+							});
+						}else if(response.rows.item(i).mealType=="Dinner"){
+							$scope.dinnerList.push({
+							id:response.rows.item(i).id,
+							mealType:response.rows.item(i).mealType,
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+							});
+						}else if(response.rows.item(i).mealType=="Snack"){
+							$scope.snackList.push({
+							id:response.rows.item(i).id,
+							mealType:response.rows.item(i).mealType,
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+							});
+						}
+					}
+
+				}else
+				{
+					alert("No entries created till now.");
+				}
+
+			}catch(e){
+				alert("Error in fetchEntries controller "+e.message);
+			}
+			
+			
+		}
+
+		function fetchEntriesErrorCB(error)
+		{
+			$scope.loadingEntries = false;
+			alert("Some error occurred in fetching entry List");
+		}
+
+		function deleteBreakfast(index,id)
+		{
+			try{
+				if(index > -1)
+				{
+					MealsService.deleteEntry(id)
+					.then(function(response){
+						$scope.breakfastList.splice(index,1);
+						$scope.entriesList.splice(index,1);
+						alert("Entry has been succesfully deleted.");
+					},function(error){
+						alert("Error in adding new entry");
+					});
+				}
+			}catch(e){
+				alert("Error in deleteBreakfast "+e.message);
+			}
+			
+		}
+
+		function deleteLunch(index,id)
+		{
+			try{
+				if(index > -1)
+				{
+					MealsService.deleteEntry(id)
+					.then(function(response){
+						$scope.lunchList.splice(index,1);
+						$scope.entriesList.splice(index,1);
+						alert("Entry has been succesfully deleted.");
+					},function(error){
+						alert("Error in adding new entry");
+					});
+				}
+			}catch(e){
+				alert("Error in deleteLunch "+e.message);
+			}
+			
+		}
+
+		function deleteDinner(index,id)
+		{
+			try{
+				if(index > -1)
+				{
+					MealsService.deleteEntry(id)
+					.then(function(response){
+						$scope.dinnerList.splice(index,1);
+						$scope.entriesList.splice(index,1);
+						alert("Entry has been succesfully deleted.");
+					},function(error){
+						alert("Error in adding new entry");
+					});
+				}
+			}catch(e){
+				alert("Error in deleteDinner "+e.message);
+			}
+			
+		}
+
+		function deleteSnack(index,id)
+		{
+			try{
+				if(index > -1)
+				{
+					MealsService.deleteEntry(id)
+					.then(function(response){
+						$scope.snackList.splice(index,1);
+						$scope.entriesList.splice(index,1);
+						alert("Entry has been succesfully deleted.");
+					},function(error){
+						alert("Error in adding new entry");
+					});
+				}
+			}catch(e){
+				alert("Error in deleteSnack "+e.message);
+			}
+			
+		}
+
+		function addNewEntry()
+		{
+
+			try{
+				if($scope.foodName.name!= '' && $scope.headerToEdit!=''){
+				MealsService.addNewEntry($scope.date_id,$scope.headerToEdit,$scope.foodName.name,$scope.foodCal.value)
+				.then(function(response){
+				//	$scope.newEntry.value = 0;
+					alert("New Entry has been added. "+ $scope.date_id);
+					closeModal();
+					
+				},function(error){
+					alert("Error in adding new entry");
+				});
+				}else
+					{
+						alert('Please enter a positive value.');
+					}
+			}catch(e){
+				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
+			}
+			
+		}
 }]);

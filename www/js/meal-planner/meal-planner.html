@@ -4,7 +4,9 @@
 	      <button class="button button-dark" ui-sref="routinesList">Back</button>
 	    </div>
 		<h1 class="title">Meal Planner</h1>
-		
+		<div class="buttons">
+        <button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+      </div>
 	</ion-header-bar>
 	<ion-content class="main-content" >
 		<!ion-list>
@@ -19,53 +21,90 @@
 			</ion-item>
  			
 		</div>
+
 		<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Breakfast ({{something.totalCal}} kcal)
-		    	<button class="button button-right" ui-sref="mealsList({dateId:id})">Edit</button>
+		    	<button class="button" ng-click="openModal(); setAsBreakfast()">Add</button>
 	    	</ion-item>
-	    	<ion-item ng-show="loadingRoutines">
+	    </ion-list>
+	    <ion-list show-delete="shouldShowDelete">
+	    	<ion-item ng-show="loadingEntries">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
-	    	<ion-item ui-sref="mealsList({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
-	    		{{routine.name}}, {{routine.id}}
-	    	</ion-item>
+				    	<ion-item ng-repeat="item in breakfastList track by $index">
+				    		{{item.foodName}}, {{item.foodCal}}
+				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteBreakfast($index,item.id)"></ion-delete-button>
+				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Lunch ({{something.totalCal}} kcal)
-		    	<button class="button button-right" ng-click="toggleEdit()">Edit</button>
+		    	<button class="button" ng-click="openModal(); setAsLunch()">Add</button>
 	    	</ion-item>
-	    	<ion-item ng-show="loadingRoutines">
+	    </ion-list>
+	    <ion-list show-delete="shouldShowDelete">
+	    	<ion-item ng-show="loadingEntries">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
-	    	<ion-item ui-sref="mealsList({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
-	    		{{routine.name}}, {{routine.id}}
-	    	</ion-item>
+	    				<ion-item ng-repeat="entry in lunchList track by $index">
+				    		{{entry.foodName}}, {{entry.foodCal}}
+				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteLunch($index,entry.id)"></ion-delete-button>
+				    	</ion-item>
 	   	</ion-list>
-	   	<ion-list>
+	   	<ion-list >
 	   		<ion-item class="item item-divider item-button-right">
 	    		Dinner ({{something.totalCal}} kcal)
-		    	<button class="button button-right" ng-click="toggleEdit()">Edit</button>
+		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsDinner()"></button>
 	    	</ion-item>
-	    	<ion-item ng-show="loadingMeals">
+	    </ion-list>
+	    <ion-list show-delete="shouldShowDelete">
+	    	<ion-item ng-show="loadingEntries">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
-	    	<ion-item ui-sref="mealsList({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
-	    		{{routine.name}}, {{routine.id}}
-	    	</ion-item>
+	    				<ion-item ng-repeat="entry in dinnerList track by $index">
+				    		{{entry.foodName}}, {{entry.foodCal}}
+				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteDinner($index,entry.id)"></ion-delete-button>
+				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Snack ({{something.totalCal}} kcal)
-		    	<button class="button button-right" ng-click="toggleEdit()">Edit</button>
+		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsSnack()"></button>
 	    	</ion-item>
-	    	<ion-item ng-show="loadingRoutines">
+	    </ion-list>
+	    <ion-list show-delete="shouldShowDelete">
+	    	<ion-item ng-show="loadingEntries">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
-	    	<ion-item ui-sref="mealsList({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
-	    		{{routine.name}}, {{routine.id}}
-	    	</ion-item>
+	    				<ion-item ng-repeat="entry in snackList track by $index">
+				    		{{entry.foodName}}, {{entry.foodCal}}
+				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteSnack($index,entry.id)"></ion-delete-button>
+				    	</ion-item>
 	   	</ion-list>
 	</ion-content>
 </ion-view>
+
+
+<script id="meals-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+     <div class="buttons">
+	      <button class="button button-dark" ng-click="closeModal()">Back</button>
+	  </div>
+      <h1 class="title">{{headerToEdit}}</h1>
+    </ion-header-bar>
+    <ion-content>
+    	<div class="list list-inset">
+    		<label class="item item-input">		
+    			<input type="text" ng-model="foodName.name" placeholder="Search or add new">
+    			<i class="icon ion-search placeholder-icon"></i>
+    		</label>
+    		<label class="item item-input">		
+    			<input type="number" ng-model="foodCal.value" placeholder="Calories">
+    		</label>
+    		<button class="button button-block button-calm" ng-click="addNewEntry()">Add new</button>
+    	</div>
+    </ion-content>
+  </ion-modal-view>
+</script>

@@ -86,7 +86,9 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 
 			return deferred.promise;
 		}
-
+//----------------------------------------------------------------
+//--------------------to get specific routine---------------------
+//----------------------------------------------------------------
 		function getRoutine(id) {
 			var routine;
 			if(routinesList){
@@ -98,7 +100,8 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 			}
 			return routine;
 		}
-
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 		function runQuery(query,dataArray,successCb,errorCb)
 		{
 		  $ionicPlatform.ready(function() {	

@@ -8,7 +8,10 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			initDB:initDB,
 			getAllMealPlanner: getAllMealPlanner,
 			addNewMealPlanner: addNewMealPlanner,
-			getMealPlanner:getMealPlanner
+			getMealPlanner:getMealPlanner,
+			getAllEntries:getAllEntries,
+			addNewEntry:addNewEntry,
+			deleteEntry:deleteEntry
 		//	deleteAllFromTable: deleteAllFromTable
 		}
 
@@ -24,13 +27,28 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS mealPlanner_list_try (id integer primary key autoincrement, created_at datetime, dateName string, no_of_entries integer)";
+			  var query_meals = "CREATE TABLE IF NOT EXISTS meals_list_try (id integer primary key autoincrement, dateName_id integer, mealType string, foodName string, foodCal double)";
+
 			  runQuery(query,[],function(res) {
 			      console.log("table created ");
-			      alert("table created ");
+			      alert("table created for meal date");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table "+err);
+			      alert("error creating table for meal date"+err);
 			   }); 
+
+			  try{
+			  	runQuery(query_meals,[],function(res) {
+			      console.log("table created ");
+			      alert("table created for meal type");
+			   }, function (err) {
+			      console.log(err);
+			      alert("error creating table for meal type"+err);
+			   }); 
+			  }catch(e){
+			  	alert("ERROR in try for creating table "+e.message);
+			  }
+			  
 			   
 		  }.bind(this));
 		}
@@ -136,5 +154,76 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		  }.bind(this));
 		}
 
+		//-------------------------------------------------------
+		//---------------ENTRY FACTORY-----------------------
+		//-------------------------------------------------------
+		function getAllEntries(dateName_id){
+
+			var deferred = $q.defer();
+			var query = "SELECT * from meals_list_try WHERE dateName_id = ?";
+			try{
+				runQuery(query,[dateName_id],function(response){
+				//Success Callback
+				console.log(response);
+				entriesList = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				alert("Error in getAllEntries "+e.message);
+			}
+		}
+
+		function addNewEntry(dateName_id, mealType, foodName, foodCal) {
+			try{
+				var deferred = $q.defer();
+				var query = "INSERT INTO meals_list_try (dateName_id, mealType, foodName, foodCal) VALUES (?,?,?,?)";
+				runQuery(query,[dateName_id, mealType, foodName, foodCal],function(response){
+					//Success Callback
+					alert("entry added successfully - "+dateName_id+", "+mealType+", "+foodName+", "+foodCal);
+					console.log(response);
+					deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					alert("error in entering")
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				alert("Error in addNewEntry "+e.message);
+			}
+			
+		}
+
+		function deleteEntry(id) {
+			try{
+				var deferred = $q.defer();
+				var query = "DELETE FROM meals_list_try WHERE id = ?";
+				runQuery(query,[id],function(response){
+					//Success Callback
+					alert("deleteEntry Success");
+					console.log(response);
+					deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					alert("deleteEntry error");
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				alert("Error in deleteEntry "+e.message);
+			}
+			
+		}
+//---------------------------------------------------------------------
 	}
 ]);
