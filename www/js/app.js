@@ -14,12 +14,12 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
   })
   .state('profile',{
    url:'/profile',
-   templateUrl:'templates/profile-details.html',
+   templateUrl:'js/profile-details/profile-details.html',
    controller:'ProfileDetailsCtrl'
   })
   .state('routinesList',{
    url:'/routinesList',
-   templateUrl:'templates/routines-list.html',
+   templateUrl:'js/routines-list/routines-list.html',
    controller:'RoutinesListCtrl'
   })
   .state('routineDetails',{

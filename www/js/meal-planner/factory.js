@@ -11,7 +11,8 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			getMealPlanner:getMealPlanner,
 			getAllEntries:getAllEntries,
 			addNewEntry:addNewEntry,
-			deleteEntry:deleteEntry
+			deleteEntry:deleteEntry,
+			getAllEntriesForArray: getAllEntriesForArray
 		//	deleteAllFromTable: deleteAllFromTable
 		}
 
@@ -224,6 +225,29 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			}
 			
 		}
-//---------------------------------------------------------------------
+//----------------------------------------------------------------------
+//------------------FILTERED ARRAY--------------------------------------
+//----------------------------------------------------------------------
+		function getAllEntriesForArray(){
+
+			var deferred = $q.defer();
+			var query = "SELECT DISTINCT foodName, foodCal from meals_list_try";
+			try{
+				runQuery(query,[],function(response){
+				//Success Callback
+				console.log(response);
+				arrayList = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				alert("Error in getAllEntries "+e.message);
+			}
+		}
 	}
 ]);

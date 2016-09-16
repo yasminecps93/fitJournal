@@ -24,8 +24,10 @@
 
 		<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
-	    		Breakfast ({{something.totalCal}} kcal)
-		    	<button class="button" ng-click="openModal(); setAsBreakfast()">Add</button>
+	    		Breakfast ({{breakfastCal}} kcal)
+		    	<button class="button" ng-click="openModal(); setAsBreakfast()">
+		    		<i class="icon ion-android-add" ></i>
+		    	</button>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
@@ -39,7 +41,7 @@
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
-	    		Lunch ({{something.totalCal}} kcal)
+	    		Lunch ({{lunchCal}} kcal)
 		    	<button class="button" ng-click="openModal(); setAsLunch()">Add</button>
 	    	</ion-item>
 	    </ion-list>
@@ -54,7 +56,7 @@
 	   	</ion-list>
 	   	<ion-list >
 	   		<ion-item class="item item-divider item-button-right">
-	    		Dinner ({{something.totalCal}} kcal)
+	    		Dinner ({{dinnerCal}} kcal)
 		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsDinner()"></button>
 	    	</ion-item>
 	    </ion-list>
@@ -69,7 +71,7 @@
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
-	    		Snack ({{something.totalCal}} kcal)
+	    		Snack ({{snackCal}} kcal)
 		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsSnack()"></button>
 	    	</ion-item>
 	    </ion-list>
@@ -94,17 +96,56 @@
 	  </div>
       <h1 class="title">{{headerToEdit}}</h1>
     </ion-header-bar>
-    <ion-content>
-    	<div class="list list-inset">
-    		<label class="item item-input">		
-    			<input type="text" ng-model="foodName.name" placeholder="Search or add new">
-    			<i class="icon ion-search placeholder-icon"></i>
-    		</label>
-    		<label class="item item-input">		
-    			<input type="number" ng-model="foodCal.value" placeholder="Calories">
-    		</label>
-    		<button class="button button-block button-calm" ng-click="addNewEntry()">Add new</button>
-    	</div>
-    </ion-content>
+
+	<ion-tabs class="tabs-top tabs-positive has-header">
+		<ion-tab title="ADD NEW" href="#/tab/new">
+			<ion-view>
+				<ion-content>
+					
+			    	<div class="list list-inset">
+			    		<label class="item item-input">		
+			    			<input type="text" ng-model="foodName.name" placeholder="Food item">
+			    			<i class="icon ion-search placeholder-icon"></i>
+			    		</label>
+			    		<label class="item item-input">	
+			    			<span class="input-label">Calories</span>	
+			    			<input type="number" ng-model="foodCal.value">
+			    		</label>
+			    		<button class="button button-block button-calm" ng-click="addNewEntry()">Add new</button>
+			    		<ion-list>
+							<ion-item class="item item-divider">
+					    		Recently used
+					    	</ion-item>
+					    	<ion-item class="item item-button-right" ng-repeat="entry in arrayList | filter:foodName.name" >
+				    		{{entry.foodName}} ({{entry.foodCal}} kcal)
+				    			<button class="button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
+				    				<i class="icon ion-android-add" ></i>
+				    			</button>
+				    		</ion-item>
+						</ion-list>
+			    	</div>
+
+			    </ion-content>
+			</ion-view>
+		</ion-tab>
+		<ion-tab title="SEARCH" href="#/tab/search">
+			<ion-view>
+				<ion-content>
+			    	<div class="list list-inset">
+			    		<label class="item item-input">		
+			    			<input type="text" ng-model="searchName.name" placeholder="Search">
+			    			<i class="icon ion-search placeholder-icon"></i>
+			    		</label>
+						<ion-list>
+							<ion-item class="item item-divider item-button-right">
+					    		Items
+					    	</ion-item>
+						</ion-list>
+			    	</div>
+			    </ion-content>
+			</ion-view>
+		</ion-tab>
+	</ion-tabs>    
+    
   </ion-modal-view>
 </script>

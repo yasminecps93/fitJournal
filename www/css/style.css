@@ -41,9 +41,9 @@ body{
 	display: none;
 }
 /*others*/
-.overflow-scroll{
+/*.overflow-scroll{
 	overflow-y: hidden;
-}
+}*/
 
 .button-right{
 	text-align: right !important;

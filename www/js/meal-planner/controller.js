@@ -10,7 +10,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.newDate = {
 				dateName: ''
 			};
-			$scope.date_id=0;
+			$scope.date_id=-1;
 			$scope.foodName={
 				name: ''
 			};
@@ -42,6 +42,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.setAsLunch = setAsLunch;
 			$scope.setAsDinner = setAsDinner;
 			$scope.setAsSnack = setAsSnack;
+			$scope.addNewEntryByFiltered = addNewEntryByFiltered;
 		//	$scope.deleteAllFromTable = deleteAllFromTable;
 
 		}
@@ -129,6 +130,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		function addNewMealPlanner()
 		{
 			try{
+
 				if($scope.newDate.dateName != ''){
 
 					MealsService.addNewMealPlanner($scope.newDate.dateName)
@@ -200,16 +202,19 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		});
 
 		$scope.openModal = function(){
-			$scope.modal.show();
-			$scope.foodName={
-				name: ''
-			};
-			$scope.foodCal={
-				value:0
-			};
+			if($scope.date_id<0){
+				alert("Please select a date first");
+			}else{
+				$scope.modal.show();
+				$scope.foodName={
+					name: ''
+				};
+				$scope.foodCal={
+					value:0
+				};
+			}
 		};
 		$scope.closeModal = function(){
-			alert("calling closeModal function");
 			$scope.modal.hide();
 		};
 		$scope.$on('$destroy', function(){
@@ -237,10 +242,16 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 
 		function fetchEntries() {
 			$scope.loadingEntries = true;
+			$scope.breakfastCal=0;
+			$scope.lunchCal=0;
+			$scope.dinnerCal=0;
+			$scope.snackCal=0;
 			try{
 				alert("$scope.date_id is "+$scope.date_id);
 				MealsService.getAllEntries($scope.date_id)
-				.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
+				.then(fetchEntriesSuccessCB,fetchMealPlannerErrorCB);
+				MealsService.getAllEntriesForArray()
+				.then(fetchEntriesForArraySuccessCB,fetchMealPlannerErrorCB);
 			}catch(e){
 				alert("Error in fetchEntries "+ e.message);
 			}
@@ -259,6 +270,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					$scope.lunchList=[];
 					$scope.dinnerList=[];
 					$scope.snackList=[];
+
 					for(var i=0;i<response.rows.length;i++)
 					{
 						$scope.entriesList.push({
@@ -275,6 +287,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
+							$scope.breakfastCal = $scope.breakfastCal + response.rows.item(i).foodCal;
 						}else if(response.rows.item(i).mealType=="Lunch"){
 							$scope.lunchList.push({
 							id:response.rows.item(i).id,
@@ -282,6 +295,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
+							$scope.lunchCal = $scope.lunchCal + response.rows.item(i).foodCal;
 						}else if(response.rows.item(i).mealType=="Dinner"){
 							$scope.dinnerList.push({
 							id:response.rows.item(i).id,
@@ -289,6 +303,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
+							$scope.dinnerCal = $scope.dinnerCal + response.rows.item(i).foodCal;
 						}else if(response.rows.item(i).mealType=="Snack"){
 							$scope.snackList.push({
 							id:response.rows.item(i).id,
@@ -296,6 +311,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
+							$scope.snackCal = $scope.snackCal + response.rows.item(i).foodCal;
 						}
 					}
 
@@ -311,12 +327,6 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			
 		}
 
-		function fetchEntriesErrorCB(error)
-		{
-			$scope.loadingEntries = false;
-			alert("Some error occurred in fetching entry List");
-		}
-
 		function deleteBreakfast(index,id)
 		{
 			try{
@@ -327,6 +337,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 						$scope.breakfastList.splice(index,1);
 						$scope.entriesList.splice(index,1);
 						alert("Entry has been succesfully deleted.");
+						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
 					});
@@ -347,6 +358,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 						$scope.lunchList.splice(index,1);
 						$scope.entriesList.splice(index,1);
 						alert("Entry has been succesfully deleted.");
+						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
 					});
@@ -367,6 +379,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 						$scope.dinnerList.splice(index,1);
 						$scope.entriesList.splice(index,1);
 						alert("Entry has been succesfully deleted.");
+						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
 					});
@@ -387,6 +400,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 						$scope.snackList.splice(index,1);
 						$scope.entriesList.splice(index,1);
 						alert("Entry has been succesfully deleted.");
+						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
 					});
@@ -406,8 +420,68 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 				.then(function(response){
 				//	$scope.newEntry.value = 0;
 					alert("New Entry has been added. "+ $scope.date_id);
-					closeModal();
-					
+					$scope.foodName={
+					name: ''
+					};
+					$scope.foodCal={
+						value:0
+					};
+					fetchEntries();
+				},function(error){
+					alert("Error in adding new entry");
+				});
+				}else
+					{
+						alert('Please enter a positive value.');
+					}
+			}catch(e){
+				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
+			}
+			
+		}
+
+//-----------------------------------------------------------------------------------
+//------------------------FILTER ARRAY-----------------------------------------------
+//-----------------------------------------------------------------------------------
+		function fetchEntriesForArraySuccessCB(response){
+				
+			try{
+				if(response && response.rows && response.rows.length > 0)
+				{
+					$scope.arrayList=[];
+				
+					for(var i=0;i<response.rows.length;i++)
+					{	
+						$scope.arrayList.push({
+							foodName:response.rows.item(i).foodName,
+							foodCal:response.rows.item(i).foodCal
+						});
+		
+					}
+				}
+			}catch(e){
+				alert(e.message);
+			}
+				
+		}
+
+
+		function addNewEntryByFiltered(foodName, foodCal)
+		{
+
+			try{
+				if(foodName!= '' && $scope.headerToEdit!=''){
+				MealsService.addNewEntry($scope.date_id,$scope.headerToEdit,foodName,foodCal)
+				.then(function(response){
+				//	$scope.newEntry.value = 0;
+					alert("New Entry has been added. "+ $scope.date_id);
+					$scope.foodName={
+					name: ''
+					};
+					$scope.foodCal={
+						value:0
+					};
+					fetchEntries();
 				},function(error){
 					alert("Error in adding new entry");
 				});
