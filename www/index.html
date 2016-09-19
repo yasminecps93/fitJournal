@@ -7,6 +7,7 @@
   
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <!--link href="css/animate.css" rel="stylesheet"-->
+    <link rel="stylesheet" href="lib/angular-gridster/dist/angular-gridster.css"/>
     <link href="css/color-theme.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
@@ -18,6 +19,9 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> 
     <script src="lib/ionic-datepicker/dist/ionic-datepicker.bundle.min.js"></script>
+    <script src="lib/angular-gridster/dist/detect-element-resize.js"></script>
+    <script src="lib/angular-gridster/dist/jquery.resize.js"></script>
+    <script src="lib/angular-gridster/dist/angular-gridster.min.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
@@ -32,6 +36,7 @@
     <script src="js/profile-details/factory.js"></script>
     <script src="js/meal-planner/controller.js"></script>
     <script src="js/meal-planner/factory.js"></script>
+   
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/javaScripts.js"></script>
   </head>
@@ -51,7 +56,16 @@
          </div>
         </ion-header-bar>
         <ion-content class="main-content">
-          <h3>main page</h3>
+          
+          <div gridster="gridsterOpts">
+              <ul>
+                  <!--li gridster-item="customItemMap" ng-repeat="extraWidget in extraWidgets"-->
+                  <li ng-repeat="extraWidget in extraWidgets" gridster-item row="extraWidget.row" col="extraWidget.col" size-x="extraWidget.sizeX" size-y="extraWidget.sizeY">
+                   
+                  </li>
+              </ul>
+          </div>
+
         </ion-content>
         <ion-footer-bar ng-if="showFooter">
          <ion-nav-view ui-view="bottom-nav"></ion-nav-view>
@@ -78,8 +92,8 @@
         <ion-slide-box on-slide-changed="slideChange(index)">
           <ion-slide>
 
-                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/scale.svg" alt=""></img>Weight</a>
-                <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/measuring-tape.svg" alt=""></img>Measurements</a>
+                <a class="button button-clear widget-button" ng-click="addWidget()"><img class="widget-icon" src="img/scale.svg" alt=""></img>Weight</a>
+                <a class="button button-clear widget-button" ng-click="addWidget()"><img class="widget-icon" src="img/measuring-tape.svg" alt=""></img>Measurements</a>
                 <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/weight.svg" alt=""></img>Exercise Log</a>
                 <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/cutlery.svg" alt=""></img>Food Intake</a>
             

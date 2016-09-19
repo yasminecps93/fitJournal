@@ -6,7 +6,7 @@ ion-header-bar{
 .main-content{
 	font-family: 'normalFonts'
 	background-color: #f2f2f2;
-	padding-top: 30px
+/*	padding-top: 30px */
 }
 
 ion-footer-bar{
