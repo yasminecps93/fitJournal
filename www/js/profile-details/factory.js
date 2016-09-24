@@ -19,7 +19,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			  	alert("opened db ");
+			//  	alert("opened db ");
 			  }
 			  catch(e) { 
 			  	alert("Error in opening db " + e.message);
@@ -30,7 +30,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			  try{
 				  	runQuery(query,[],function(res) {
 				      console.log("table created ");
-				      alert("table created ");
+				 //     alert("table created ");
 				   }, function (err) {
 				      console.log(err);
 				      alert("error creating table "+err);
@@ -43,7 +43,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			  try{
 				  	runQuery(query_weight,[],function(res) {
 				      console.log("table created");
-				      alert("table created for query_weight");
+				//      alert("table created for query_weight");
 				   }, function (err) {
 				      console.log(err);
 				      alert("error creating table for query_weight"+err);
@@ -63,7 +63,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			try{
 				runQuery(query,[today_weight, weight_unit],function(response){
 				//Success Callback
-				alert("New weight has been added. "+today_weight+", "+ weight_unit);
+			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -110,7 +110,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			try{
 				runQuery(query,[current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss],function(response){
 				//Success Callback
-				alert(current_weight+", "+weight_unit+", "+goal_weight+", "+goal_date+", "+total_weight_loss+", "+weekly_weight_loss);
+			//	alert(current_weight+", "+weight_unit+", "+goal_weight+", "+goal_date+", "+total_weight_loss+", "+weekly_weight_loss);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -148,7 +148,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				var query = "DELETE * FROM profiledata_list";
 				runQuery(query,[],function(response){
 					//Success Callback
-					alert("deleteEntry Success");
+			//		alert("deleteEntry Success");
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
@@ -171,7 +171,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			      alert("success in runQuery function "+res);
+			  //    alert("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
 			      alert("error in runQuery function "+err);

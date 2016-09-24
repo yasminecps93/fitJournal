@@ -134,7 +134,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 				});
 				}else
 				{
-					alert('Please enter the name of the ProfileData. ');
+					alert('Some are empty. ');
 				}
 			}
 			catch(e){
@@ -216,7 +216,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 					ProfileService.deleteEntry()
 					.then(function(response){
 					//	$scope.entriesList.splice(index,1);
-						alert("Entry has been succesfully deleted.");
+					//	alert("Entry has been succesfully deleted.");
 					},function(error){
 						alert("Error in adding new entry");
 					});

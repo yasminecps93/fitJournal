@@ -1,7 +1,7 @@
 <ion-view >
 	<ion-header-bar>
 		<div class="buttons">
-	      <button class="button button-dark" ui-sref="routinesList">Back</button>
+	      <button class="button button-dark" ui-sref="main-page">Back</button>
 	    </div>
 		<h1 class="title">Meal Planner</h1>
 		<div class="buttons">
@@ -57,7 +57,9 @@
 	   	<ion-list >
 	   		<ion-item class="item item-divider item-button-right">
 	    		Dinner ({{dinnerCal}} kcal)
-		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsDinner()"></button>
+		    	<button class="button" ng-click="openModal(); setAsDinner()">
+		    		<i class="icon ion-android-add" ></i>
+		    	</button>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
@@ -72,7 +74,9 @@
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Snack ({{snackCal}} kcal)
-		    	<button class="button button-icon ion-android-add" ng-click="openModal();setAsSnack()"></button>
+		    	<button class="button" ng-click="openModal(); setAsSnack()">
+		    		<i class="icon ion-android-add" ></i>
+		    	</button>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">

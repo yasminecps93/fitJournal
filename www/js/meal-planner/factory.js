@@ -21,7 +21,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			  	alert("opened db ");
+			//  	alert("opened db ");
 			  }
 			  catch(e) { 
 			  	alert("Error in opening db");
@@ -32,7 +32,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 			  runQuery(query,[],function(res) {
 			      console.log("table created ");
-			      alert("table created for meal date");
+			 //     alert("table created for meal date");
 			   }, function (err) {
 			      console.log(err);
 			      alert("error creating table for meal date"+err);
@@ -41,7 +41,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			  try{
 			  	runQuery(query_meals,[],function(res) {
 			      console.log("table created ");
-			      alert("table created for meal type");
+			  //    alert("table created for meal type");
 			   }, function (err) {
 			      console.log(err);
 			      alert("error creating table for meal type"+err);
@@ -123,7 +123,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "DELETE from mealPlanner_list_try";
 				runQuery(query,[],function(response){
 				//Success Callback
-				alert("deleted");
+			//	alert("deleted");
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -146,7 +146,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			      alert("success in runQuery function "+res);
+			//      alert("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
 			      alert("error in runQuery function "+err);
@@ -186,7 +186,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "INSERT INTO meals_list_try (dateName_id, mealType, foodName, foodCal) VALUES (?,?,?,?)";
 				runQuery(query,[dateName_id, mealType, foodName, foodCal],function(response){
 					//Success Callback
-					alert("entry added successfully - "+dateName_id+", "+mealType+", "+foodName+", "+foodCal);
+				//	alert("entry added successfully - "+dateName_id+", "+mealType+", "+foodName+", "+foodCal);
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
@@ -209,7 +209,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "DELETE FROM meals_list_try WHERE id = ?";
 				runQuery(query,[id],function(response){
 					//Success Callback
-					alert("deleteEntry Success");
+				//	alert("deleteEntry Success");
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){

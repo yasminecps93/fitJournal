@@ -17,7 +17,7 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			  	alert("opened db ");
+		//	  	alert("opened db ");
 			  }
 			  catch(e) { 
 			  	alert("Error in opening db");
@@ -26,7 +26,7 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 			  var query = "CREATE TABLE IF NOT EXISTS routines_list (id integer primary key autoincrement, name string , no_of_entries integer)";
 			  runQuery(query,[],function(res) {
 			      console.log("table created ");
-			      alert("table created ");
+			//      alert("table created ");
 			   }, function (err) {
 			      console.log(err);
 			      alert("error creating table "+err);
@@ -108,7 +108,7 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			      alert("success in runQuery function "+res);
+			//      alert("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
 			      alert("error in runQuery function "+err);

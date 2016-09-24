@@ -176,7 +176,9 @@ input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.clon
 }
 
 .bottom-button{
+	position: absolute;
 	color: white !important;
 	font-size: 18px !important;
 	width: 100%;
+	bottom: 0;
 }

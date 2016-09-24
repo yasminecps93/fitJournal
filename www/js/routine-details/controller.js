@@ -101,7 +101,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				RoutineService.addNewEntry($scope.routineId,$scope.exeName.name,$scope.exeNumber.number,$scope.exeUnit.name,$scope.exeSet.set,$scope.exeCal.value)
 				.then(function(response){
 				//	$scope.newEntry.value = 0;
-					alert("New Entry has been added.");
+				//	alert("New Entry has been added.");
 					fetchEntries();
 					closePopup();
 				},function(error){
@@ -156,7 +156,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				RoutineService.deleteEntry(id)
 				.then(function(response){
 					$scope.entriesList.splice(index,1);
-					alert("Entry has been succesfully deleted.");
+				//	alert("Entry has been succesfully deleted.");
 				},function(error){
 					alert("Error in adding new entry");
 				});

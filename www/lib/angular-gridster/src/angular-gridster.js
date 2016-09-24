@@ -1746,6 +1746,7 @@
 					item.setPosition(item.row, item.col);
 					item.setSizeY(item.sizeY);
 					item.setSizeX(item.sizeX);
+					
 
 					scope.$apply(function() {
 						if (gridster.resizable && gridster.resizable.stop) {

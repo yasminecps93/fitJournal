@@ -36,12 +36,14 @@
     <script src="js/profile-details/factory.js"></script>
     <script src="js/meal-planner/controller.js"></script>
     <script src="js/meal-planner/factory.js"></script>
-   
+    <script src="js/main-page/controller.js"></script>
+    <script src="js/main-page/factory.js"></script>
+    
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/javaScripts.js"></script>
   </head>
 
-  <body ng-controller="MainCtrl">
+  <body>
       <ion-nav-bar class="bar-stable">
       </ion-nav-bar>
       <ion-nav-view ui-view="main"></ion-nav-view>
@@ -51,17 +53,29 @@
         <ion-header-bar>
           <h1 class="title">FitJournal</h1>
           <div class="buttons button-right">
-           <button class="button button-icon ion-android-add" ng-click="toggleFooter(); bottomNav()"></button>
+           <button class="button button-icon" ng-class="{'icon ion-plus': !showFooter, 'icon ion-minus': showFooter}"ng-click="toggleFooter(); bottomNav()">
+
+           </button>
            <button class="button button-icon ion-android-more-vertical" ng-click="openPopover($event)" ng-controller="SideMenuCtrl"></button>
          </div>
         </ion-header-bar>
         <ion-content class="main-content">
           
           <div gridster="gridsterOpts">
+
               <ul>
                   <!--li gridster-item="customItemMap" ng-repeat="extraWidget in extraWidgets"-->
-                  <li ng-repeat="extraWidget in extraWidgets" gridster-item row="extraWidget.row" col="extraWidget.col" size-x="extraWidget.sizeX" size-y="extraWidget.sizeY">
-                   
+                  <li ng-repeat="extraWidget in widgetList track by $index" gridster-item row="extraWidget.row" col="extraWidget.col" size-x="extraWidget.sizeX" size-y="extraWidget.sizeY">
+                  <!--input type="text" integer ng-model="extraWidget.sizeX" size="1"/>x
+                  <input type="text" integer ng-model="extraWidget.sizeY" size="1" /-->
+                      <ion-header-bar on-touch="draggable()" class="widget-header">
+                          <h6>{{extraWidget.title}}</h6>
+                          <div class="buttons button-right">
+                          <button class="button button-icon ion-ios-trash-outline" ng-click="deleteWidget($index, extraWidget.id)"></button>
+                      </ion-header-bar>
+                      
+                        <!--compile-directive directive="{{extraWidget.directives}}"></compile-directive-->
+                      
                   </li>
               </ul>
           </div>
@@ -79,7 +93,7 @@
           <div class="list">
               <a class="item item-icon-left side-menu" href="#/profile" ng-click="closePopover()"><i class="icon ion-person"></i>Profile details</a>
               <a class="item item-icon-left side-menu" ui-sref="routinesList" ng-click="closePopover()"><i class="icon ion-clipboard"></i>Fitness routine</a>
-              <a class="item item-icon-left side-menu"><i class="icon ion-calendar"></i>Meal planner</a>
+              <a class="item item-icon-left side-menu" ui-sref="mealPlanner" ng-click="closePopover()"><i class="icon ion-calendar"></i>Meal planner</a>
               <a class="item item-icon-left side-menu"><i class="icon ion-stats-bars"></i>Progress chart</a>
               <a class="item item-icon-left side-menu"><i class="icon ion-gear-b"></i>Settings</a>
           </div>
@@ -92,8 +106,8 @@
         <ion-slide-box on-slide-changed="slideChange(index)">
           <ion-slide>
 
-                <a class="button button-clear widget-button" ng-click="addWidget()"><img class="widget-icon" src="img/scale.svg" alt=""></img>Weight</a>
-                <a class="button button-clear widget-button" ng-click="addWidget()"><img class="widget-icon" src="img/measuring-tape.svg" alt=""></img>Measurements</a>
+                <a class="button button-clear widget-button" ng-click="addWeightWidget()"><img class="widget-icon" src="img/scale.svg" alt=""></img>Weight</a>
+                <a class="button button-clear widget-button" ng-click="addMeasurementsWidget()"><img class="widget-icon" src="img/measuring-tape.svg" alt=""></img>Measurements</a>
                 <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/weight.svg" alt=""></img>Exercise Log</a>
                 <a class="button button-clear widget-button" ng-click=""><img class="widget-icon" src="img/cutlery.svg" alt=""></img>Food Intake</a>
             

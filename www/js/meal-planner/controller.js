@@ -50,7 +50,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		function deleteAllFromTable(){
 			MealsService.deleteAllFromTable().then(function(response){
 					//$scope.newRoutine.name = '';
-					alert("Table has been cleared");
+			//		alert("Table has been cleared");
 				//	fetchMeals();
 				},function(error){
 					alert("Error in clearing table");
@@ -111,12 +111,12 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							
 						}
 					}
-					alert("isAvailable= "+$scope.isAvailable);
+			//		alert("isAvailable= "+$scope.isAvailable);
 					if($scope.isAvailable==false){
 						addNewMealPlanner();
 					}	
 				}else{
-					alert("isAvailable= "+$scope.isAvailable);
+			//		alert("isAvailable= "+$scope.isAvailable);
 					if($scope.isAvailable==false){
 						addNewMealPlanner();
 					}
@@ -137,7 +137,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					.then(function(response){
 						//$scope.newRoutine.name = '';
 						$scope.isAdded=true;
-						alert("New MealPlanner has been added. "+($scope.newDate.dateName));
+				//		alert("New MealPlanner has been added. "+($scope.newDate.dateName));
 						fetchMeals();	
 						
 					//	$scope.date_id=$scope.mealPlannerList[$scope.mealPlannerList.length].id;
@@ -146,7 +146,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					});
 				}else
 				{
-					alert('Please enter the name of the MealPlanner.');
+					alert('Please select a date.');
 				}
 			}catch(e){
 				alert("Error in addNewMealPlanner controller "+e.message);
@@ -247,7 +247,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.dinnerCal=0;
 			$scope.snackCal=0;
 			try{
-				alert("$scope.date_id is "+$scope.date_id);
+		//		alert("$scope.date_id is "+$scope.date_id);
 				MealsService.getAllEntries($scope.date_id)
 				.then(fetchEntriesSuccessCB,fetchMealPlannerErrorCB);
 				MealsService.getAllEntriesForArray()
@@ -264,7 +264,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 				$scope.loadingEntries = false;
 				if(response && response.rows && response.rows.length > 0)
 				{
-					alert("in fetchEntriesSuccessCB!!!!!!!!!!!!!!!!!!!");
+			//		alert("in fetchEntriesSuccessCB!!!!!!!!!!!!!!!!!!!");
 					$scope.entriesList = [];
 					$scope.breakfastList=[];
 					$scope.lunchList=[];
@@ -336,10 +336,10 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					.then(function(response){
 						$scope.breakfastList.splice(index,1);
 						$scope.entriesList.splice(index,1);
-						alert("Entry has been succesfully deleted.");
+				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
-						alert("Error in adding new entry");
+						alert("Error in delete new entry");
 					});
 				}
 			}catch(e){
@@ -357,7 +357,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					.then(function(response){
 						$scope.lunchList.splice(index,1);
 						$scope.entriesList.splice(index,1);
-						alert("Entry has been succesfully deleted.");
+					//	alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
@@ -378,7 +378,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					.then(function(response){
 						$scope.dinnerList.splice(index,1);
 						$scope.entriesList.splice(index,1);
-						alert("Entry has been succesfully deleted.");
+				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
@@ -399,7 +399,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 					.then(function(response){
 						$scope.snackList.splice(index,1);
 						$scope.entriesList.splice(index,1);
-						alert("Entry has been succesfully deleted.");
+				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
 						alert("Error in adding new entry");
@@ -432,7 +432,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 				});
 				}else
 					{
-						alert('Please enter a positive value.');
+						alert('Please enter food name.');
 					}
 			}catch(e){
 				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
@@ -474,7 +474,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 				MealsService.addNewEntry($scope.date_id,$scope.headerToEdit,foodName,foodCal)
 				.then(function(response){
 				//	$scope.newEntry.value = 0;
-					alert("New Entry has been added. "+ $scope.date_id);
+				//	alert("New Entry has been added. "+ $scope.date_id);
 					$scope.foodName={
 					name: ''
 					};
@@ -487,7 +487,7 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 				});
 				}else
 					{
-						alert('Please enter a positive value.');
+						alert('Please enter a food name.');
 					}
 			}catch(e){
 				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
