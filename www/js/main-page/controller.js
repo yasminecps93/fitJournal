@@ -6,6 +6,9 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 		initData();
 	  	initMethods();
 
+	  	var yPosition = 0;
+	  	var maxLength = 0;
+	  	var newYPosition = 0;
 		$scope.showFooter = false;
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
@@ -23,28 +26,33 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	    function initMethods(){
 	    	$scope.addWeightWidget = addWeightWidget;
 	    	$scope.addMeasurementsWidget = addMeasurementsWidget;
-	    	$scope.draggable = draggable;
-	    //	$scope.disableDraggable = disableDraggable;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
 	    }
 	    
+	    function calculateLastWidgetPosition(){
+	    	var temp = 0;
+	    	newYPosition = 0;
+	    	if($scope.widgetList.length>0){
+	    		for(var i=0; i<$scope.widgetList.length; i++){
+	    			yPosition = $scope.widgetList[i].row;
+	    			maxLength = $scope.widgetList[i].sizeY;
+	    			temp = yPosition+maxLength;
+	    				if(temp>newYPosition){
+	    					newYPosition=temp;
+	    				}
+	    		}
+	    	}
+	    	
+	    }
 
-	    function addWeightWidget(){
-	    	$scope.widgetList.push({
-	    	  title: "Weight",
-	          sizeX: 2,
-	          sizeY: 2,
-	          row: 0,
-	          col: 0,
-	          directives : "<weight-widget></weight-widget>",
-	      });
+	   	function addWeightWidget(){
+	    	calculateLastWidgetPosition();
+	    	console.log(newYPosition);
 	    	try{
-	      		var lastItem = $scope.widgetList.length - 1;
-	      		MainService.addNewWidget($scope.widgetList[lastItem].title,$scope.widgetList[lastItem].row,$scope.widgetList[lastItem].col, $scope.widgetList[lastItem].sizeX, $scope.widgetList[lastItem].sizeY, $scope.widgetList[lastItem].directives)
+	      		MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
 				.then(function(response){
-				//	alert("Saved widget");
-					//	fetchWidget();
+				fetchWidget();
 				},function(error){
 					alert("Error in changing template");
 				});
@@ -54,20 +62,11 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	    }
 	   	
 	   	function addMeasurementsWidget(){
-	   		$scope.widgetList.push({
-	   		  title: "Measurements",
-	          sizeX: 3,
-	          sizeY: 1,
-	          row: 0,
-	          col: 1,
-	          directives : "<measurements-widget></measurements-widget>"
-	      	});
+	   		calculateLastWidgetPosition();
 	      	try{
-	      		var lastItem = $scope.widgetList.length - 1;
-	      		MainService.addNewWidget($scope.widgetList[lastItem].title,$scope.widgetList[lastItem].row,$scope.widgetList[lastItem].col, $scope.widgetList[lastItem].sizeX, $scope.widgetList[lastItem].sizeY, $scope.widgetList[lastItem].directives)
+	      		MainService.addNewWidget("Measurements",newYPosition,0, 3, 1, "<measurements-widget></measurements-widget>")
 				.then(function(response){
-				//	alert("Saved widget");
-					//	fetchWidget();
+				 	fetchWidget();
 				},function(error){
 					alert("Error in changing template");
 				});
@@ -117,16 +116,15 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 
 		function deleteWidget(index,id)
 		{
+			console.log(index);
 			try{
 				if(index > -1)
 				{	
 					MainService.deleteWidget(id)
 					.then(function(response){
-						$scope.widgetList.splice(index,1);
-				//		alert("Entry has been succesfully deleted.");
 						fetchWidget();
 					},function(error){
-						alert("Error in delete new widget");
+						alert("Error in delete widget");
 					});	
 				}
 			}catch(e){
@@ -153,8 +151,7 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 							sizeX:response.rows.item(i).sizeX,
 							sizeY:response.rows.item(i).sizeY,
 							directives:response.rows.item(i).directives
-						});
-					
+						});					
 					}
 					
 				}else
@@ -175,12 +172,12 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	    $scope.gridsterOpts = {
 	        columns: 4, // the width of the grid, in columns
 	        pushing: true, // whether to push other items out of the way on move or resize
-	        floating: true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
+	        floating: false, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
 	        swapping: true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
 	        width: 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
 	        colWidth: 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
 	        rowHeight: 'match', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
-	        margins: [10, 10], // the pixel distance between each widget
+	        margins: [7, 7], // the pixel distance between each widget
 	        outerMargin: true, // whether margins apply to outer edges of the grid
 	        isMobile: false, // stacks the grid items if true
 	        mobileBreakPoint: 600, // if the screen is not wider that this, remove the grid layout and stack the items
@@ -205,48 +202,19 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	           } // optional callback fired when item is finished resizing
 	        },
 	        draggable: {
-	           enabled: false, // whether dragging items is supported
-	         //  handle: '.my-class', // optional selector for drag handle
+	           enabled: true, // whether dragging items is supported
+	           handle: '.widget-header', // optional selector for drag handle
 	           scrollSensitivity: 20, // Distance in pixels from the edge of the viewport after which the viewport should scroll, relative to pointer
 	           scrollSpeed: 15, // Speed at which the window should scroll once the mouse pointer gets within scrollSensitivity distance
 	           start: function(event, $element, widget) {}, // optional callback fired when drag is started,
 	           drag: function(event, $element, widget) {}, // optional callback fired when item is moved,
 	           stop: function(event, $element, widget) {
 	           		addWidgetTemplate();
-	           		disableDraggable();
 	           } // optional callback fired when item is finished dragging
 	        }
 	    };
 
-	    function draggable(){
-	    	$scope.gridsterOpts = {
-     			draggable: {
-       			 	enabled: true
-      			}
-    		 }
-	    //	$timeout(delayFunction, 300);
-	    }
-
-	    function delayFunction(){
-	    	console.log("enabled");
-	   		
-	    	$scope.gridsterOpts = {
-     			draggable: {
-       			 	enabled: true
-      			}
-    		 }
-    		 
-    		//$cordovaVibration.vibrate(100);
-	    }
-	    
-	    function disableDraggable(){
-	    	console.log("disabled");
-	    	$scope.gridsterOpts = {
-     			draggable: {
-       			 	enabled: false
-      			}
-    		}
-	    }
+	   
 	}
 ]);
 
@@ -271,7 +239,7 @@ mainPageModule.directive('weightWidget',
   function($compile){
   return{
     replace: false,
-    templateUrl:'/templates/tryWidgetTemplate.html'
+    templateUrl:'js/main-page/templates/tryWidgetTemplate.html'
   }
 });
 
@@ -279,6 +247,7 @@ mainPageModule.directive('measurementsWidget',
   function($compile){
   return{
     replace: false,
-    templateUrl:'/templates/measurementsWidgetTemplate.html'
+    templateUrl:'js/main-page/templates/measurementsWidgetTemplate.html'
   }
 });
+

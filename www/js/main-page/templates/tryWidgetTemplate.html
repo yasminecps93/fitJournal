@@ -1,7 +1,14 @@
 <div>
-	<ion-header-bar>
-		Weight
-	</ion-header-bar>
+<ion-header-bar  class="widget-header">
+    <button class="button button-icon"ng-click="deleteWidget($index, extraWidget.id)">
+		<i class="ion-android-close"></i>
+	</button>
+    <div class="h3 title">Weight</div>
+	
+	<button class="button button-icon" ng-click="save()">
+		<i class="ion-android-create"></i>
+	</button>
+</ion-header-bar>
 	<ion-content>
     	Your weight is 50kg.
     </ion-content>

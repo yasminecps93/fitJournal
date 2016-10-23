@@ -111,6 +111,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 				runQuery(query,[],function(response){
 					//Success Callback
 				//	alert("Table dropped");
+					alterTable();
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
@@ -122,6 +123,28 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 				return deferred.promise;
 			}catch(e){
 				alert("Error in deleteTable "+e.message);
+			}
+			
+		}
+
+		function alterTable(){
+			var deferred = $q.defer();
+			try{
+				var query = "DELETE from sqlite_sequence where name='widget_list_try1'";
+				runQuery(query,[],function(response){
+					//Success Callback
+				//	alert("Table dropped");
+					console.log(response);
+					deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				alert("Error in alterTable "+e.message);
 			}
 			
 		}

@@ -1,7 +1,15 @@
 <div>
-	<ion-header-bar>
-		Measurements
-	</ion-header-bar>
+<ion-header-bar  class="widget-header">
+	<button class="button button-icon" ng-click="deleteWidget($index, extraWidget.id)">
+		<i class="ion-android-close"></i>
+	</button>
+    <div class="h3 title">Measurements</div>
+	
+	<button class="button button-icon" ng-click="save()">
+		<i class="ion-android-create"></i>
+	</button>
+</ion-header-bar>
+
 	<ion-content>
     	Today's measurements are...
     </ion-content>

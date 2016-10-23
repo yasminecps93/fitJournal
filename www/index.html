@@ -53,7 +53,7 @@
         <ion-header-bar>
           <h1 class="title">FitJournal</h1>
           <div class="buttons button-right">
-           <button class="button button-icon" ng-class="{'icon ion-plus': !showFooter, 'icon ion-minus': showFooter}"ng-click="toggleFooter(); bottomNav()">
+           <button class="button button-icon" ng-class="{'icon ion-android-add': !showFooter, 'icon ion-android-remove': showFooter}"ng-click="toggleFooter(); bottomNav()">
 
            </button>
            <button class="button button-icon ion-android-more-vertical" ng-click="openPopover($event)" ng-controller="SideMenuCtrl"></button>
@@ -68,14 +68,15 @@
                   <li ng-repeat="extraWidget in widgetList track by $index" gridster-item row="extraWidget.row" col="extraWidget.col" size-x="extraWidget.sizeX" size-y="extraWidget.sizeY">
                   <!--input type="text" integer ng-model="extraWidget.sizeX" size="1"/>x
                   <input type="text" integer ng-model="extraWidget.sizeY" size="1" /-->
-                      <ion-header-bar on-touch="draggable()" class="widget-header">
+                      <!-- <ion-header-bar class="widget-header">
                           <h6>{{extraWidget.title}}</h6>
                           <div class="buttons button-right">
                           <button class="button button-icon ion-ios-trash-outline" ng-click="deleteWidget($index, extraWidget.id)"></button>
-                      </ion-header-bar>
-                      
-                        <!--compile-directive directive="{{extraWidget.directives}}"></compile-directive-->
-                      
+                      </ion-header-bar> -->
+                      <compile-directive directive="{{extraWidget.directives}}"></compile-directive> 
+                      <!-- <ion-content>
+                                          
+                      </ion-content> -->
                   </li>
               </ul>
           </div>
