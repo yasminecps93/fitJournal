@@ -1,7 +1,7 @@
 var mainPageModule = angular.module('MainPage',['ngCordova','ionic','gridster']);
 
-mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration','$timeout',
-	function($scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration,$timeout){
+mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration',
+	function($rootScope,$scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration){
 
 		initData();
 	  	initMethods();
@@ -9,6 +9,7 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	  	var yPosition = 0;
 	  	var maxLength = 0;
 	  	var newYPosition = 0;
+	  	var isDelete = "";
 		$scope.showFooter = false;
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
@@ -28,6 +29,7 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	    	$scope.addMeasurementsWidget = addMeasurementsWidget;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
+	    	$scope.removeDirective = removeDirective;
 	    }
 	    
 	    function calculateLastWidgetPosition(){
@@ -94,8 +96,6 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 						for(var i=0; i<$scope.widgetList.length; i++){
 							MainService.addNewWidget($scope.widgetList[i].title,$scope.widgetList[i].row,$scope.widgetList[i].col, $scope.widgetList[i].sizeX, $scope.widgetList[i].sizeY, $scope.widgetList[i].directives)
 							.then(function(response){
-						//		alert("Saved template");
-							//	fetchWidget();
 							},function(error){
 								alert("Error in changing template");
 							});
@@ -122,7 +122,15 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 				{	
 					MainService.deleteWidget(id)
 					.then(function(response){
-						fetchWidget();
+						// removeDirective(function(){
+						// 	fetchWidget();
+						// });
+						// if(index!=$scope.widgetList.length){
+							removeDirective();
+						// }
+						console.log("in delete success");
+						 fetchWidget();
+					//	removeDirective();
 					},function(error){
 						alert("Error in delete widget");
 					});	
@@ -132,6 +140,10 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 			}
 			
 		}
+
+		 function removeDirective() {
+		    $rootScope.$emit('destroyDirective');
+		  };
 
 		function fetchSuccessCB(response)
 		{
@@ -218,34 +230,65 @@ mainPageModule.controller('MainCtrl',['$scope','$state','$cordovaSQLite','$ionic
 	}
 ]);
 
-mainPageModule.directive('compileDirective', function($compile) {
+mainPageModule.directive('compileDirective', function($compile,$rootScope) {
+        var uniqueId = 0;
         return {
           restrict: "E",
           replace: false,
           link: function(scope, element, attr) {
-            scope.$watch(function() {
-              return attr.directive;
-            }, function(val) {
-              if (val) {
-                var directive = $compile(angular.element(val))(scope);
-                element.append(directive);
-              }
-            });
-          }
+          	
+          		 scope.$watch(function() {
+             		 return attr.directive;
+            	}, function(val) {
+            	if (val) {
+            		// $rootScope.$on('destroyDirective',function(){
+            		// 	console.log("delete val= "+val);
+		          		// var directive1 = $compile(angular.element(val))(scope);
+			           //  element.remove(directive1);
+            		// });
+		            //  	console.log("val= "+val);
+		            //  	var item = 'item' + uniqueId++;
+		                var directive = $compile(angular.element(val))(scope);
+		                element.append(directive);
+		             //   element.find('compile-directive').attr('id',item);
+		         }
+            	});
+          	}
         };
 });
 
 mainPageModule.directive('weightWidget',
-  function($compile){
-  return{
-    replace: false,
-    templateUrl:'js/main-page/templates/tryWidgetTemplate.html'
-  }
+	function($compile,$rootScope){
+	  
+	  	function link(scope, element, attributes,controller) {
+	  		// $rootScope.$on('destroyDirective', function () {
+	    //     element.html('');
+	  		// 	console.log("deleted");
+	    //   });
+	  		// scope.remove = function(){
+	  		// 	element.html('');
+	  		// 	console.log("deleted");
+	  		// };
+	    }
+	   return({
+	   	controller: 'WeightWidgetCtrl',
+	    replace: false,
+	    link: link,
+	    templateUrl:'js/main-page/templates/tryWidgetTemplate.html'
+     });
+
+  
 });
 
 mainPageModule.directive('measurementsWidget',
-  function($compile){
+  function($compile,$rootScope){
   return{
+  	link: function (scope, element, attributes) {
+  		// $rootScope.$on('destroyDirective', function () {
+    //     element.html('');
+  		// 	console.log("deleted");
+    //   });
+  	},
     replace: false,
     templateUrl:'js/main-page/templates/measurementsWidgetTemplate.html'
   }

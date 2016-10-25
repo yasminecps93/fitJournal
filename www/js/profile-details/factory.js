@@ -26,7 +26,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS profiledata_list (id integer primary key autoincrement, current_weight double, weight_unit string, goal_weight double, goal_date string, total_weight_loss double, weekly_weight_loss double)";
-			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, today_weight double, weight_unit string)";
+			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, today_weight double, weight_unit string)";
 			  try{
 				  	runQuery(query,[],function(res) {
 				      console.log("table created ");
@@ -56,12 +56,12 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		  }.bind(this));
 		}
 
-		function addNewWeight(today_weight, weight_unit){
+		function addNewWeight(current_date, today_weight, weight_unit){
 			
 			var deferred = $q.defer();
-			var query = "INSERT INTO weight_list (created_at, today_weight, weight_unit) VALUES (datetime(),?,?)";
+			var query = "INSERT INTO weight_list (created_at, current_date, today_weight, weight_unit) VALUES (datetime(),?,?,?)";
 			try{
-				runQuery(query,[today_weight, weight_unit],function(response){
+				runQuery(query,[current_date,today_weight, weight_unit],function(response){
 				//Success Callback
 			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);

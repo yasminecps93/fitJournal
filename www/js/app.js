@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails', 'MealPlanner','gridster','MainPage'])
+angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails', 'MealPlanner','gridster','MainPage','WeightWidget'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
@@ -84,7 +84,9 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
        $scope.$on('$destroy', function() {
          $scope.popover.remove();
       });
+
 })
+
 /*
 .directive('compileDirective', function($compile) {
         return {

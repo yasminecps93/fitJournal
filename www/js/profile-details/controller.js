@@ -20,14 +20,15 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 	  		$scope.weight={
 	  			first:0,
 	  			second:0
-	  		}
+	  		};
 	  		$scope.wwl=0;
 	  		$scope.goalDate='';
-	  	//	$scope.totalDaysForPreviousGoalDate=0;
+	  		$scope.cDate = "";
 			$scope.loadingProfileData = false;
 			
 			ProfileService.initDB();
 			fetchProfileData();
+			currentDate();
 		}
 
 	 
@@ -106,7 +107,20 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 			$scope.addNewProfileData = addNewProfileData;
 			$scope.deleteEntry = deleteEntry;
 			$scope.addNewWeight = addNewWeight;
+			$scope.currentDate = currentDate;
 		}
+
+		function currentDate(){
+          var monthsList= ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+          var dateToString = "";
+          var oneDay = 24*60*60*1000;
+          var todayDate = new Date();
+          var i = new Date().getMonth();
+          var month = monthsList[i];
+          dateToString = new Date().getDate()+ "/"+ month + "/" + new Date().getFullYear();
+          $scope.cDate =dateToString;   
+          console.log(dateToString);
+      }
 
 		function fetchProfileData() {
 			$scope.loadingProfileData = true;
@@ -145,7 +159,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 		function addNewWeight(){
 			try{
 				if($scope.weight.first> 0 && $scope.weight.second > 0 && $scope.goalDate!=''){
-				ProfileService.addNewWeight($scope.weight.first,$scope.wUnit.name)
+				ProfileService.addNewWeight($scope.cDate, $scope.weight.first,$scope.wUnit.name)
 				.then(function(response){
 					
 					//fetchProfileData();
