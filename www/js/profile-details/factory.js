@@ -4,13 +4,15 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
 		var ProfileDataList;
+		var weightArray;
 
 		return{
 			initDB:initDB,
 			getAllProfileData: getAllProfileData,
+			updateProfileData:updateProfileData,
 			addNewProfileData: addNewProfileData,
-			deleteEntry: deleteEntry,
-			getProfileData:getProfileData,
+			getAllWeight: getAllWeight,
+			updateWeight:updateWeight,
 			addNewWeight: addNewWeight
 		}
 
@@ -25,8 +27,8 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			  	alert("Error in opening db " + e.message);
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS profiledata_list (id integer primary key autoincrement, current_weight double, weight_unit string, goal_weight double, goal_date string, total_weight_loss double, weekly_weight_loss double)";
-			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, today_weight double, weight_unit string)";
+			  var query = "CREATE TABLE IF NOT EXISTS profiledata_list (id integer primary key autoincrement, current_date string, current_weight double, weight_unit string, goal_weight double, goal_date string, total_weight_loss double, weekly_weight_loss double)";
+			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, current_weight double, weight_unit string)";
 			  try{
 				  	runQuery(query,[],function(res) {
 				      console.log("table created ");
@@ -56,14 +58,55 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		  }.bind(this));
 		}
 
-		function addNewWeight(current_date, today_weight, weight_unit){
+//---------------------------------------------------------------------------------//
+//---------------------------------WEIGHT------------------------------------------//
+//---------------------------------------------------------------------------------//		
+
+		function getAllWeight(){
+
+			var deferred = $q.defer();
+			var query = "SELECT * from weight_list";
+			try{
+				runQuery(query,[],function(response){
+				weightArray = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+				return deferred.promise;
+			}catch(e){
+			  	alert("Error in getAllWeight "+e.message);
+			}
+		}
+
+		function updateWeight(current_weight,weight_unit,id){
+			var deferred = $q.defer();
+			var query = "UPDATE weight_list SET current_weight = ?, weight_unit = ? WHERE id = ?";
+			try{
+				runQuery(query,[current_weight,weight_unit,id],function(response){
+				console.log(response);
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					alert("Error in changing weight");
+					console.log(error);
+					deferred.reject(error);
+				});
+				return deferred.promise;
+			}catch(e){
+				alert("Error in updatingWeightTable "+e.message);
+			}
+		}
+
+
+		function addNewWeight(current_date, current_weight, weight_unit){
 			
 			var deferred = $q.defer();
-			var query = "INSERT INTO weight_list (created_at, current_date, today_weight, weight_unit) VALUES (datetime(),?,?,?)";
+			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (datetime(),?,?,?)";
 			try{
-				runQuery(query,[current_date,today_weight, weight_unit],function(response){
-				//Success Callback
-			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
+				runQuery(query,[current_date,current_weight, weight_unit],function(response){
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -78,18 +121,18 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			}
 		}
 
+//---------------------------------------------------------------------------------//
+//-------------------------------PROFILE DATA--------------------------------------//
+//---------------------------------------------------------------------------------//	
+
 		function getAllProfileData(){
 
 			var deferred = $q.defer();
 			var query = "SELECT * from profiledata_list";
-		//	var query = "SELECT last_insert_rowid()";
 			try{
 				runQuery(query,[],function(response){
-				//Success Callback
-				//alert(response);
 				ProfileDataList = response.rows;
 				deferred.resolve(response);
-			//	alert("last insert rowid() "+response);
 				},function(error){
 					//Error Callback
 					console.log(error);
@@ -99,18 +142,33 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			}catch(e){
 			  	alert("Error in getAllProfileData "+e.message);
 			}
-			
-			
 		}
 
-		function addNewProfileData(current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss) {
+		function updateProfileData(current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss ,id){
+			var deferred = $q.defer();
+			var query = "UPDATE weight_list SET current_weight = ?, weight_unit = ?, goal_weight = ?, goal_date = ?, total_weight_loss = ?, weekly_weight_loss =? WHERE id = ?";
+			try{
+				runQuery(query,[current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss,id],function(response){
+				console.log(response);
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					alert("Error in changing profile data");
+					console.log(error);
+					deferred.reject(error);
+				});
+				return deferred.promise;
+			}catch(e){
+				alert("Error in updatingProfileDataTable "+e.message);
+			}
+		}
+
+		function addNewProfileData(current_date, current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss) {
 		//	console.log('adding new routine :'+name);
 			var deferred = $q.defer();
-			var query = "INSERT INTO profiledata_list (current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss) VALUES (?,?,?,?,?,?)";
+			var query = "INSERT INTO profiledata_list (current_date, current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss) VALUES (?,?,?,?,?,?,?)";
 			try{
-				runQuery(query,[current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss],function(response){
-				//Success Callback
-			//	alert(current_weight+", "+weight_unit+", "+goal_weight+", "+goal_date+", "+total_weight_loss+", "+weekly_weight_loss);
+				runQuery(query,[current_date, current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss],function(response){
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -125,45 +183,6 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			
 		}
 
-		function getProfileData(id) {
-			var profiledata;
-			try{
-				if(ProfileDataList){
-					for(var i=0;i<ProfileDataList.length;i++)
-					{
-						if(ProfileDataList.item(i).id == id)
-							profiledata = ProfileDataList.item(i);
-					}
-				}
-				return profiledata;
-			}catch(e){
-				alert("Error in getProfileData "+e.message);
-			}
-				
-		}
-
-		function deleteEntry() {
-			try{
-				var deferred = $q.defer();
-				var query = "DELETE * FROM profiledata_list";
-				runQuery(query,[],function(response){
-					//Success Callback
-			//		alert("deleteEntry Success");
-					console.log(response);
-					deferred.resolve(response);
-				},function(error){
-					//Error Callback
-					alert("deleteEntry error");
-					console.log(error);
-					deferred.reject(error);
-				});
-
-				return deferred.promise;
-			}catch(e){
-				alert("Error in deleteEntry "+e.message);
-			}
-			
-		}
 
 		function runQuery(query,dataArray,successCb,errorCb)
 		{
@@ -181,3 +200,43 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		}
 
 	}]);
+
+		// function getProfileData(id) {
+		// 	var profiledata;
+		// 	try{
+		// 		if(ProfileDataList){
+		// 			for(var i=0;i<ProfileDataList.length;i++)
+		// 			{
+		// 				if(ProfileDataList.item(i).id == id)
+		// 					profiledata = ProfileDataList.item(i);
+		// 			}
+		// 		}
+		// 		return profiledata;
+		// 	}catch(e){
+		// 		alert("Error in getProfileData "+e.message);
+		// 	}
+				
+		// }
+
+		// function deleteEntry() {
+		// 	try{
+		// 		var deferred = $q.defer();
+		// 		var query = "DELETE * FROM profiledata_list";
+		// 		runQuery(query,[],function(response){
+		// 			//Success Callback
+		// 	//		alert("deleteEntry Success");
+		// 			console.log(response);
+		// 			deferred.resolve(response);
+		// 		},function(error){
+		// 			//Error Callback
+		// 			alert("deleteEntry error");
+		// 			console.log(error);
+		// 			deferred.reject(error);
+		// 		});
+
+		// 		return deferred.promise;
+		// 	}catch(e){
+		// 		alert("Error in deleteEntry "+e.message);
+		// 	}
+			
+		// }

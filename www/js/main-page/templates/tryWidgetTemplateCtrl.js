@@ -16,17 +16,21 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
       }; 
       $scope.cDate = "";
       $scope.dateExist = false;
-      $scope.tempID =0;
+      $scope.tempIDWeight =0;
       WeightWidgetService.initDB();
-      getWeight();
+      fetchWeight();
       
     }
 
     function initMethods(){
-      $scope.addWeight = addWeight;
-      $scope.displayDate = displayDate;
+      $scope.addNewWeight = addNewWeight;
+      $scope.currentDate = currentDate;
       $scope.checkDate = checkDate;
     }
+
+//---------------------------------------------------------------------------------//
+//---------------------------MODAL FUNCTIONS---------------------------------------//
+//---------------------------------------------------------------------------------//
 
     $ionicModal.fromTemplateUrl('add-weight-modal.html',{
       scope: $scope,
@@ -38,7 +42,7 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
 
     $scope.openModal = function(){   
         $scope.modal.show();
-        displayDate();
+        currentDate();
     };
 
     $scope.closeModal = function() {
@@ -49,7 +53,11 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
       $scope.modal.remove();
     });
 
-     function displayDate(){
+//---------------------------------------------------------------------------------//
+//--------------------CHECK CURRENT DATE FUNCTIONS---------------------------------//
+//---------------------------------------------------------------------------------//
+
+     function currentDate(){
           var monthsList= ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
           var dateToString = "";
           var oneDay = 24*60*60*1000;
@@ -62,62 +70,34 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
           checkDate();
       }
 
-    function getWeight(){
+      function checkDate(){
+        try{
+          if($scope.weightArray.length>0){
+            for(var j= 0 ; j< $scope.weightArray.length; j++){
+              if($scope.weightArray[j].cDate==$scope.cDate){
+                $scope.tempIDWeight=$scope.weightArray[j].id;
+                $scope.dateExist=true;
+                console.log($scope.tempIDWeight+", "+$scope.dateExist);
+                break;
+              }
+            }
+          }
+          
+        }catch(e){
+          alert("Error in check weight controller "+e.message);
+        }
+      }
+
+//---------------------------------------------------------------------------------//
+//--------------------------------WEIGHT FUNCTIONS---------------------------------//
+//---------------------------------------------------------------------------------//      
+
+    function fetchWeight(){
       try{
         WeightWidgetService.getAllWeight()
         .then(fetchSuccessCB,fetchErrorCB);
       }catch(e){
         alert("Error in fetch weight controller "+e.message);
-      }
-    }
-
-    function checkDate(){
-      try{
-        if($scope.weightArray.length>0){
-          for(var j= 0 ; j< $scope.weightArray.length; j++){
-            if($scope.weightArray[j].cDate==$scope.cDate){
-              $scope.tempID=$scope.weightArray[j].id;
-              $scope.dateExist=true;
-              console.log($scope.tempID+", "+$scope.dateExist);
-              break;
-            }
-          }
-        }
-        
-      }catch(e){
-        alert("Error in check weight controller "+e.message);
-      }
-    }
-
-    function addWeight(){
-      try{
-        if($scope.weight.current> 0 && $scope.dateExist==false){
-      
-          WeightWidgetService.addNewWeight($scope.cDate,$scope.weight.current,$scope.wUnit.name)
-          .then(function(response){
-            alert("New weight saved. "+$scope.weight.current+', '+$scope.dateExist);
-            getWeight();
-            closeModal();
-          },function(error){
-            alert("Error in adding new Weight");
-          });
-        }else if($scope.weight.current> 0 && $scope.dateExist==true){
-          WeightWidgetService.updateWeight($scope.weight.current,$scope.tempID)
-           .then(function(response){
-            alert("Updated weight saved. "+$scope.weight.current+', '+$scope.dateExist);
-            $scope.dateExist=false;
-            getWeight();
-            closeModal();
-          },function(error){
-            alert("Error in updating new Weight");
-          });
-        }else
-        {
-          alert('Empty input, '+$scope.weight.current+', '+$scope.dateExist);
-        }
-      }
-      catch(e){
-        alert("Error in add weight controller "+e.message);
       }
     }
 
@@ -134,7 +114,7 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
             $scope.weightArray.push
             ({
               id:response.rows.item(i).id,
-              cWeight:response.rows.item(i).today_weight,
+              cWeight:response.rows.item(i).current_weight,
               wUnit:response.rows.item(i).weight_unit,
               cDate:response.rows.item(i).current_date
             });
@@ -157,6 +137,40 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
     {
       alert("Some error occurred in fetching Weight");
     }
+
+    function addNewWeight(){
+      try{
+        if($scope.weight.current> 0 && $scope.dateExist==false){
+      
+          WeightWidgetService.addNewWeight($scope.cDate,$scope.weight.current,$scope.wUnit.name)
+          .then(function(response){
+            alert("New weight saved. "+$scope.weight.current+', '+$scope.dateExist);
+            fetchWeight();
+            $scope.closeModal();
+          },function(error){
+            alert("Error in adding new Weight");
+          });
+        }else if($scope.weight.current> 0 && $scope.dateExist==true){
+          WeightWidgetService.updateWeight($scope.weight.current,$scope.tempIDWeight)
+           .then(function(response){
+            alert("Updated weight saved. "+$scope.weight.current+', '+$scope.dateExist);
+            $scope.dateExist=false;
+            fetchWeight();
+            $scope.closeModal();
+          },function(error){
+            alert("Error in updating new Weight");
+          });
+        }else
+        {
+          alert('Empty input, '+$scope.weight.current+', '+$scope.dateExist);
+        }
+      }
+      catch(e){
+        alert("Error in add weight controller "+e.message);
+      }
+    }
+
+    
 
   }]);
 

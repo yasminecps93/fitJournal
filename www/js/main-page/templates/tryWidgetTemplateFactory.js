@@ -22,7 +22,7 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 			  	alert("Error in opening db");
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, today_weight double, weight_unit string)";
+			  var query = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, current_weight double, weight_unit string)";
 
 			  try{
 			  	runQuery(query,[],function(res) {
@@ -60,11 +60,11 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 			}
 		}
 
-		function updateWeight(cweight,id){
+		function updateWeight(current_weight,id){
 			var deferred = $q.defer();
-			var query = "UPDATE weight_list SET today_weight = ? WHERE id = ?";
+			var query = "UPDATE weight_list SET current_weight = ? WHERE id = ?";
 			try{
-				runQuery(query,[cweight,id],function(response){
+				runQuery(query,[current_weight,id],function(response){
 				//Success Callback
 			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
@@ -81,12 +81,12 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 			}
 		}
 
-		function addNewWeight(current_date, today_weight, weight_unit){
+		function addNewWeight(current_date, current_weight, weight_unit){
 			
 			var deferred = $q.defer();
-			var query = "INSERT INTO weight_list (created_at, current_date, today_weight, weight_unit) VALUES (datetime(),?,?,?)";
+			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (datetime(),?,?,?)";
 			try{
-				runQuery(query,[current_date, today_weight, weight_unit],function(response){
+				runQuery(query,[current_date, current_weight, weight_unit],function(response){
 				//Success Callback
 			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
