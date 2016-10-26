@@ -84,7 +84,7 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
           }
           
         }catch(e){
-          alert("Error in check weight controller "+e.message);
+          alert("Error in check date controller "+e.message);
         }
       }
 

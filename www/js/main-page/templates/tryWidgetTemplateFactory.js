@@ -103,6 +103,10 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 			}
 		}
 
+//--------------------------------------------------------------------//
+//------------------------QUERY FUNCTIONS-----------------------------//
+//--------------------------------------------------------------------//
+
 		function runQuery(query,dataArray,successCb,errorCb)
 		{
 		  $ionicPlatform.ready(function() {	

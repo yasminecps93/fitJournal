@@ -146,7 +146,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 
 		function updateProfileData(current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss ,id){
 			var deferred = $q.defer();
-			var query = "UPDATE weight_list SET current_weight = ?, weight_unit = ?, goal_weight = ?, goal_date = ?, total_weight_loss = ?, weekly_weight_loss =? WHERE id = ?";
+			var query = "UPDATE profiledata_list SET current_weight = ?, weight_unit = ?, goal_weight = ?, goal_date = ?, total_weight_loss = ?, weekly_weight_loss =? WHERE id = ?";
 			try{
 				runQuery(query,[current_weight, weight_unit, goal_weight, goal_date, total_weight_loss, weekly_weight_loss,id],function(response){
 				console.log(response);

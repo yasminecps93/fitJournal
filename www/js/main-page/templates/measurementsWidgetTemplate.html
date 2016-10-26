@@ -5,12 +5,65 @@
 	</button>
     <div class="h3 title">Measurements</div>
 	
-	<button class="button button-icon" ng-click="save()">
+	<button class="button button-icon" ng-click="openModal()">
 		<i class="ion-android-create"></i>
 	</button>
 </ion-header-bar>
 
 	<ion-content>
-    	Today's measurements are...
+    	 <ion-list>
+			<ion-item ng-repeat="item in bodyPartMeasurementArray">
+				{{item.bodypart_name}}, {{item.measurement}} {{item.unit}}
+			</ion-item>
+	   	</ion-list>
+	   	
     </ion-content>
 </div>
+
+<script type="text/ng-template" id="add-measurements-modal.html">
+	<ion-modal-view>
+		<ion-header-bar>
+			<a ng-click="closeModal()"><i class="ion-ios-arrow-left"></i></a>
+			 <div class="h1 title">Measurements</div>
+			<div class="buttons">
+		    	<button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+		  	</div>
+			
+		</ion-header-bar>
+		<ion-content>
+			<ion-list show-delete="shouldShowDelete">
+		    	
+		    	<ion-item ng-click="showPopup(); addArray($index); checkDate($index)" class="item-icon-right" ng-repeat="entry in bodyPartMeasurementArray track by $index">
+					    {{entry.bodypart_name}}, {{entry.measurement}} {{entry.unit}}
+					    <ion-delete-button class="ion-minus-circled" ng-click="deleteBodyPartMeasurements($index,entry.bodypart_name)"></ion-delete-button>
+				</ion-item>
+		   	</ion-list>
+		   	<ion-list>
+		    	<ion-item class="item item-divider">
+		    		Add New Body Part
+		    	</ion-item>
+		    	<ion-item>
+					<input type="text" placeholder="Enter Body Part Name" ng-model="bodypart.name">
+		    	</ion-item>
+		   		<ion-item>
+		   			<button class="button button-block button-calm" ng-click="addNewBodyPart()">Add</button>
+		   		</ion-item>
+		   	</ion-list>
+		</ion-content>
+	</ion-modal-view>
+</script>
+
+<script type="text/ng-template" id="add-measurements-popup.html">
+  <div ng-repeat="t in tempArray">
+      <input type="text" ng-value="t.name" ng-model="bp.name"/>
+      <label class="item item-input item-stacked-label p-item">
+	      <span class="input-label">Measurement</span>
+	      <input type="Number" ng-model="measurement.num" ng-value="t.measurement"/>
+	  </label>
+	  <select ng-model="mUnit.name">
+	          <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
+	  </select>
+  </div>
+  
+  <!--button class="button button-positive" ng-click="addNewEntry() ">Save</button-->
+</script>

@@ -282,13 +282,19 @@ mainPageModule.directive('weightWidget',
 
 mainPageModule.directive('measurementsWidget',
   function($compile,$rootScope){
+  	function link(scope, element, attributes,controller) {
+	  		// $rootScope.$on('destroyDirective', function () {
+	    //     element.html('');
+	  		// 	console.log("deleted");
+	    //   });
+	  		// scope.remove = function(){
+	  		// 	element.html('');
+	  		// 	console.log("deleted");
+	  		// };
+	}
   return{
-  	link: function (scope, element, attributes) {
-  		// $rootScope.$on('destroyDirective', function () {
-    //     element.html('');
-  		// 	console.log("deleted");
-    //   });
-  	},
+  	controller: 'MeasurementsWidgetCtrl',
+  	link: link,
     replace: false,
     templateUrl:'js/main-page/templates/measurementsWidgetTemplate.html'
   }

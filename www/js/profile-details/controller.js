@@ -88,7 +88,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
               if($scope.ProfileDataList[j].cDate==$scope.cDate){
                 $scope.tempIDProfile=$scope.ProfileDataList[j].id;
                 $scope.dateExistProfileData=true;
-                console.log($scope.tempIDProfile+", "+$scope.dateExist);  
+                console.log($scope.tempIDProfile+", "+$scope.dateExistProfileData);  
                 break;
               }
             }
@@ -330,7 +330,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
           });
         }else
         {
-          alert('Empty input, '+$scope.weight.current+', '+$scope.dateExist);
+          alert('Empty input, '+$scope.weight.current+', '+$scope.dateExistWeight);
         }
       }
       catch(e){
@@ -340,22 +340,4 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 		
 }]); 
 
-
-		// function deleteEntry(index)
-		// {
-		// 	try{
-		// 			ProfileService.deleteEntry()
-		// 			.then(function(response){
-		// 			//	$scope.entriesList.splice(index,1);
-		// 			//	alert("Entry has been succesfully deleted.");
-		// 			},function(error){
-		// 				alert("Error in adding new entry");
-		// 			});
-
-				
-		// 	}catch(e){
-		// 		alert("Error in deleteEntry controller "+e.message);
-		// 	}
-			
-		// }
 	

@@ -13,13 +13,6 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 
 		function initDB() {
 		  $ionicPlatform.ready(function() {
-		  	//   if(window.cordova)
-		  	//   {
-			  // 	db = $cordovaSQLite.openDB("myapp.db");
-			  // }else
-			  // {
-			  // 	db = window.openDatabase("myapp.db", '1.0', 'Trackers DB', -1);
-			  // }
 			 
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
