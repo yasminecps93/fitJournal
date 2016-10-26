@@ -10,7 +10,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
     		$scope.cDate = "";
 		    $scope.dateExist = false;
         $scope.nameChange = false;
-
+        $scope.nameAvailable = true;
 		    $scope.tempIDMeasurements =0;
     		$scope.bodyPartMeasurementArray =[]; 
   
@@ -76,6 +76,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
           unit:$scope.bodyPartMeasurementArray[$index].unit
         });
         $scope.mUnit.name = $scope.tempArray[0].unit;
+        $scope.measurement.num = $scope.tempArray[0].measurement;
       }
 
 
@@ -222,6 +223,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
     function addNewBodyPart()
     {
       try{
+        $scope.nameAvailable = true;
         $scope.mUnit = {
           name: 'cm'
         };
@@ -230,14 +232,25 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
         };
         if($scope.bodypart.name != '')
         {
-          MeasurementsWidgetService.addNewEntry($scope.bodypart.name, $scope.measurement.num, $scope.mUnit.name)
-          .then(function(response){
-            $scope.bodypart.name = "";
-            alert("Added new body part");
-            fetchAllBodyPartMeasurements(); 
-          },function(error){
-            alert("Error in adding new BodyPart");
-          });
+          if($scope.bodyPartMeasurementArray.length>0){
+            for(var i=0; i<$scope.bodyPartMeasurementArray.length; i++){
+              if($scope.bodypart.name == $scope.bodyPartMeasurementArray[i].bodypart_name){
+                alert("Name already exist!");
+                $scope.nameAvailable = false;
+                break;
+              }
+            }
+          }
+          if ($scope.nameAvailable == true){
+            MeasurementsWidgetService.addNewEntry($scope.bodypart.name, $scope.measurement.num, $scope.mUnit.name)
+            .then(function(response){
+              $scope.bodypart.name = "";
+              alert("Added new body part");
+              fetchAllBodyPartMeasurements(); 
+            },function(error){
+              alert("Error in adding new BodyPart");
+            });
+          } 
         }else
         {
           alert('Empty input.');
