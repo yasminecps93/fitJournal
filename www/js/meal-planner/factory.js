@@ -31,7 +31,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			  var query_meals = "CREATE TABLE IF NOT EXISTS meals_list_try (id integer primary key autoincrement, dateName_id integer, mealType string, foodName string, foodCal double)";
 
 			  runQuery(query,[],function(res) {
-			      console.log("table created ");
+			      console.log("table created mealPlanner");
 			 //     alert("table created for meal date");
 			   }, function (err) {
 			      console.log(err);

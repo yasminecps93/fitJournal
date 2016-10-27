@@ -1,27 +1,36 @@
 var foodWidgetModule = angular.module('FoodWidget',['ngCordova','ionic']);
 
-foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','$ionicModal',
-	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, $ionicModal){
+foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','CaloriesWidgetService','$ionicModal',
+	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, CaloriesWidgetService, $ionicModal){
     
 	    initData();
 	    initMethods();
 
 	    function initData(){
 	    	$scope.cDate="";
+	    	$scope.numericDate="";
 	    	$scope.date_id=-1;
+	    	$scope.tempIDCalories =0;
 	    	$scope.foodName={
 				name: ''
 			};
 			$scope.foodCal={
 				value:0
 			};
+			$scope.calories = {
+	    		inCal : 0,
+	    		outCal : 0,
+	    		totalCalories : 0
+	    	}
 			$scope.showExtra = false;
 			$scope.dateExist= false;
 			$scope.isAdded= false;
 			$scope.headerToEdit = '';
 			$scope.shouldShowDelete = false;
 			$scope.editButtonLabel = "Edit";
+			$scope.mealPlannerList = [];
 			MealsService.initDB();
+			CaloriesWidgetService.initDB();
 			fetchMeals();
 		//	currentDate();
 	    }
@@ -41,6 +50,9 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 			$scope.setAsDinner = setAsDinner;
 			$scope.setAsSnack = setAsSnack;
 			$scope.addNewEntryByFiltered = addNewEntryByFiltered;
+			$scope.getLastEntry = getLastEntry;
+			$scope.addNewRowToCaloriesTable = addNewRowToCaloriesTable;
+			$scope.updateCalories = updateCalories;
 	    }
 	    
 	    function toggleEdit() {
@@ -68,8 +80,12 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 			var monthsList= ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 		    var i = new Date().getMonth();
 		    var month = monthsList[i];
+		    var numericMonth = new Date().getMonth() + 1;
 		    $scope.cDate = new Date().getDate()+ " "+month + " " + new Date().getFullYear();
+			$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-" + new Date().getDate(); 
+
 			checkExistingMealPlanner();
+			getLastEntry();
 		}
 
 		function checkExistingMealPlanner(){
@@ -95,6 +111,20 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					
 			}catch(e){
 				alert("Error in checkExistingMealPlanner controller "+e.message);
+			}
+		}
+
+		function checkCaloriesDate(){
+			if($scope.caloriesArray.length>0){
+				if($scope.numericDate == $scope.caloriesArray[0].cDate){
+      				$scope.calories.inCal = $scope.caloriesArray[0].caloriesIn;
+      				$scope.calories.outCal = $scope.caloriesArray[0].caloriesOut;
+      				$scope.calories.totalCalories = $scope.caloriesArray[0].caloriesTotal;
+      				$scope.tempIDCalories = $scope.caloriesArray[0].id;
+      			}else{
+      				console.log($scope.numericDate+"!="+ $scope.caloriesArray[0].created_at);
+      				addNewRowToCaloriesTable();
+      			}
 			}
 		}
 //---------------------------------------------------------------------------------
@@ -189,6 +219,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				}else
 				{
 					alert("No dates created till now.");
+					currentDate();
 				}
 			}catch(e){
 				alert("Error in fetchMealPlannerSuccessCB controller "+e.message);
@@ -211,7 +242,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					.then(function(response){
 						$scope.isAdded=true;
 						fetchMeals();	
-						
+						console.log("Added new meal date");
 					},function(error){
 						alert("Error in adding new MealPlanner");
 					});
@@ -300,6 +331,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					}
 
 					$scope.totalCal = $scope.breakfastCal + $scope.lunchCal + $scope.dinnerCal + $scope.snackCal;
+					updateCalories();
 					$scope.dateExist = false;
 				}else
 				{
@@ -423,9 +455,9 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 			
 		}
 
-//-----------------------------------------------------------------------------------
-//------------------------FILTER ARRAY-----------------------------------------------
-//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------//
+//------------------------FILTER ARRAY-----------------------------------------------//
+//-----------------------------------------------------------------------------------//
 		function fetchEntriesForArraySuccessCB(response){
 				
 			try{
@@ -476,5 +508,84 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 			}
 			
 		}
+//-----------------------------------------------------------------------------------//
+//------------------------Calorie Counter Function-----------------------------------//
+//-----------------------------------------------------------------------------------//
+		function getLastEntry(){
+      		try{
+		        CaloriesWidgetService.getLastEntry()
+		        .then(fetchCaloriesSuccessCB,fetchCaloriesErrorCB);
+		      }catch(e){
+		        alert("Error in fetch getLastEntry controller FoodWidget "+e.message);
+		      }
+      	}
+
+      	function fetchCaloriesSuccessCB(response)
+	    {
+	      try{
+	        if(response && response.rows && response.rows.length > 0)
+	        {
+	          
+	          $scope.caloriesArray = [];
+	       		console.log("number of rows for calories is "+response.rows.length);
+	          for(var i=0;i<response.rows.length;i++)
+	          {
+	            $scope.caloriesArray.push
+	            ({
+	              id:response.rows.item(i).id,
+	              cDate:response.rows.item(i).created_at,
+	              caloriesIn:response.rows.item(i).calories_in,
+	              caloriesOut:response.rows.item(i).calories_out,
+	              caloriesTotal:response.rows.item(i).calories_total,
+	            });
+	          }
+	          checkCaloriesDate();
+	        }else
+	        {
+	          alert("No calories created till now.");
+	          addNewRowToCaloriesTable();
+	        }
+	      }catch(e){
+	        alert("Error in fetchCaloriesSuccessCB controller "+e.message);
+	      }
+	      
+	    }
+
+	    function fetchCaloriesErrorCB(error)
+	    {
+	      alert("Some error occurred in fetchCaloriesErrorCB");
+	    }
+
+	    function addNewRowToCaloriesTable(){
+	    	try{
+	    		CaloriesWidgetService.addNewRow($scope.calories.inCal, $scope.calories.outCal, $scope.calories.totalCalories)
+		    	.then(function(response){
+		    		getLastEntry();
+		    	},function(error){
+		    		alert("Error in adding new row to calories table");
+		    	});
+	    	}catch(e){
+	    		alert("Error in addNewRowToCaloriesTable controller "+e.message);
+	    	}
+	    	
+	    }
+
+	    function updateCalories(){
+	    	try{
+	    		$scope.calories.totalCalories = $scope.totalCal - $scope.calories.outCal;
+	    		console.log($scope.calories.totalCalories+"= "+ $scope.totalCal+"- "+  $scope.calories.outCal);
+	    		CaloriesWidgetService.updateCalories($scope.totalCal,$scope.calories.outCal,$scope.calories.totalCalories,$scope.tempIDCalories)
+	    		.then(function(response){
+	    			console.log("Updated calories");
+	    			getLastEntry();
+	    		},function(error){
+		    		alert("Error in updating calories table");
+	    		})
+	    	}catch(e){
+	    		alert("Error in updateCalories controller "+e.message);
+
+	    	}
+	    }
+
 
 }]);
