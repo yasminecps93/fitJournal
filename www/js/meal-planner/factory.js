@@ -27,7 +27,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 			  	alert("Error in opening db");
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS mealPlanner_list_try (id integer primary key autoincrement, created_at datetime, dateName string, no_of_entries integer)";
+			  var query = "CREATE TABLE IF NOT EXISTS mealPlanner_list_try (id integer primary key autoincrement, created_at date, dateName string, no_of_entries integer)";
 			  var query_meals = "CREATE TABLE IF NOT EXISTS meals_list_try (id integer primary key autoincrement, dateName_id integer, mealType string, foodName string, foodCal double)";
 
 			  runQuery(query,[],function(res) {
@@ -80,7 +80,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		function addNewMealPlanner(dateName) {
 			//console.log('adding new routine :'+name);
 			var deferred = $q.defer();
-			var query = "INSERT INTO mealPlanner_list_try (created_at, dateName, no_of_entries) VALUES (datetime(),?,?)";
+			var query = "INSERT INTO mealPlanner_list_try (created_at, dateName, no_of_entries) VALUES (date('now','localtime'),?,?)";
 			try{
 				runQuery(query,[dateName,0],function(response){
 				//Success Callback

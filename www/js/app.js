@@ -1,5 +1,5 @@
 
-angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails', 'MealPlanner','gridster','MainPage','WeightWidget','MeasurementsWidget'])
+angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetails', 'RoutinesList', 'RoutineDetails', 'MealPlanner','gridster','MainPage','WeightWidget','MeasurementsWidget','FoodWidget'])
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider){
   $ionicConfigProvider.views.maxCache(0);

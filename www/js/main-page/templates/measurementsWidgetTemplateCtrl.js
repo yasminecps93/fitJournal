@@ -42,7 +42,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
 			  
     		MeasurementsWidgetService.initDB();
     	  fetchAllBodyPartMeasurements();
-        fetchAll();
+       // fetchAll();
     	}
 
     	function initMethods(){
@@ -346,44 +346,44 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
       
     }
 
-function fetchAll(){
-      try{
-        MeasurementsWidgetService.getAll()
-        .then(fetchAllSuccessCB,fetchBodyPartErrorCB);
-      }catch(e){
-        alert("Error in fetch AllBodyPartMeasurements controller "+e.message);
-      }
-    }
+  // function fetchAll(){
+  //     try{
+  //       MeasurementsWidgetService.getAll()
+  //       .then(fetchAllSuccessCB,fetchBodyPartErrorCB);
+  //     }catch(e){
+  //       alert("Error in fetch AllBodyPartMeasurements controller "+e.message);
+  //     }
+  //   }
 
-    function fetchAllSuccessCB(response)
-    {
-      try{
-        if(response && response.rows && response.rows.length > 0)
-        {
+  //   function fetchAllSuccessCB(response)
+  //   {
+  //     try{
+  //       if(response && response.rows && response.rows.length > 0)
+  //       {
           
-          $scope.bodyPartArray = [];
+  //         $scope.bodyPartArray = [];
        
-          for(var i=0;i<response.rows.length;i++)
-          {
-            $scope.bodyPartArray.push
-            ({
-              id:response.rows.item(i).id,
-              bodypart_name:response.rows.item(i).bodypart_name,
-              cDate:response.rows.item(i).created_at,
-              measurement:response.rows.item(i).measurement,
-              unit:response.rows.item(i).unit
-            });
-            console.log($scope.bodyPartArray[i].id+", "+$scope.bodyPartArray[i].bodypart_name+", "+$scope.bodyPartArray[i].cDate+", "+$scope.bodyPartArray[i].measurement+", "+$scope.bodyPartArray[i].unit)
-          }
+  //         for(var i=0;i<response.rows.length;i++)
+  //         {
+  //           $scope.bodyPartArray.push
+  //           ({
+  //             id:response.rows.item(i).id,
+  //             bodypart_name:response.rows.item(i).bodypart_name,
+  //             cDate:response.rows.item(i).created_at,
+  //             measurement:response.rows.item(i).measurement,
+  //             unit:response.rows.item(i).unit
+  //           });
+  //           console.log($scope.bodyPartArray[i].id+", "+$scope.bodyPartArray[i].bodypart_name+", "+$scope.bodyPartArray[i].cDate+", "+$scope.bodyPartArray[i].measurement+", "+$scope.bodyPartArray[i].unit)
+  //         }
           
-        }else
-        {
-          alert("No body parts created till now.");
-        }
-      }catch(e){
-        alert("Error in fetchBodyPartSuccessCB controller "+e.message);
-      }
+  //       }else
+  //       {
+  //         alert("No body parts created till now.");
+  //       }
+  //     }catch(e){
+  //       alert("Error in fetchBodyPartSuccessCB controller "+e.message);
+  //     }
       
-    }
+  //   }
 
 }]);

@@ -27,6 +27,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    function initMethods(){
 	    	$scope.addWeightWidget = addWeightWidget;
 	    	$scope.addMeasurementsWidget = addMeasurementsWidget;
+	    	$scope.addFoodWidget = addFoodWidget;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
 	    	$scope.removeDirective = removeDirective;
@@ -74,6 +75,20 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				});
 	      	}catch(e){
 	      		alert("Error in addMeasurementsTemplate "+e.message);
+	      	}
+	   	}
+
+	   	function addFoodWidget(){
+	   		calculateLastWidgetPosition();
+	      	try{
+	      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 4, "<food-widget></food-widget>")
+				.then(function(response){
+				 	fetchWidget();
+				},function(error){
+					alert("Error in changing template");
+				});
+	      	}catch(e){
+	      		alert("Error in addFoodTemplate "+e.message);
 	      	}
 	   	}
 	  	
@@ -300,3 +315,22 @@ mainPageModule.directive('measurementsWidget',
   }
 });
 
+mainPageModule.directive('foodWidget',
+  function($compile,$rootScope){
+  	function link(scope, element, attributes,controller) {
+	  		// $rootScope.$on('destroyDirective', function () {
+	    //     element.html('');
+	  		// 	console.log("deleted");
+	    //   });
+	  		// scope.remove = function(){
+	  		// 	element.html('');
+	  		// 	console.log("deleted");
+	  		// };
+	}
+  return{
+  	controller: 'FoodWidgetCtrl',
+  	link: link,
+    replace: false,
+    templateUrl:'js/main-page/templates/foodWidgetTemplate.html'
+  }
+});

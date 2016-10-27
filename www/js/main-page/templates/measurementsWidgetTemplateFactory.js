@@ -4,7 +4,7 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
 		var bodyPartMeasurementArray;
-		var bodyPartArray;
+	//	var bodyPartArray;
 
 		return{
 			initDB:initDB,
@@ -12,8 +12,8 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 			updateEntry:updateEntry,
 			updateBodyPartName:updateBodyPartName,
 			addNewEntry:addNewEntry,
-			deleteBodyPartMeasurements:deleteBodyPartMeasurements,
-			getAll:getAll
+			deleteBodyPartMeasurements:deleteBodyPartMeasurements
+		//	getAll:getAll
 		}
 
 		function initDB(){
@@ -64,26 +64,26 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 			}
 		}
 
-		function getAll(){
-			try{
-				var deferred = $q.defer();
-				var query = "SELECT * from bodypart_list";
-				runQuery(query,[],function(response){
-					//Success Callback
-					console.log(response);
-					bodyPartArray = response.rows;
-					deferred.resolve(response);
-				},function(error){
-					alert("Error in get all bodyPart");
-					console.log(error);
-					deferred.reject(error);
-				});
+		// function getAll(){
+		// 	try{
+		// 		var deferred = $q.defer();
+		// 		var query = "SELECT * from bodypart_list";
+		// 		runQuery(query,[],function(response){
+		// 			//Success Callback
+		// 			console.log(response);
+		// 			bodyPartArray = response.rows;
+		// 			deferred.resolve(response);
+		// 		},function(error){
+		// 			alert("Error in get all bodyPart");
+		// 			console.log(error);
+		// 			deferred.reject(error);
+		// 		});
 
-				return deferred.promise;
-			}catch(e){
-				alert("Error in getAllBodyPartTable "+e.message);
-			}
-		}
+		// 		return deferred.promise;
+		// 	}catch(e){
+		// 		alert("Error in getAllBodyPartTable "+e.message);
+		// 	}
+		// }
 
 
 		function updateEntry(measurement,unit,id){
