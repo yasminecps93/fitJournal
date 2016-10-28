@@ -1,7 +1,7 @@
 var mainPageModule = angular.module('MainPage',['ngCordova','ionic','gridster']);
 
-mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration',
-	function($rootScope,$scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration){
+mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration','$window',
+	function($rootScope,$scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration,$window){
 
 		initData();
 	  	initMethods();
@@ -28,6 +28,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    	$scope.addWeightWidget = addWeightWidget;
 	    	$scope.addMeasurementsWidget = addMeasurementsWidget;
 	    	$scope.addFoodWidget = addFoodWidget;
+	    	$scope.addExerciseWidget = addExerciseWidget;
 	    	$scope.addCaloriesWidget = addCaloriesWidget;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
@@ -83,6 +84,20 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		calculateLastWidgetPosition();
 	      	try{
 	      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 4, "<food-widget></food-widget>")
+				.then(function(response){
+				 	fetchWidget();
+				},function(error){
+					alert("Error in changing template");
+				});
+	      	}catch(e){
+	      		alert("Error in addFoodTemplate "+e.message);
+	      	}
+	   	}
+
+	   	function addExerciseWidget(){
+	   		calculateLastWidgetPosition();
+	      	try{
+	      		MainService.addNewWidget("Calories Counter",newYPosition,0, 2, 2, "<exercise-widget></exercise-widget>")
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
@@ -173,6 +188,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 
 		 function removeDirective() {
 		    $rootScope.$emit('destroyDirective');
+		   // $window.location.reload(true);
 		  };
 
 		function fetchSuccessCB(response)
@@ -304,7 +320,7 @@ mainPageModule.directive('weightWidget',
 	   	controller: 'WeightWidgetCtrl',
 	    replace: false,
 	    link: link,
-	    templateUrl:'js/main-page/templates/tryWidgetTemplate.html'
+	    templateUrl:'js/main-page/templates/weightWidgetTemplate.html'
      });
 
   
@@ -349,6 +365,27 @@ mainPageModule.directive('foodWidget',
     templateUrl:'js/main-page/templates/foodWidgetTemplate.html'
   }
 });
+
+mainPageModule.directive('exerciseWidget',
+  function($compile,$rootScope){
+  	function link(scope, element, attributes,controller) {
+	  		// $rootScope.$on('destroyDirective', function () {
+	    //     element.html('');
+	  		// 	console.log("deleted");
+	    //   });
+	  		// scope.remove = function(){
+	  		// 	element.html('');
+	  		// 	console.log("deleted");
+	  		// };
+	}
+  return{
+  	controller: 'ExerciseWidgetCtrl',
+  	link: link,
+    replace: false,
+    templateUrl:'js/main-page/templates/exerciseWidgetTemplate.html'
+  }
+});
+
 
 mainPageModule.directive('caloriesWidget',
   function($compile,$rootScope){

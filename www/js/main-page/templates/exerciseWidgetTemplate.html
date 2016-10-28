@@ -1,0 +1,86 @@
+<div>
+	<ion-header-bar  class="widget-header">
+		<button class="button button-icon" ng-click="deleteWidget($index, extraWidget.id)">
+			<i class="ion-android-close"></i>
+		</button>
+	    <div class="h3 title">Exercise Log</div>
+		
+		<button class="button button-icon" ng-click="showChooseRoutinePopup()">
+			<i class="ion-android-create"></i>
+		</button>
+	</ion-header-bar>
+
+	<ion-content>
+		<div>
+			Total Calories Out: {{totalCal}} kcal
+		</div>
+	    <ion-list>
+			<ion-item ng-repeat="item in exerciseLogArray track by $index">
+				<!-- {{item.foodName}}, {{item.foodCal}} -->
+			</ion-item>
+	   	</ion-list>
+	</ion-content>
+</div>
+
+<script type="text/ng-template" id="add-exercise-modal.html">
+	<ion-modal-view>
+		<ion-header-bar>
+			<a ng-click="closeModal()"><i class="ion-ios-arrow-left"></i></a>
+			 <div class="h1 title">Exercise Log</div>
+			<div class="buttons">
+		    	<button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+		  	</div>
+		</ion-header-bar>
+
+		<ion-content>
+			<ion-list show-delete="shouldShowDelete">
+				<ion-item ng-repeat="item in exerciseLogArray track by $index">
+					{{item.exeName}}
+					<input type="number" ng-model="item.exeNumber"> {{item.exeUnit}}, {{item.exeSet}}, {{item.exeCal}}
+					<ion-delete-button class="ion-minus-circled" ng-click="deleteExerciseLogExercise($index)"></ion-delete-button>
+				</ion-item>
+				<ion-item ng-repeat="item in entriesList track by $index">
+					{{item.exeName}}
+					<input type="number" ng-model="item.exeNumber">
+					{{item.exeUnit}}, {{item.exeSet}}, {{item.exeCal}}
+					<ion-delete-button class="ion-minus-circled" ng-click="deleteEntrieListExercise($index)"></ion-delete-button>
+				</ion-item>
+		   	</ion-list>
+		    
+		   	<button class="button button-block button-calm" ng-click="showEntryPopup()">Add</button>
+		   	<button class="button button-block button-calm" ng-click="save()">Save</button> 	
+		</ion-content>
+	</ion-modal-view>
+</script>
+
+<script type="text/ng-template" id="choose-routine-popup.html">
+  <ion-list ng-repeat="r in routinesList track by $index">
+      <ion-item >
+      	{{r.name}}
+      	<ion-checkbox checked="false" ng-click="getExercisesFromRoutine(r.id); openModal();"></ion-checkbox>
+      </ion-item>
+  </ion-list>
+</script>
+
+
+<script type="text/ng-template" id="add-entry-popup.html">
+  <label class="item item-input item-stacked-label p-item">
+      <span class="input-label">Exercise name</span>
+      <input type="text" ng-model="exeName.name"/>
+  </label>
+  <label class="item item-input item-stacked-label p-item">
+      <span class="input-label">Unit</span>
+      <input type="Number" ng-model="exeNumber.number"/>
+  </label>
+  <select ng-model="exeUnit.name">
+          <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
+  </select>
+  <label class="item item-input item-stacked-label p-item">
+      <span class="input-label">Sets</span>
+      <input type="Number" ng-model="exeSet.set"/>
+  </label>
+  <label class="item item-input item-stacked-label p-item">
+      <span class="input-label">Calories burn</span>
+      <input type="Number" ng-model="exeCal.value"/>
+  </label>
+</script>

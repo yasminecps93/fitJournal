@@ -54,7 +54,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
         $scope.deleteBodyPartMeasurements = deleteBodyPartMeasurements;
       }
 
-    	function toggleEdit() {
+    function toggleEdit() {
 			$scope.shouldShowDelete = !$scope.shouldShowDelete;
 			$scope.editButtonLabel = $scope.shouldShowDelete ? "Done" : "Edit";
 		}

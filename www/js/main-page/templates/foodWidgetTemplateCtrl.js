@@ -1,7 +1,7 @@
 var foodWidgetModule = angular.module('FoodWidget',['ngCordova','ionic']);
 
-foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','CaloriesWidgetService','$ionicModal',
-	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, CaloriesWidgetService, $ionicModal){
+foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','CaloriesWidgetService','$ionicModal','$window','$rootScope',
+	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, CaloriesWidgetService, $ionicModal, $window, $rootScope){
     
 	    initData();
 	    initMethods();
@@ -27,6 +27,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 			$scope.isAdded= false;
 			$scope.headerToEdit = '';
 			$scope.shouldShowDelete = false;
+			$scope.isFirstTime = true;
 			$scope.editButtonLabel = "Edit";
 			$scope.mealPlannerList = [];
 			MealsService.initDB();
@@ -149,6 +150,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		$scope.openModal = function(index){
 			if(index == 1){
 				$scope.modal1.show();
+
 			}else{
 				if($scope.date_id<0){
 					alert("cDate is empty, check currentDate function");
@@ -166,8 +168,13 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		};
 
 		$scope.closeModal = function(index){
-			if (index == 1) $scope.modal1.hide();
+			if (index == 1) {
+				$scope.modal1.hide();
+				//$window.location.reload(true);
+			}
       		else $scope.modal2.hide();
+
+
 		};
 		$scope.$on('$destroy', function(){
 			$scope.modal1.remove();
@@ -331,7 +338,12 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					}
 
 					$scope.totalCal = $scope.breakfastCal + $scope.lunchCal + $scope.dinnerCal + $scope.snackCal;
-					updateCalories();
+					if($scope.isFirstTime == true){
+						$scope.isFirstTime = false;
+					}else{
+						updateCalories();
+					}
+					
 					$scope.dateExist = false;
 				}else
 				{
@@ -578,6 +590,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	    		.then(function(response){
 	    			console.log("Updated calories");
 	    			getLastEntry();
+	    			$rootScope.$broadcast('updateCaloriesInWidget');
 	    		},function(error){
 		    		alert("Error in updating calories table");
 	    		})

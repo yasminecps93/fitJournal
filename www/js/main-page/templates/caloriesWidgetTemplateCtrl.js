@@ -1,7 +1,7 @@
 var caloriesWidgetModule = angular.module('CaloriesWidget',['ngCordova','ionic']);
 
-caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','CaloriesWidgetService',
-	function($scope,$state,$cordovaSQLite,$ionicPlatform, CaloriesWidgetService){
+caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','CaloriesWidgetService','$rootScope',
+	function($scope,$state,$cordovaSQLite,$ionicPlatform, CaloriesWidgetService, $rootScope){
     
 	    initData();
 	    initMethods();
@@ -16,12 +16,16 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	    	
 	    	CaloriesWidgetService.initDB();
 	    	currentDate();
-	    	
+	    	$rootScope.$on('updateCaloriesInWidget',function(){
+	    		console.log("calling updateCalories");
+	    		getLastEntry();
+	    	});
 	    }
 
 	    function initMethods(){
 	    	$scope.checkDate = checkDate;
 	    	$scope.getLastEntry=getLastEntry;
+	    	
 	    }
 
 	    function currentDate(){
@@ -85,5 +89,5 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	      alert("Some error occurred in fetchErrorCB");
 	    }
 
-
+	    
 }]);
