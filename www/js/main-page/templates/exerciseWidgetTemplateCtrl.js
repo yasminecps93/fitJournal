@@ -45,6 +45,8 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 	    	$scope.dateExist = false;
 			$scope.isFirstTime = true;
 			$scope.choseRoutine = false;
+			$scope.openWidget = true;
+			console.log("initData~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 	    	$scope.lastEntryArray = [];
 			$scope.exerciseLogArray = [];
 
@@ -94,11 +96,12 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
     $scope.openModal = function(){ 
         $scope.modal.show();
         currentDate();
+        console.log("openModal~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
     };
 
     $scope.closeModal = function() {
       $scope.modal.hide();
-      getExerciseLog();
+      $scope.openWidget = true;
     };
 
     $scope.$on('$destroy', function(){
@@ -123,7 +126,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
             text:'Next',
             type:'button-positive',
             onTap:function(e){
-           	//  getExerciseLog();
+           	  $scope.openWidget=true;
               $scope.openModal();
             }
           }
@@ -216,6 +219,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		}
 
 		function getExercisesFromRoutine(id){
+			$scope.openWidget = false;
 			$scope.tempIDRoutine = id;
 			getExerciseLog();
 			$scope.choseRoutine =true;
@@ -237,6 +241,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeCal:response.rows.item(i).exeCal,
 					});
 				}
+				saveLog();
 			}else
 			{
 				alert("No entries created till now.");
@@ -272,9 +277,12 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeCal:response.rows.item(i).calOut
 					});
 				}
+				console.log("getLastEntry~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 				if($scope.cDate==$scope.lastEntryArray[0].created_at){
 					$scope.dateExist=true;
-					getExerciseLog();
+					if($scope.openWidget == true){
+						getExerciseLog();
+					}	
 				}else{
 					$scope.dateExist=false;
 				}
@@ -327,11 +335,12 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			{
 				alert("No entries created till now.");
 			}
-
+			console.log("getExerciseLog~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 			if($scope.choseRoutine ==true){
 				RoutineService.getAllEntries($scope.tempIDRoutine)
 				.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
 				$scope.choseRoutine = false;
+				
 			}
 		}
 
@@ -370,7 +379,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 							counter++;
 							if(counter == $scope.exerciseLogArray.length){
 								alert("Saved");
-								
+								$scope.openWidget = true;
 								getExerciseLog();
 							}
 						},function(error){
@@ -390,6 +399,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				if(index>-1){
 					$scope.exerciseLogArray.splice(index,1);
 					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after splice");
+					saveLog();
 				}
 			}catch(e){
 				alert("Error in deleteExercise controller");
@@ -399,9 +409,14 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 
 		function addNewExercise(){
 			try{
+				if($scope.exerciseLogArray.length<=0){
+					var tempID = 0;
+				}else{
+					var tempID = $scope.exerciseLogArray[$scope.exerciseLogArray.length-1].id+1;
+				}
 				if($scope.exeName.name!='' && $scope.exeNumber.number>0 && $scope.exeSet.set>0){
 					$scope.exerciseLogArray.push({
-						id:$scope.exerciseLogArray[$scope.exerciseLogArray.length-1].id+1,
+						id:tempID,
 						created_at:$scope.cDate,
 						exeName:$scope.exeName.name,
 						exeNumber:$scope.exeNumber.number,
@@ -410,6 +425,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeCal:$scope.exeCal.value
 					});
 					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after adding");
+					saveLog();
 				}else{
 					alert('Empty inputs!');
 				}
