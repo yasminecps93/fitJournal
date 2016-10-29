@@ -22,12 +22,13 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	    		outCal : 0,
 	    		totalCalories : 0
 	    	}
+	    	$scope.isFirstTime = true;
 			$scope.showExtra = false;
 			$scope.dateExist= false;
 			$scope.isAdded= false;
 			$scope.headerToEdit = '';
 			$scope.shouldShowDelete = false;
-			$scope.isFirstTime = true;
+			
 			$scope.editButtonLabel = "Edit";
 			$scope.mealPlannerList = [];
 			MealsService.initDB();
@@ -122,6 +123,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
       				$scope.calories.outCal = $scope.caloriesArray[0].caloriesOut;
       				$scope.calories.totalCalories = $scope.caloriesArray[0].caloriesTotal;
       				$scope.tempIDCalories = $scope.caloriesArray[0].id;
+      				console.log("totalCal: "+$scope.calories.totalCalories+", inCal: "+$scope.calories.inCal+", outCal: "+$scope.calories.outCal);
       			}else{
       				console.log($scope.numericDate+"!="+ $scope.caloriesArray[0].created_at);
       				addNewRowToCaloriesTable();
@@ -149,8 +151,9 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 
 		$scope.openModal = function(index){
 			if(index == 1){
+				$scope.isFirstTime = true;
 				$scope.modal1.show();
-
+				currentDate();
 			}else{
 				if($scope.date_id<0){
 					alert("cDate is empty, check currentDate function");
@@ -341,6 +344,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					if($scope.isFirstTime == true){
 						$scope.isFirstTime = false;
 					}else{
+						console.log("in here---------------------")
 						updateCalories();
 					}
 					
@@ -539,7 +543,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	        {
 	          
 	          $scope.caloriesArray = [];
-	       		console.log("number of rows for calories is "+response.rows.length);
+	       	  console.log("number of rows for calories is "+response.rows.length);
 	          for(var i=0;i<response.rows.length;i++)
 	          {
 	            $scope.caloriesArray.push

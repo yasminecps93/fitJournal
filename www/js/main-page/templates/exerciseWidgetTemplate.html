@@ -16,7 +16,8 @@
 		</div>
 	    <ion-list>
 			<ion-item ng-repeat="item in exerciseLogArray track by $index">
-				<!-- {{item.foodName}}, {{item.foodCal}} -->
+				{{item.exeName}}, {{item.exeNumber}}
+				{{item.exeUnit}}, {{item.exeSet}}, {{item.exeCal}}
 			</ion-item>
 	   	</ion-list>
 	</ion-content>
@@ -36,19 +37,15 @@
 			<ion-list show-delete="shouldShowDelete">
 				<ion-item ng-repeat="item in exerciseLogArray track by $index">
 					{{item.exeName}}
-					<input type="number" ng-model="item.exeNumber"> {{item.exeUnit}}, {{item.exeSet}}, {{item.exeCal}}
-					<ion-delete-button class="ion-minus-circled" ng-click="deleteExerciseLogExercise($index)"></ion-delete-button>
-				</ion-item>
-				<ion-item ng-repeat="item in entriesList track by $index">
-					{{item.exeName}}
-					<input type="number" ng-model="item.exeNumber">
-					{{item.exeUnit}}, {{item.exeSet}}, {{item.exeCal}}
-					<ion-delete-button class="ion-minus-circled" ng-click="deleteEntrieListExercise($index)"></ion-delete-button>
+					<input type="number" ng-model="item.exeNumber"> {{item.exeUnit}}, 
+					<input type="number" ng-model="item.exeSet">
+					<input type="number" ng-model="item.exeCal">
+					<ion-delete-button class="ion-minus-circled" ng-click="deleteExercise($index)"></ion-delete-button>
 				</ion-item>
 		   	</ion-list>
 		    
 		   	<button class="button button-block button-calm" ng-click="showEntryPopup()">Add</button>
-		   	<button class="button button-block button-calm" ng-click="save()">Save</button> 	
+		   	<button class="button button-block button-calm" ng-click="saveLog()">Save</button> 	
 		</ion-content>
 	</ion-modal-view>
 </script>
@@ -57,7 +54,7 @@
   <ion-list ng-repeat="r in routinesList track by $index">
       <ion-item >
       	{{r.name}}
-      	<ion-checkbox checked="false" ng-click="getExercisesFromRoutine(r.id); openModal();"></ion-checkbox>
+      	<ion-checkbox checked="false" ng-click="getExercisesFromRoutine(r.id); openModal(); closeChooseRoutinePopup()"></ion-checkbox>
       </ion-item>
   </ion-list>
 </script>

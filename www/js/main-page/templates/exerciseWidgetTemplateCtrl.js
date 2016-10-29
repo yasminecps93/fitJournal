@@ -8,18 +8,15 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 
 	    function initData(){
 	    	$scope.cDate = "";
+	    	$scope.totalCal = 0;
+	    	$scope.tempIDCalories =0;
+	    	$scope.tempIDRoutine = 0;
 	    	$scope.calories = {
 	    		inCal : 0,
 	    		outCal : 0,
 	    		totalCalories : 0
 	    	}
-	    	$scope.exercise = {
-	    		name : "",
-	    		reps : 0,
-	    		unit : "",
-	    		sets : 0,
-	    		calOut : 0
-	    	}
+	    	
 	    	$scope.units={
 				option: [
 				  {name: 'reps'},
@@ -47,7 +44,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			};
 	    	$scope.dateExist = false;
 			$scope.isFirstTime = true;
-
+			$scope.choseRoutine = false;
 	    	$scope.lastEntryArray = [];
 			$scope.exerciseLogArray = [];
 
@@ -60,10 +57,21 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			RoutinesService.initDB();
 			currentDate();
 			fetchRoutines();
+
 	    }
 
 	    function initMethods(){
 	    	$scope.toggleEdit = toggleEdit;
+	    	$scope.getExercisesFromRoutine = getExercisesFromRoutine;
+	    	$scope.getLastEntry = getLastEntry;
+	    	$scope.getExerciseLog = getExerciseLog;
+	    	$scope.saveLog = saveLog;
+	    	$scope.addNewLog = addNewLog;
+	    	$scope.deleteExercise = deleteExercise;
+	    	$scope.addNewExercise = addNewExercise;
+	    	$scope.getLastEntryCalories = getLastEntryCalories;
+	    	$scope.addNewRowToCaloriesTable = addNewRowToCaloriesTable;
+	    	$scope.updateCalories = updateCalories;
 	    }
 
 	    function toggleEdit() {
@@ -83,12 +91,14 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
     });
 
 
-    $scope.openModal = function(){   
+    $scope.openModal = function(){ 
         $scope.modal.show();
+        currentDate();
     };
 
     $scope.closeModal = function() {
       $scope.modal.hide();
+      getExerciseLog();
     };
 
     $scope.$on('$destroy', function(){
@@ -98,7 +108,6 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 //---------------------------------------------------------------------------------//
 //---------------------------POPUP FUNCTIONS---------------------------------------//
 //---------------------------------------------------------------------------------//
-
 
     $scope.showChooseRoutinePopup = function(){
         $scope.data={}
@@ -114,25 +123,21 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
             text:'Next',
             type:'button-positive',
             onTap:function(e){
-           	//add loading entries
-              $cope.openModal();
+           	//  getExerciseLog();
+              $scope.openModal();
             }
           }
           ]
-        }).then(function(res){
-          //success
-
-          console.log("Success");
-        },function(err){
-          //error
-          console.log("Error");
         });
+        $scope.closeChooseRoutinePopup = function(){
+	        routinepopup.close();
+	   }
       }
 
-      $scope.closeChooseRoutinePopup = function(){
-        routinepopup.close();
-      }
-
+       $scope.closeChooseRoutinePopup = function(){
+	        routinepopup.close();
+	   }
+      
       $scope.showEntryPopup = function(){
         $scope.data={}
         var entrypopup = $ionicPopup.show({
@@ -147,7 +152,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
             text:'OK',
             type:'button-positive',
             onTap:function(e){
-              addNewEntry();
+              addNewExercise();
             }
           }
           ]
@@ -159,11 +164,14 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
           //error
           console.log("Error");
         });
+		
+		 
       }
-
       $scope.closeEntryPopup = function(){
-        entrypopup.close();
-      }
+	    entrypopup.close();
+	  }      
+
+     
 
 //---------------------------------------------------------------------------------//
 //--------------------CHECK CURRENT DATE FUNCTIONS---------------------------------//
@@ -173,6 +181,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
         var month = new Date().getMonth() + 1;
         $scope.cDate = new Date().getFullYear()+ "-"+ month + "-" + new Date().getDate(); 
      	getLastEntry();
+     	getLastEntryCalories();
       }
 
 //---------------------------------------------------------------------------------//
@@ -207,18 +216,18 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		}
 
 		function getExercisesFromRoutine(id){
-			RoutineService.getAllEntries(id)
-			.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
+			$scope.tempIDRoutine = id;
+			getExerciseLog();
+			$scope.choseRoutine =true;
 		}
 
 		function fetchEntriesSuccessCB(response)
 		{
 			if(response && response.rows && response.rows.length > 0)
 			{
-				$scope.entriesList = [];
 				for(var i=0;i<response.rows.length;i++)
 				{
-					$scope.entriesList.push({
+					$scope.exerciseLogArray.push({
 						id:response.rows.item(i).id,
 						created_at:response.rows.item(i).created_at,
 						exeName:response.rows.item(i).exeName,
@@ -265,6 +274,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				}
 				if($scope.cDate==$scope.lastEntryArray[0].created_at){
 					$scope.dateExist=true;
+					getExerciseLog();
 				}else{
 					$scope.dateExist=false;
 				}
@@ -283,15 +293,17 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 //----------------------------EXERCISE LOG FUNCTIONS-------------------------------//
 //---------------------------------------------------------------------------------//
 		function getExerciseLog(){
+
 			ExerciseWidgetService.getAllExercises($scope.cDate)
 			.then(fetchLogSuccessCB,fetchLogErrorCB);
 		}
 
 		function fetchLogSuccessCB(response)
-		{
+		{	$scope.exerciseLogArray=[];
+
 			if(response && response.rows && response.rows.length > 0)
 			{
-				$scope.exerciseLogArray = [];
+				$scope.totalCal = 0;
 				for(var i=0;i<response.rows.length;i++)
 				{
 					$scope.exerciseLogArray.push({
@@ -303,10 +315,23 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeSet:response.rows.item(i).sets,
 						exeCal:response.rows.item(i).calOut
 					});
+					$scope.totalCal = $scope.totalCal+ response.rows.item(i).calOut;
+					
+				}
+				if($scope.isFirstTime == true){
+					$scope.isFirstTime = false;
+				}else{
+					updateCalories();
 				}
 			}else
 			{
 				alert("No entries created till now.");
+			}
+
+			if($scope.choseRoutine ==true){
+				RoutineService.getAllEntries($scope.tempIDRoutine)
+				.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
+				$scope.choseRoutine = false;
 			}
 		}
 
@@ -315,16 +340,18 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			alert("Some error occurred in fetching log exercises");
 		}
 
-		function addSaveLog(){
+		function saveLog(){
 			try{
 				if($scope.dateExist==true){
 					ExerciseWidgetService.deleteExercises($scope.cDate)
 					.then(function(response){
+						console.log("Removing all entries in database");
 						addNewLog();
 					},function(error){
 
 					})
 				}else{
+					console.log("Adding new log");
 					addNewLog();
 				}
 			}catch(e){
@@ -334,49 +361,38 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 
 		function addNewLog(){
 			try{
-				if($scope.entriesList.length>0){
-					for(var i=0; i<$scope.entriesList.length; i++){
-						ExerciseWidgetService.addNewExercises($scope.entriesList[i].exeName, $scope.entriesList[i].exeNumber, $scope.entriesList[i].exeUnit, $scope.entriesList[i].exeSet, $scope.entriesList[i].exeCal)
-						.then(function(response){
-							//Success
-						},function(error){
-							//Error
-						});
-					}
-				}
+				var counter = 0;
 				if($scope.exerciseLogArray.length>0){
+					console.log("exerciseLogArray.length is "+$scope.exerciseLogArray.length);
 					for(var j=0; j<$scope.exerciseLogArray.length; j++){
 						ExerciseWidgetService.addNewExercises($scope.exerciseLogArray[j].exeName, $scope.exerciseLogArray[j].exeNumber, $scope.exerciseLogArray[j].exeUnit, $scope.exerciseLogArray[j].exeSet, $scope.exerciseLogArray[j].exeCal)
 						.then(function(response){
-							//Success
+							counter++;
+							if(counter == $scope.exerciseLogArray.length){
+								alert("Saved");
+								
+								getExerciseLog();
+							}
 						},function(error){
 							//Error
 						});
 					}
 				}
+				
 			}catch(e){
 				alert("Error in addNewLog controller "+e.message);
 			}
 		}
 
-		function deleteEntrieListExercise(index){
-			try{
-				if(index>-1){
-					$scope.entriesList.splice(index,1);
-				}
-			}catch(e){
-				alert("Error in deleteEntrieListExercise controller");
-			}
 
-		}
-
-		function deleteExerciseLogExercise(index){
+		function deleteExercise(index){
 			try{
 				if(index>-1){
 					$scope.exerciseLogArray.splice(index,1);
+					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after splice");
 				}
 			}catch(e){
-				alert("Error in deleteExerciseLogExercise controller");
+				alert("Error in deleteExercise controller");
 			}
 
 		}
@@ -384,8 +400,8 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		function addNewExercise(){
 			try{
 				if($scope.exeName.name!='' && $scope.exeNumber.number>0 && $scope.exeSet.set>0){
-					$scope.entriesList.push({
-						id:$scope.entriesList[$scope.entriesList.length-1].id+1,
+					$scope.exerciseLogArray.push({
+						id:$scope.exerciseLogArray[$scope.exerciseLogArray.length-1].id+1,
 						created_at:$scope.cDate,
 						exeName:$scope.exeName.name,
 						exeNumber:$scope.exeNumber.number,
@@ -393,6 +409,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeSet:$scope.exeSet.set,
 						exeCal:$scope.exeCal.value
 					});
+					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after adding");
 				}else{
 					alert('Empty inputs!');
 				}
@@ -404,5 +421,92 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 //---------------------------------------------------------------------------------//
 //------------------------------CALORIES FUNCTIONS---------------------------------//
 //---------------------------------------------------------------------------------//
+		function getLastEntryCalories(){
+      		try{
+		        CaloriesWidgetService.getLastEntry()
+		        .then(fetchCaloriesSuccessCB,fetchCaloriesErrorCB);
+		      }catch(e){
+		        alert("Error in fetch getLastEntryCalories controller "+e.message);
+		      }
+      	}
 
+      	function fetchCaloriesSuccessCB(response)
+	    {
+	      try{
+	        if(response && response.rows && response.rows.length > 0)
+	        {
+	          
+	          $scope.caloriesArray = [];
+	    //   	  console.log("number of rows for calories is "+response.rows.length);
+	          for(var i=0;i<response.rows.length;i++)
+	          {
+	            $scope.caloriesArray.push
+	            ({
+	              id:response.rows.item(i).id,
+	              cDate:response.rows.item(i).created_at,
+	              caloriesIn:response.rows.item(i).calories_in,
+	              caloriesOut:response.rows.item(i).calories_out,
+	              caloriesTotal:response.rows.item(i).calories_total,
+	            });
+	          }
+	          if($scope.cDate==$scope.caloriesArray[0].cDate){
+	          	
+	          		$scope.calories.inCal = $scope.caloriesArray[0].caloriesIn;
+      				$scope.calories.outCal = $scope.caloriesArray[0].caloriesOut;
+      				$scope.calories.totalCalories = $scope.caloriesArray[0].caloriesTotal;
+      				$scope.tempIDCalories = $scope.caloriesArray[0].id;
+	          }else{
+	          	
+	          	console.log("in cDate if else "+$scope.cDate+" != "+$scope.caloriesArray[0].cDate);
+	         	addNewRowToCaloriesTable();
+	          }
+	        }else
+	        {
+	          alert("No calories created till now.");
+	          console.log("in No calories created till now else");
+	          addNewRowToCaloriesTable();
+	        }
+	      }catch(e){
+	        alert("Error in fetchCaloriesSuccessCB controller "+e.message);
+	      }
+	      
+	    }
+
+	    function fetchCaloriesErrorCB(error)
+	    {
+	      alert("Some error occurred in fetchCaloriesErrorCB");
+	    }
+
+	    function addNewRowToCaloriesTable(){
+	    	try{
+	    		CaloriesWidgetService.addNewRow($scope.calories.inCal, $scope.calories.outCal, $scope.calories.totalCalories)
+		    	.then(function(response){
+		    		
+		    		getLastEntryCalories();
+		    	},function(error){
+		    		alert("Error in adding new row to calories table");
+		    	});
+	    	}catch(e){
+	    		alert("Error in addNewRowToCaloriesTable controller "+e.message);
+	    	}
+	    	
+	    }
+
+	    function updateCalories(){
+	    	try{
+	    		$scope.calories.totalCalories = $scope.calories.inCal - $scope.totalCal;
+	    		console.log($scope.calories.totalCalories+"= "+ $scope.calories.inCal+"- "+  $scope.totalCal);
+	    		CaloriesWidgetService.updateCalories($scope.calories.inCal,$scope.totalCal,$scope.calories.totalCalories,$scope.tempIDCalories)
+	    		.then(function(response){
+	    			console.log("Updated calories");
+	    			getLastEntryCalories();
+	    			$rootScope.$broadcast('updateCaloriesInWidget');
+	    		},function(error){
+		    		alert("Error in updating calories table");
+	    		})
+	    	}catch(e){
+	    		alert("Error in updateCalories controller "+e.message);
+
+	    	}
+	    }
 }]);

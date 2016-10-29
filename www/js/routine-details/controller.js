@@ -24,19 +24,13 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
   					}
   				}
   				]
-  			}).then(function(res){
-  				//success
-
-  				console.log("Success");
-  			},function(err){
-  				//error
-  				console.log("Error");
   			});
+  			$scope.closePopup = function(){
+	  			entrypopup.close();
+	  		}
   		}
 
-  		$scope.closePopup = function(){
-  			entrypopup.close();
-  		}
+  		
 
 		function initData(){
 			
@@ -103,7 +97,6 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				//	$scope.newEntry.value = 0;
 				//	alert("New Entry has been added.");
 					fetchEntries();
-					closePopup();
 				},function(error){
 					alert("Error in adding new entry");
 				});
