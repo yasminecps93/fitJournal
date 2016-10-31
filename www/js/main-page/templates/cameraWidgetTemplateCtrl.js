@@ -10,25 +10,32 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    	$scope.cDate = "";
 	    	$scope.dateExist = false;
 	    	$scope.isExist = false;
-	    	$scope.tempID = 0;
+	    	$scope.tempID = -1;
 	    	$scope.imageArray = [];
+
 	    	$scope.image={
 	    		file:"",
 	    		caption:""
 	    	}
-	    	$scope.widgetID = 0;
+	    	$scope.widgetID = -1;
 
 	    	CameraWidgetService.initDB();
-	    	fetchAllImage();
 	    	currentDate();
+	    	
 	    }
 
 	    function initMethods(){
-	    	$scope.checkDate = checkDate;
+	    	//$scope.checkDate = checkDate;
 	    	$scope.checkForExisting = checkForExisting;
 	    	$scope.addNewEntry = addNewEntry;
 	    	$scope.updateEntry = updateEntry;
 	    }
+
+	    $scope.getID = function(id)
+  		{
+  			$scope.widgetID = id;
+  			console.log("widgetID---"+$scope.widgetID);
+  		}
 //---------------------------------------------------------------------------------//
 //---------------------------MODAL FUNCTIONS---------------------------------------//
 //---------------------------------------------------------------------------------//
@@ -43,7 +50,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 
     $scope.openModal = function(){   
         $scope.modal.show();
-        checkDate();
+      //  checkDate();
     };
 
     $scope.closeModal = function() {
@@ -83,26 +90,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
           }else{
           	$scope.cDate = new Date().getFullYear()+ "-"+ month + "-" + new Date().getDate(); 
           }
-          
-      }
-
-      function checkDate(){
-        try{
-         if($scope.imageArray.length>0){
-         	var lastID = $scope.imageArray.length - 1;
-
-         	if($scope.cDate == $scope.imageArray[lastID].cDate){
-         		$scope.dateExist = true;
-         		alert($scope.cDate+" == "+$scope.imageArray[lastID].cDate);
-         	}else{
-         		$scope.dateExist = false;
-         		alert($scope.cDate+" != "+$scope.imageArray[lastID].cDate);
-         	}
-         }
-         
-        }catch(e){
-          alert("Error in check date controller "+e.message);
-        }
+          fetchAllImage();
       }
 
 //---------------------------------------------------------------------------------//
@@ -111,7 +99,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	
 	function fetchAllImage(){
 		try{
-        CameraWidgetService.getAllEntry()
+        CameraWidgetService.getAllEntry($scope.cDate)
         .then(fetchSuccessCB,fetchErrorCB);
       }catch(e){
         alert("Error in fetch fetchAllImage controller "+e.message);
@@ -137,11 +125,21 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
               caption:response.rows.item(i).caption
             });
           }
-          $scope.image.file = response.rows.item(lastID).image_file;        
-          $scope.image.caption = response.rows.item(lastID).caption;
+          for(var j= 0;j<response.rows.length;j++){
+          	if($scope.widgetID == response.rows.item(j).widget_id){
+          		$scope.tempID = response.rows.item(j).id;
+          		$scope.image.file = response.rows.item(j).image_file;        
+          		$scope.image.caption = response.rows.item(j).caption;
+          		$scope.isExist=true;
+          		break;
+          	}
+          }
+          alert("response.rows.length "+response.rows.length);
+          $scope.dateExist = true;
         }else
         {
-          alert("No images created till now.");
+          alert("No images created for today till now.");
+          $scope.dateExist = false;
         }
       }catch(e){
         alert("Error in fetchSuccessCB controller "+e.message);
@@ -156,14 +154,8 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 
     function checkForExisting(){
     	try{
+    		alert("$scope.dateExist = "+$scope.dateExist+", $scope.isExist = "+$scope.isExist);
     		if($scope.dateExist==true){
-    			for(var i=0; i<$scope.imageArray.length; i++){
-    				if($scope.cDate == $scope.imageArray[i].cDate && $scope.widgetID == $scope.imageArray[i].widgetID){
-    					$scope.tempID = $scope.imageArray[i].id;
-    					$scope.isExist = true;
-    					break;
-    				}
-    			}
     			if($scope.isExist == true){
 	    			updateEntry();
 	    			$scope.isExist = false;
@@ -171,6 +163,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    		}else{
 	    			addNewEntry();
 	    			$scope.dateExist = false;
+	    		}
     		}else{
     			addNewEntry();
     		}
@@ -185,7 +178,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
     		if($scope.image.file != ''){
     			CameraWidgetService.addNewImage($scope.widgetID,$scope.image.file,$scope.image.caption)
 	    		.then(function(response){
-	    			alert("saved ---- "+$scope.image.file);
+	    			alert("saved");
 	    			fetchAllImage();
 	    			$scope.closeModal();
 	    		},function(error){
@@ -202,10 +195,11 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 
     function updateEntry(){
     	try{
+    		alert("updateEntry  "+$scope.tempID);
     		if($scope.image.file != ''){
     			CameraWidgetService.updateEntry($scope.image.file,$scope.image.caption,$scope.tempID)
 	    		.then(function(response){
-	    			alert("updated ---- "+$scope.image.file);
+	    			alert("updated");
 	    			fetchAllImage();
 	    			$scope.closeModal();
 	    		},function(error){
@@ -236,9 +230,9 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
             saveToPhotoAlbum: true
         };
    
-		$cordovaCamera.getPicture(options).then(function (imagePath) {
-            $scope.image.file = imagePath;
-           	alert("$scope.image.file----"+$scope.image.file);
+		$cordovaCamera.getPicture(options).then(function (imageURI) {
+            $scope.image.file = imageURI;
+        //   	alert("$scope.image.file----"+$scope.image.file);
             $scope.openModal();
         }, function (err) {
             alert("Error in getPicture of takePhoto");
@@ -261,7 +255,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
             $cordovaCamera.getPicture(options).then(function (imageURI) {
               //  $scope.imgURI = imageData;
                 $scope.image.file = imageURI;
-                alert("$scope.image.file----"+$scope.image.file);
+           //     alert("$scope.image.file----"+$scope.image.file);
                 $scope.openModal();
              }, function (err) {
              	alert("Error in getPicture of choosePhoto");

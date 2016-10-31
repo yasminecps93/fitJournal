@@ -182,7 +182,12 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 
      function currentDate(){
         var month = new Date().getMonth() + 1;
-        $scope.cDate = new Date().getFullYear()+ "-"+ month + "-" + new Date().getDate(); 
+        var date = new Date().getDate();
+          if(date<10){
+          	$scope.cDate = new Date().getFullYear()+ "-"+ month + "-0" + new Date().getDate();
+          }else{
+          	$scope.cDate = new Date().getFullYear()+ "-"+ month + "-" + new Date().getDate(); 
+          }
      	getLastEntry();
      	getLastEntryCalories();
       }

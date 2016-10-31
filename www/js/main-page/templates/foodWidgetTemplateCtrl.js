@@ -84,7 +84,12 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		    var month = monthsList[i];
 		    var numericMonth = new Date().getMonth() + 1;
 		    $scope.cDate = new Date().getDate()+ " "+month + " " + new Date().getFullYear();
-			$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-" + new Date().getDate(); 
+		    var date = new Date().getDate();
+	          if(date<10){
+	          	$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-0" + new Date().getDate();
+	          }else{
+	          	$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-" + new Date().getDate(); 
+	          }
 
 			checkExistingMealPlanner();
 			getLastEntry();

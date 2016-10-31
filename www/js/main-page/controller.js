@@ -114,7 +114,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		calculateLastWidgetPosition();
 	      	try{
 	      	//	MainService.addNewWidget("Image",newYPosition,0, 4, 6, "<camera-widget ng-attr-id="{{$scope.idIndex}}"></camera-widget>")
-	      		MainService.addNewWidget("Image",newYPosition,0, 4, 6, "<camera-widget></camera-widget>")
+	      		MainService.addNewWidget("Image",newYPosition,0, 4, 4, "<camera-widget></camera-widget>")
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
@@ -404,7 +404,7 @@ mainPageModule.directive('exerciseWidget',
 });
 
 mainPageModule.directive('cameraWidget',
-  function($compile,$rootScope){
+  function($compile,$rootScope,UniqueIdService){
   	function link(scope, element, attributes,controller) {
 	  		// $rootScope.$on('destroyDirective', function () {
 	    //     element.html('');
@@ -414,9 +414,12 @@ mainPageModule.directive('cameraWidget',
 	  		// 	element.html('');
 	  		// 	console.log("deleted");
 	  		// };
+	  	//	scope.unique_ID = UniqueIdService.getUniqueId();
+	  	//	console.log("scope.unique_ID = "+scope.unique_ID);
 	}
   return{
   	controller: 'CameraWidgetCtrl',
+//  	scope: {},
   	link: link,
     replace: false,
     templateUrl:'js/main-page/templates/cameraWidgetTemplate.html'
@@ -442,4 +445,13 @@ mainPageModule.directive('caloriesWidget',
     replace: false,
     templateUrl:'js/main-page/templates/caloriesWidgetTemplate.html'
   }
+});
+
+mainPageModule.service("UniqueIdService", function(){
+
+    var nextId = 1;
+
+    this.getUniqueId = function(){
+        return nextId++;
+    }
 });

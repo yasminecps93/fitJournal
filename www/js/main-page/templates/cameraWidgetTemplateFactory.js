@@ -38,11 +38,11 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 		  }.bind(this));
 		}
 
-		function getAllEntry(){
+		function getAllEntry(cDate){
 			try{
 				var deferred = $q.defer();
-		 		var query = "SELECT * from image_list";
-				runQuery(query,[],function(response){
+		 		var query = "SELECT * from image_list WHERE created_at = ?";
+				runQuery(query,[cDate],function(response){
 					//Success Callback
 					console.log(response);
 					imageArray = response.rows;
