@@ -1,0 +1,48 @@
+<div>
+<ion-header-bar  class="widget-header">
+	<button class="button button-icon" ng-click="deleteWidget($index, extraWidget.id)">
+		<i class="ion-android-close"></i>
+	</button>
+    <div class="h3 title">Image</div>
+	
+	<button class="button button-icon" ng-click="showPopup()">
+		<i class="ion-android-create"></i>
+	</button>
+</ion-header-bar>
+
+	<ion-content>
+    	 <img  ng-src="{{image.file || 'img/dummy.png'}}" style="text-align: center"/>
+		<div>
+		{{image.caption}}
+		</div>
+	   
+    </ion-content>
+</div>
+
+<script type="text/ng-template" id="add-image-modal.html">
+	<ion-modal-view>
+		<ion-header-bar>
+			<a ng-click="closeModal()"><i class="ion-ios-arrow-left"></i></a>
+			 <div class="h1 title">Image</div>
+			<button class="button button-clear button-positive" ng-click="checkForExisting()">
+				<i class="ion-ios-checkmark-outline"></i>
+			</button>
+			
+		</ion-header-bar>
+		<ion-content>
+			<img ng-show="image.file !== undefined" ng-src="{{image.file}}" style="text-align: center"/>
+			<textarea ng-model="image.caption"></textarea>
+		</ion-content>
+	</ion-modal-view>
+</script>
+
+<script type="text/ng-template" id="add-image-popup.html">
+ 	<ion-list>
+		<ion-item ng-click="takePhoto();closePopup()">
+			Camera
+		</ion-item>
+		<ion-item ng-click="choosePhoto();closePopup()">
+			Gallery
+		</ion-item>
+	</ion-list>
+</script>

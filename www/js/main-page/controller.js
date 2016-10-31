@@ -5,7 +5,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 
 		initData();
 	  	initMethods();
-
+	  	$scope.idIndex = -1;
 	  	var yPosition = 0;
 	  	var maxLength = 0;
 	  	var newYPosition = 0;
@@ -29,6 +29,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    	$scope.addMeasurementsWidget = addMeasurementsWidget;
 	    	$scope.addFoodWidget = addFoodWidget;
 	    	$scope.addExerciseWidget = addExerciseWidget;
+	    	$scope.addCameraWidget = addCameraWidget;
 	    	$scope.addCaloriesWidget = addCaloriesWidget;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
@@ -104,7 +105,23 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 					alert("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addFoodTemplate "+e.message);
+	      		alert("Error in addExerciseTemplate "+e.message);
+	      	}
+	   	}
+
+	   	function addCameraWidget(){
+	   		$scope.idIndex++;
+	   		calculateLastWidgetPosition();
+	      	try{
+	      	//	MainService.addNewWidget("Image",newYPosition,0, 4, 6, "<camera-widget ng-attr-id="{{$scope.idIndex}}"></camera-widget>")
+	      		MainService.addNewWidget("Image",newYPosition,0, 4, 6, "<camera-widget></camera-widget>")
+				.then(function(response){
+				 	fetchWidget();
+				},function(error){
+					alert("Error in changing template");
+				});
+	      	}catch(e){
+	      		alert("Error in addCameraTemplate "+e.message);
 	      	}
 	   	}
 
@@ -118,7 +135,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 					alert("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addFoodTemplate "+e.message);
+	      		alert("Error in addCaloriesTemplate "+e.message);
 	      	}
 	   	}
 	  	
@@ -383,6 +400,26 @@ mainPageModule.directive('exerciseWidget',
   	link: link,
     replace: false,
     templateUrl:'js/main-page/templates/exerciseWidgetTemplate.html'
+  }
+});
+
+mainPageModule.directive('cameraWidget',
+  function($compile,$rootScope){
+  	function link(scope, element, attributes,controller) {
+	  		// $rootScope.$on('destroyDirective', function () {
+	    //     element.html('');
+	  		// 	console.log("deleted");
+	    //   });
+	  		// scope.remove = function(){
+	  		// 	element.html('');
+	  		// 	console.log("deleted");
+	  		// };
+	}
+  return{
+  	controller: 'CameraWidgetCtrl',
+  	link: link,
+    replace: false,
+    templateUrl:'js/main-page/templates/cameraWidgetTemplate.html'
   }
 });
 
