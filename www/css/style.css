@@ -102,6 +102,17 @@
 	
 }
 
+.e-popup ion-item{
+	padding: 0px;
+	background-color: transparent !important;
+}
+
+.e-popup .item-checkbox{
+	border-width: 0px 0px 0px 0px !important;
+	padding: 10px 0px 16px 50px !important;
+	background-color: transparent !important;
+}
+
 .p-item{
 	width: 60% !important;
 }
@@ -159,6 +170,12 @@ input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.clon
 	background-color: transparent;
 }
 
+textarea{
+	padding: 10px;
+	width: 100%;
+	font-size: 20px;
+}
+
 .bottom-button{
 	position: absolute;
 	color: white !important;
@@ -172,18 +189,21 @@ input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.clon
 }
 
 
-.platform-android .bar .title {
+.platform-android .bar .title ,.platform-android .bar .widget-title{
     font-size: 17px;
 }
+
 .item-button-right .buttons .button{
 	font-size: 40px;
 }
+
 .item-button-right > .button,
 .item-button-right .item-content > .button,
 .item-button-right > .buttons,
 .item-button-right .item-content > .buttons {
 	top:3px;
 }
+
 #unitE{
 	position: absolute;
 	right: 10px;
@@ -191,4 +211,27 @@ input[disabled], select[disabled], textarea[disabled], input[readonly]:not(.clon
 	border:0px;
 	width: 35%;
 	height: 30px;
+}
+
+/*Widget CSS*/
+.label-weight-widget{
+	font-size: 25px;
+}
+
+#unitM{
+	position: absolute;
+	right: 10px;
+	top: 127px;
+	border:0px;
+	width: 35%;
+	height: 30px;
+}
+
+.item-complex.item-icon-right .item-content {
+    padding-right: 16px;
+}
+
+img{
+	width: 100%;
+	border-radius: 20px;
 }

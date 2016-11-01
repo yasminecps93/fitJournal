@@ -74,6 +74,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 	    	$scope.getLastEntryCalories = getLastEntryCalories;
 	    	$scope.addNewRowToCaloriesTable = addNewRowToCaloriesTable;
 	    	$scope.updateCalories = updateCalories;
+	    	$scope.editExercise = editExercise;
 	    }
 
 	    function toggleEdit() {
@@ -137,11 +138,23 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 	   }
       }
 
-       $scope.closeChooseRoutinePopup = function(){
-	        routinepopup.close();
-	   }
-      
+     
       $scope.showEntryPopup = function(){
+      	$scope.exeUnit = {
+				name: 'reps'
+			};
+			$scope.exeName = {
+				name: ''
+			};
+			$scope.exeNumber = {
+				number: 0
+			};
+			$scope.exeSet = {
+				set: 0
+			};
+			$scope.exeCal = {
+				value: 0
+			};
         $scope.data={}
         var entrypopup = $ionicPopup.show({
           templateUrl:'add-entry-popup.html',
@@ -173,6 +186,53 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
       $scope.closeEntryPopup = function(){
 	    entrypopup.close();
 	  }      
+
+	  $scope.showUpdatePopup = function(index){
+      	if(index>-1){
+      		for(var i=0; i<$scope.exerciseLogArray.length; i++){
+      			if($scope.exerciseLogArray[i].id==index){
+      				$scope.exeUnit = {
+						name: $scope.exerciseLogArray[i].exeUnit
+					};
+					$scope.exeName = {
+						name: $scope.exerciseLogArray[i].exeName
+					};
+					$scope.exeNumber = {
+						number: $scope.exerciseLogArray[i].exeNumber
+					};
+					$scope.exeSet = {
+						set: $scope.exerciseLogArray[i].exeSet
+					};
+					$scope.exeCal = {
+						value: $scope.exerciseLogArray[i].exeCal
+					};
+      			}
+      		}
+      	}
+        $scope.data={}
+        var updatepopup = $ionicPopup.show({
+          templateUrl:'update-entry-popup.html',
+          title: 'Edit exercise',
+          scope: $scope,
+          buttons:[
+          {
+            text: 'Cancel', onTap:
+            function(e){ return true;}
+          },{
+            text:'OK',
+            type:'button-positive',
+            onTap:function(e){
+              editExercise(index);
+            }
+          }
+          ]
+        });
+		
+		 $scope.closeEntryPopup = function(){
+		    updatepopup.close();
+		  }  
+      }
+          
 
      
 
@@ -429,6 +489,29 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeSet:$scope.exeSet.set,
 						exeCal:$scope.exeCal.value
 					});
+					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after adding");
+					saveLog();
+				}else{
+					alert('Empty inputs!');
+				}
+			}catch(e){
+				alert("Error in addNewExercise controller "+e.message);
+			}	
+		}
+
+		function editExercise(index){
+			try{
+				if($scope.exeName.name!='' && $scope.exeNumber.number>0 && $scope.exeSet.set>0){
+					for(var i=0; i<$scope.exerciseLogArray.length; i++){
+						if($scope.exerciseLogArray[i].id==index){
+							$scope.exerciseLogArray[i].exeName = $scope.exeName.name;
+							$scope.exerciseLogArray[i].exeNumber = $scope.exeNumber.number;
+							$scope.exerciseLogArray[i].exeUnit = $scope.exeUnit.name;
+							$scope.exerciseLogArray[i].exeSet = $scope.exeSet.set;
+							$scope.exerciseLogArray[i].exeCal = $scope.exeCal.value;
+						}
+					}
+					
 					console.log("exerciseLogArray length is "+$scope.exerciseLogArray.length+" after adding");
 					saveLog();
 				}else{

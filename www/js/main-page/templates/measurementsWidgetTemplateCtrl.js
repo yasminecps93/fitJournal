@@ -142,6 +142,31 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
         fetchAllBodyPartMeasurements();
       }
 
+       $scope.showNamePopup = function(){
+        $scope.data={}
+        var popup = $ionicPopup.show({
+          templateUrl:'add-name-popup.html',
+          title: 'Enter body part name',
+          scope: $scope,
+          buttons:[
+          {
+            text: 'Cancel', onTap:
+            function(e){ return true;}
+          },{
+            text:'Save',
+            type:'button-positive',
+            onTap:function(e){
+              addNewBodyPart();
+            }
+          }
+          ]
+        });
+        $scope.closeNamePopup = function(){
+          popup.close();
+        }
+      }
+
+      
 //---------------------------------------------------------------------------------//
 //--------------------CHECK CURRENT DATE FUNCTIONS---------------------------------//
 //---------------------------------------------------------------------------------//

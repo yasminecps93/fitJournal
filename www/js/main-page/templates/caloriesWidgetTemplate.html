@@ -7,16 +7,17 @@
 	
 </ion-header-bar>
 
-	<ion-content>
-		<div>
-			Total Calories: {{calories.totalCal}}
-		</div>
-    	<div>
-			Total Calories In: {{calories.inCal}}
-		</div>
-		<div>
-			Total Calories Out: -{{calories.outCal}}
-		</div>
-	   	
+	<ion-content class="widget-content food-widget">
+		<ion-list>
+			<ion-item class="item item-divider item-button-right">
+				Total Calories: {{calories.totalCal}} kcal	    		
+			</ion-item>
+			<ion-item class="item item-divider item-button-right">
+				Total Calories In: {{calories.inCal}} kcal	    		
+			</ion-item>
+			<ion-item class="item item-divider item-button-right">
+				Total Calories Out: -{{calories.outCal}} kcal	    		
+			</ion-item>
+		</ion-list>
     </ion-content>
 </div>

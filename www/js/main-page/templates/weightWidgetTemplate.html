@@ -4,34 +4,38 @@
 		<i class="ion-android-close"></i>
 	</button>
     <div class="h3 title">Weight</div>
-	
+	<!-- <h3 class="widget-title">Weight</h3> -->
 	<button class="button button-icon" ng-click="openModal()">
 		<i class="ion-android-create"></i>
 	</button>
 </ion-header-bar>
-	<ion-content>
-		<input  type="text" value="{{weight.current}}" readonly="true"/>
-    	
-    	<label class="label-inline">{{wUnit.name}}</label>
+	<ion-content class="widget-content">
+			<!-- <input  type="text" value="{{weight.current}}" readonly="true"/> -->
+			<label class="label-weight-widget">{{weight.current}} {{wUnit.name}}</label>
     </ion-content>
 </div>
 
 <script type="text/ng-template" id="add-weight-modal.html">
 	<ion-modal-view>
 		<ion-header-bar>
-			<a ng-click="closeModal()"><i class="ion-ios-arrow-left"></i></a>
+			<div class="buttons">
+				<button class="button button-icon ion-ios-arrow-left" ng-click="closeModal()">
+		      	</button>
+		    </div>
 			 <div class="h1 title">Weight</div>
-			<button class="button button-clear button-positive" ng-click="addNewWeight()">
-				<i class="ion-ios-checkmark-outline"></i>
+			<button class="button button-icon ion-ios-checkmark-outline" ng-click="addNewWeight()"  ui-sref="main-page">
 			</button>
-			
 		</ion-header-bar>
 		<ion-content>
-			<label class="item item-input item-stacked-label">
-			    <span class="input-label">Current Weight</span>
-			    <input type="number" ng-model="weight.current"/>
-			    <label class="label-inline">{{wUnit.name}}</label>
-			  </label>
+			<form>
+				<div class="list list-inset">
+					<label class="item item-input item-stacked-label">
+					    <span class="input-label">Current Weight</span>
+					    <input type="number" ng-model="weight.current"/>
+					    <label class="label-inline">{{wUnit.name}}</label>
+					</label>
+				</div>
+			</form>
 		</ion-content>
 	</ion-modal-view>
 </script>

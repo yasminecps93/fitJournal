@@ -1,11 +1,11 @@
 ion-header-bar{
-	background-color:  #FFA07A !important;
+	background-color:  #34495E !important;
 
 }
 
 .main-page-content{
 	font-family: 'normalFonts';
-	background-color: rgba(255,160,122,0.05) !important;
+	background-color: rgba(52,73,94,0.05) !important;
 }
 
 .main-content{
@@ -15,11 +15,11 @@ ion-header-bar{
 }
 
 ion-footer-bar{
-	background-color:  #FFA07A !important;
+	background-color:  #34495E !important;
 }
 
 .bottom-nav-color, .slider-slide, .slider, .slider-slides{
-	background-color:  #FFA07A !important;
+	background-color:  #34495E !important;
 }
 
 .widget-button, .title, .button-icon{
@@ -34,7 +34,7 @@ ion-footer-bar{
 
 .ion-ios-plus{
 	font-size: 70px;
-	color:#FFA07A;
+	color:#34495E;
 }
 .add-icon{
 	z-index: 100px;
@@ -44,13 +44,13 @@ ion-footer-bar{
 }
 
 .button-positive{
-	background-color:#FFA07A !important;
+	background-color:#34495E !important;
 	color: white !important; 
 	font-family: 'normalFonts';
 }
 
 .ion-minus-circled{
-	color: #FFA07A !important;
+	color: #34495E !important;
 }
 
 select{
@@ -58,23 +58,23 @@ select{
 }
 
 .item-divider{
-	background-color: #FFA07A;
+	background-color: #34495E;
 	color: white;
-	border-color:  #FFA07A !important;
+	border-color:  #34495E !important;
 	line-height: 30px;
 }
 
 .tabs-striped.tabs-positive .tabs{
-	background-color: #FFA07A;
+	background-color: #34495E;
 }
 
 .button-block{
-	background-color: #FFA07A;
+	background-color: #34495E;
 	color: white;
 }
 
 .list-button{
-	color: #444 !important;
+	color: white !important;
 	border-color: transparent;
 	background:none;
 }
@@ -82,12 +82,12 @@ select{
 /*Widget CSS*/
 
 .widget-header{
-	background-color: rgba(255,160,122,0.5) !important;
+	background-color: rgba(52,73,94,0.5) !important;
 
 }
 
 .widget-content{
-	background-color: rgba(255,160,122,0.5);
+	background-color: rgba(52,73,94,0.5);
 	padding: 5px;
 	text-align: center;
 }
@@ -111,13 +111,13 @@ select{
 }
 
 .food-widget .item{
-	color: #444 !important;
+	color: white !important;
 	font-size: 17px;
 }
 
 .food-widget .button-icon.icon:before {
     font-size: 25px;
-    color: #444;
+    color: white;
 }
 
 .food-widget .item-button-right > .button{
@@ -130,5 +130,5 @@ select{
 }
 
 .label-weight-widget{
-	color: #444;
+	color: white;
 }

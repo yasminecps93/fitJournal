@@ -1,11 +1,11 @@
 ion-header-bar{
-	background-color:  #FFA07A !important;
+	background-color:  #00BFA2 !important;
 
 }
 
 .main-page-content{
 	font-family: 'normalFonts';
-	background-color: rgba(255,160,122,0.05) !important;
+	background-color: rgba(0,191,162,0.05) !important;
 }
 
 .main-content{
@@ -15,11 +15,11 @@ ion-header-bar{
 }
 
 ion-footer-bar{
-	background-color:  #FFA07A !important;
+	background-color:  #00BFA2 !important;
 }
 
 .bottom-nav-color, .slider-slide, .slider, .slider-slides{
-	background-color:  #FFA07A !important;
+	background-color:  #00BFA2 !important;
 }
 
 .widget-button, .title, .button-icon{
@@ -34,7 +34,7 @@ ion-footer-bar{
 
 .ion-ios-plus{
 	font-size: 70px;
-	color:#FFA07A;
+	color:#00BFA2;
 }
 .add-icon{
 	z-index: 100px;
@@ -44,13 +44,13 @@ ion-footer-bar{
 }
 
 .button-positive{
-	background-color:#FFA07A !important;
+	background-color:#00BFA2 !important;
 	color: white !important; 
 	font-family: 'normalFonts';
 }
 
 .ion-minus-circled{
-	color: #FFA07A !important;
+	color: #00BFA2 !important;
 }
 
 select{
@@ -58,18 +58,18 @@ select{
 }
 
 .item-divider{
-	background-color: #FFA07A;
+	background-color: #00BFA2;
 	color: white;
-	border-color:  #FFA07A !important;
+	border-color:  #00BFA2 !important;
 	line-height: 30px;
 }
 
 .tabs-striped.tabs-positive .tabs{
-	background-color: #FFA07A;
+	background-color: #00BFA2;
 }
 
 .button-block{
-	background-color: #FFA07A;
+	background-color: #00BFA2;
 	color: white;
 }
 
@@ -82,12 +82,12 @@ select{
 /*Widget CSS*/
 
 .widget-header{
-	background-color: rgba(255,160,122,0.5) !important;
+	background-color: rgba(0,191,162,0.5) !important;
 
 }
 
 .widget-content{
-	background-color: rgba(255,160,122,0.5);
+	background-color: rgba(0,191,162,0.5);
 	padding: 5px;
 	text-align: center;
 }

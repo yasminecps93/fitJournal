@@ -7,6 +7,21 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 		initMethods();
 
   		$scope.showPopup = function(){
+  			$scope.exeUnit = {
+				name: 'reps'
+			};
+			$scope.exeName = {
+				name: ''
+			};
+			$scope.exeNumber = {
+				number: 0
+			};
+			$scope.exeSet = {
+				set: 0
+			};
+			$scope.exeCal = {
+				value: 0
+			};
   			$scope.data={}
   			var entrypopup = $ionicPopup.show({
   				templateUrl:'add-exercise-popup.html',

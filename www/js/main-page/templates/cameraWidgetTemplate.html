@@ -10,28 +10,34 @@
 	</button>
 </ion-header-bar>
 
-	<ion-content>
-    	 <img  ng-src="{{image.file || 'img/dummy.png'}}" style="text-align: center"/>
-		<div>
-		{{image.caption}}
-		</div>
-	   
+	<ion-content class="widget-content food-widget">
+    	<img  ng-src="{{image.file || 'img/dummy.png'}}" style="text-align: center"/>
+	   	<ion-list>
+	   		<ion-item class="item item-divider item-button-right">
+	   		{{image.caption}}
+	   		</ion-item>
+	   	</ion-list>
     </ion-content>
 </div>
 
 <script type="text/ng-template" id="add-image-modal.html">
 	<ion-modal-view>
 		<ion-header-bar>
-			<a ng-click="closeModal()"><i class="ion-ios-arrow-left"></i></a>
+			<div class="buttons">
+		      <button class="button button-icon ion-ios-arrow-left" ng-click="closeModal()">
+		    </div>
 			 <div class="h1 title">Image</div>
-			<button class="button button-clear button-positive" ng-click="checkForExisting()">
-				<i class="ion-ios-checkmark-outline"></i>
+			<button class="button button-icon ion-ios-checkmark-outline" ng-click="checkForExisting()">
 			</button>
-			
 		</ion-header-bar>
 		<ion-content>
 			<img ng-show="image.file !== undefined" ng-src="{{image.file}}" style="text-align: center"/>
-			<textarea ng-model="image.caption"></textarea>
+			<ion-list>
+				<ion-item >
+					<textarea ng-model="image.caption" placeholder="Type something here..."></textarea>
+				</ion-item>
+			</ion-list>
+			
 		</ion-content>
 	</ion-modal-view>
 </script>

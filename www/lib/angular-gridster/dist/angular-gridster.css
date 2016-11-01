@@ -20,7 +20,7 @@
   z-index: 2;
   position: absolute;
   display: none;
-  background-color: yellow;
+/*s*/
 }
 .gridster-loaded {
   -webkit-transition: height .3s;

@@ -34,7 +34,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
    templateUrl:'js/meal-planner/meal-planner.html',
    controller:'MealPlannerListCtrl'
   });
-  $urlRouterProvider.otherwise('/mealPlanner');
+  $urlRouterProvider.otherwise('/main');
 })
 
 .config(function (ionicDatePickerProvider) {
@@ -50,7 +50,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
     showTodayButton: true,
     dateFormat: 'dd MMMM yyyy',
     closeOnSelect: true,
-    from: new Date(2012, 8, 2)
+    from: new Date(2016, 1, 1)
     };
     ionicDatePickerProvider.configDatePicker(datePickerObj);
   })
@@ -87,40 +87,6 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
       });
 
 })
-
-/*
-.directive('compileDirective', function($compile) {
-        return {
-          restrict: "E",
-          replace: false,
-          link: function(scope, element, attr) {
-            scope.$watch(function() {
-              return attr.directive;
-            }, function(val) {
-              if (val) {
-                var directive = $compile(angular.element(val))(scope);
-                element.append(directive);
-              }
-            });
-          }
-        };
-      })
-
-.directive('weightWidget',
-  function($compile){
-  return{
-    replace: false,
-    templateUrl:'/templates/tryWidgetTemplate.html'
-  }
-})
-
-.directive('measurementsWidget',
-  function($compile){
-  return{
-    replace: false,
-    templateUrl:'/templates/measurementsWidgetTemplate.html'
-  }
-})*/
 
 
 .run(function($ionicPlatform) {
