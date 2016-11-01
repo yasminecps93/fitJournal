@@ -17,12 +17,17 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.foodCal={
 				value:0
 			};
+			$scope.breakfastCal = 0;
+			$scope.lunchCal = 0;
+			$scope.dinnerCal = 0;
+			$scope.snackCal = 0;
 			$scope.loadingEntries = false;
 			$scope.dateExist= false;
 			$scope.isAdded= false;
 			$scope.headerToEdit = '';
 			$scope.shouldShowDelete = false;
 			$scope.editButtonLabel = "Edit";
+			$scope.mealPlannerList=[];
 			MealsService.initDB();
 			fetchMeals();
 		}

@@ -34,7 +34,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
    templateUrl:'js/meal-planner/meal-planner.html',
    controller:'MealPlannerListCtrl'
   });
-  $urlRouterProvider.otherwise('/main');
+  $urlRouterProvider.otherwise('/mealPlanner');
 })
 
 .config(function (ionicDatePickerProvider) {

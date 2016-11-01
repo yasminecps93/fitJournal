@@ -1,28 +1,26 @@
 <ion-view >
 	<ion-header-bar>
 		<div class="buttons">
-	      <button class="button button-dark" ui-sref="main-page">Back</button>
+	      <button class="button button-icon ion-ios-arrow-left" ui-sref="main-page">
+		</button>
 	    </div>
 		<h1 class="title">Fitness Routine</h1>
 		<div class="buttons">
-	    	<button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+	    	<button class="button edit-button" ng-click="toggleEdit()">{{editButtonLabel}}</button>
 	  	</div>
 	</ion-header-bar>
 	<ion-content>
 		<ion-list show-delete="shouldShowDelete">
-	   		<ion-item class="item item-divider">
-	    		Click on a Routine
-	    	</ion-item>
 	    	<ion-item ng-show="loadingRoutines">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
 	    	<ion-item ui-sref="routineDetails({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
-	    		{{routine.name}}, {{routine.id}}
+	    		{{routine.name}}
 	    		<ion-delete-button class="ion-minus-circled" ng-click="deleteRoutine($index,routine.id)"></ion-delete-button>
-	    		<i class="icon ion-chevron-right"></i>
+	    		<i class="icon ion-ios-arrow-right"></i>
 	    	</ion-item>
 	   	</ion-list>
-	   	<ion-list>
+	   	<!-- <ion-list>
 	    	<ion-item class="item item-divider">
 	    		Add New Routine
 	    	</ion-item>
@@ -32,7 +30,14 @@
 	   		<ion-item>
 	   			<button class="button button-block button-calm" ng-click="addNewRoutine()">Add</button>
 	   		</ion-item>
-	   	</ion-list>
+	   	</ion-list> -->
 	</ion-content>
+	<div class="add-icon">
+		<a ng-click="showPopup()"><i class="icon ion-ios-plus"></i></a>
+	</div>
 </ion-view>
+
+<script type="text/ng-template" id="add-routine-popup.html">
+	<input type="text" ng-model="newRoutine.name"/>
+</script>
 

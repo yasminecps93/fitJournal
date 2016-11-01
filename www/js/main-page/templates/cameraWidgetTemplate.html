@@ -1,11 +1,11 @@
-<div ng-init="getID($index)">
+<div ng-init="getID(extraWidget.id)">
 <ion-header-bar  class="widget-header">
 	<button class="button button-icon" ng-click="deleteWidget($index, extraWidget.id)">
 		<i class="ion-android-close"></i>
 	</button>
     <div class="h3 title">Image</div>
 	
-	<button class="button button-icon" ng-click="showPopup(); getID($index)">
+	<button class="button button-icon" ng-click="showPopup(); getID(extraWidget.id)">
 		<i class="ion-android-create"></i>
 	</button>
 </ion-header-bar>

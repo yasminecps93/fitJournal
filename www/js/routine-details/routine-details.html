@@ -1,13 +1,12 @@
 <ion-view>
-  <ion-header-bar class="bar-balanced">
+  <ion-header-bar>
     <div class="buttons">
-      <button class="button button-dark" ui-sref="routinesList">Back</button>
+      <button class="button button-icon ion-ios-arrow-left" ui-sref="routinesList">
     </div>
     <h1 class="title">{{routineInfo.name}}</h1>
     <div class="buttons button-right">
-      <button class="button button-icon ion-android-add" ng-click="showPopup()"></button>
       <div class="buttons">
-        <button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+        <button class="button edit-button" ng-click="toggleEdit()">{{editButtonLabel}}</button>
       </div>
     </div>    
   </ion-header-bar>
@@ -17,16 +16,26 @@
      	<ion-spinner icon="spiral"></ion-spinner>
     </ion-item>
     <ion-item ng-repeat="entry in entriesList track by $index">
-    	<strong>{{entry.exeName}}</strong> - {{entry.exeNumber}}, {{entry.exeUnit}}, {{entry.exeSet}}, {{entry.exeCal}}
+      <div class = "row">
+         <div class = "col col-50">{{entry.exeName}}</div>
+         <div class = "col">{{entry.exeSet}} x</div>
+         <div class = "col">{{entry.exeNumber}} {{entry.exeUnit}}</div>
+         <div class = "col">{{entry.exeCal}}</div>
+         <div class = "col">kcal</div>
+      </div>
+    	<!-- <strong>{{entry.exeName}}</strong> - {{entry.exeNumber}}, {{entry.exeUnit}}, {{entry.exeSet}}, {{entry.exeCal}} -->
     	<ion-delete-button class="ion-minus-circled" ng-click="deleteEntry($index,entry.id)"></ion-delete-button>
     </ion-item>
    </ion-list>
    
   </ion-content>
+  <div class="add-icon">
+    <a ng-click="showPopup()"><i class="icon ion-ios-plus"></i></a>
+  </div>
 </ion-view>
 
 <script type="text/ng-template" id="add-exercise-popup.html">
-  <label class="item item-input item-stacked-label p-item">
+  <label class="item item-input item-stacked-label">
       <span class="input-label">Exercise name</span>
       <input type="text" ng-model="exeName.name"/>
   </label>
@@ -34,16 +43,16 @@
       <span class="input-label">Unit</span>
       <input type="Number" ng-model="exeNumber.number"/>
   </label>
-  <select ng-model="exeUnit.name">
-          <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
-  </select>
-  <label class="item item-input item-stacked-label p-item">
+    <select id="unitE" ng-model="exeUnit.name">
+      <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
+    </select>
+     
+  <label class="item item-input item-stacked-label">
       <span class="input-label">Sets</span>
       <input type="Number" ng-model="exeSet.set"/>
   </label>
-  <label class="item item-input item-stacked-label p-item">
+  <label class="item item-input item-stacked-label">
       <span class="input-label">Calories burn</span>
       <input type="Number" ng-model="exeCal.value"/>
   </label>
-  <!--button class="button button-positive" ng-click="addNewEntry() ">Save</button-->
 </script>

@@ -1,7 +1,7 @@
 var routinesListModule = angular.module('RoutinesList',['ngCordova']);
 
-routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','RoutinesService',
-	function($scope,$cordovaSQLite,$ionicPlatform,RoutinesService){
+routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','RoutinesService','$ionicPopup',
+	function($scope,$cordovaSQLite,$ionicPlatform,RoutinesService, $ionicPopup){
 
 		initData();
 		initMethods();
@@ -22,6 +22,31 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 			$scope.toggleEdit = toggleEdit;
 			$scope.deleteRoutine = deleteRoutine;
 		}
+
+		$scope.showPopup = function(){
+			console.log("opened popup");
+  			$scope.data={}
+  			var entrypopup = $ionicPopup.show({
+  				templateUrl:'add-routine-popup.html',
+  				title: 'Enter routine name',
+  				scope: $scope,
+  				buttons:[
+  				{
+  					text: 'Cancel', onTap:
+  					function(e){ return true;}
+  				},{
+  					text:'Save',
+  					type:'button-positive',
+  					onTap:function(e){
+  						addNewRoutine();
+  					}
+  				}
+  				]
+  			});
+  			$scope.closePopup = function(){
+	  			entrypopup.close();
+	  		}
+  		}
 
 		function fetchRoutines() {
 			$scope.loadingRoutines = true;

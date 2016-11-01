@@ -1,0 +1,74 @@
+ion-header-bar{
+	background-color:  #FFA07A !important;
+}
+
+.main-content{
+	font-family: 'normalFonts'
+	background-color: #F2F1EF !important; 
+/*	padding-top: 30px */
+}
+
+ion-footer-bar{
+	background-color:  #FFA07A !important;
+}
+
+.bottom-nav-color, .slider-slide, .slider, .slider-slides{
+	background-color:  #FFA07A !important;
+}
+
+.widget-button, .title, .button-icon{
+	color:	white !important;
+}
+
+.edit-button{
+	background-color: transparent !important;
+	color: white !important; 
+	font-family: 'normalFonts';
+}
+
+.ion-ios-plus{
+	font-size: 70px;
+	color:#FFA07A;
+}
+.add-icon{
+	z-index: 100px;
+	position: fixed;
+	bottom: 15px;
+	right:20px;
+}
+
+.button-positive{
+	background-color:#FFA07A !important;
+	color: white !important; 
+	font-family: 'normalFonts';
+}
+
+.ion-minus-circled{
+	color: #FFA07A !important;
+}
+
+select{
+	border-color: transparent;
+}
+
+.item-divider{
+	background-color: #FFA07A;
+	color: white;
+	border-color:  #FFA07A !important;
+	line-height: 30px;
+}
+
+.tabs-striped.tabs-positive .tabs{
+	background-color: #FFA07A;
+}
+
+.button-block{
+	background-color: #FFA07A;
+	color: white;
+}
+
+.list-button{
+	color: black !important;
+	border-color: transparent;
+	background:none;
+}

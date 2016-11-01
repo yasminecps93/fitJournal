@@ -1,9 +1,12 @@
 <ion-view >
 <ion-header-bar>
 	<div class="buttons">
-	      <button class="button button-dark" ui-sref="main-page">Back</button>
+		<button class="button button-icon ion-ios-arrow-left" ui-sref="main-page">
+		</button>
 	</div>
 	<h1 class="title">Profile Details</h1>
+	<button class="button button-icon ion-ios-checkmark-outline" ng-click="addNewProfileData(); addNewWeight()"  ui-sref="main-page">
+	</button>
 </ion-header-bar>
 	<ion-content class="main-content" >
 		<form>
@@ -45,7 +48,7 @@
   			</div>
 		</form>
 		<div>
-			<button class= "button bottom-button" ng-click="addNewProfileData(); addNewWeight()"  ui-sref="main-page">DONE</button>
+			<!-- <button class= "button bottom-button" ng-click="addNewProfileData(); addNewWeight()"  ui-sref="main-page">DONE</button> -->
 			<!input type="submit" value="DONE" class= " bottom-button" ng-click="addNewProfileData(); addNewWeight()"  ui-sref="main-page"-->
 		</div>
 	</ion-content>

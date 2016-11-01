@@ -1,22 +1,23 @@
 <ion-view >
 	<ion-header-bar>
 		<div class="buttons">
-	      <button class="button button-dark" ui-sref="main-page">Back</button>
+			<button class="button button-icon ion-ios-arrow-left" ui-sref="main-page">
+	      	</button>
 	    </div>
 		<h1 class="title">Meal Planner</h1>
 		<div class="buttons">
-        <button class="button button-dark" ng-click="toggleEdit()">{{editButtonLabel}}</button>
-      </div>
+        	<button class="button edit-button" ng-click="toggleEdit()">{{editButtonLabel}}</button>
+	    </div>
 	</ion-header-bar>
 	<ion-content class="main-content" >
-		<ion-list>
+		<!-- <ion-list>
 			<ion-item ng-repeat="entry in mealPlannerList track by $index">
 				{{entry.id}}-- {{entry.dateName}}
 			</ion-item>
-		</ion-list>
+		</ion-list> -->
 		<div>
 			<ion-item class="item-button-right">
-				<input class="item item-input  p-item" type="text" ng-value="newDate.dateName" readonly="true" placeholder="Choose a date" /> 			{{date_id}}		
+				<input class="item item-input  p-item" type="text" ng-value="newDate.dateName" readonly="true" placeholder="Choose a date" /> 	<!-- 		{{date_id}}	 -->	
 				<button id="datePicker2" class="button icon ion-calendar" ng-click="openDatePicker($event)"></button>
 			</ion-item>
  			
@@ -25,24 +26,31 @@
 		<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Breakfast ({{breakfastCal}} kcal)
-		    	<button class="button" ng-click="openModal(); setAsBreakfast()">
-		    		<i class="icon ion-android-add" ></i>
-		    	</button>
+		    	<div class="buttons">
+					<button class="button button-icon ion-ios-plus-empty" ng-click="openModal(); setAsBreakfast()">
+			      	</button>
+			    </div>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
 	    	<ion-item ng-show="loadingEntries">
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
-				    	<ion-item ng-repeat="item in breakfastList track by $index">
-				    		{{item.foodName}}, {{item.foodCal}}
+				    	<ion-item ng-repeat="entry in breakfastList track by $index">
+				    		<div class = "row">
+							   <div class = "col col-90">{{entry.foodName}}</div>
+							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
+							</div>
 				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteBreakfast($index,item.id)"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Lunch ({{lunchCal}} kcal)
-		    	<button class="button" ng-click="openModal(); setAsLunch()">Add</button>
+	    		<div class="buttons">
+					<button class="button button-icon ion-ios-plus-empty" ng-click="openModal(); setAsLunch()">
+			      	</button>
+			    </div>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
@@ -50,16 +58,20 @@
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
 	    				<ion-item ng-repeat="entry in lunchList track by $index">
-				    		{{entry.foodName}}, {{entry.foodCal}}
+				    		<div class = "row">
+							   <div class = "col col-90">{{entry.foodName}}</div>
+							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
+							</div>
 				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteLunch($index,entry.id)"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list >
 	   		<ion-item class="item item-divider item-button-right">
 	    		Dinner ({{dinnerCal}} kcal)
-		    	<button class="button" ng-click="openModal(); setAsDinner()">
-		    		<i class="icon ion-android-add" ></i>
-		    	</button>
+	    		<div class="buttons">
+					<button class="button button-icon ion-ios-plus-empty" ng-click="openModal(); setAsDinner()">
+			      	</button>
+			    </div>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
@@ -67,16 +79,20 @@
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
 	    				<ion-item ng-repeat="entry in dinnerList track by $index">
-				    		{{entry.foodName}}, {{entry.foodCal}}
+				    		<div class = "row">
+							   <div class = "col col-90">{{entry.foodName}}</div>
+							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
+							</div>
 				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteDinner($index,entry.id)"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
 	   		<ion-item class="item item-divider item-button-right">
 	    		Snack ({{snackCal}} kcal)
-		    	<button class="button" ng-click="openModal(); setAsSnack()">
-		    		<i class="icon ion-android-add" ></i>
-		    	</button>
+	    		<div class="buttons">
+					<button class="button button-icon ion-ios-plus-empty" ng-click="openModal(); setAsSnack()">
+			      	</button>
+			    </div>
 	    	</ion-item>
 	    </ion-list>
 	    <ion-list show-delete="shouldShowDelete">
@@ -84,7 +100,11 @@
 	     		<ion-spinner icon="spiral"></ion-spinner>
 	    	</ion-item>
 	    				<ion-item ng-repeat="entry in snackList track by $index">
-				    		{{entry.foodName}}, {{entry.foodCal}}
+	    					<div class = "row">
+							   <div class = "col col-90">{{entry.foodName}}</div>
+							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
+							</div>
+				    		<!-- {{entry.foodName}}, {{entry.foodCal}} -->
 				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteSnack($index,entry.id)"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
@@ -92,12 +112,13 @@
 </ion-view>
 
 
-<script id="meals-modal.html" type="text/ng-template">
+<!-- <script id="meals-modal.html" type="text/ng-template">
   <ion-modal-view>
     <ion-header-bar>
-     <div class="buttons">
-	      <button class="button button-dark" ng-click="closeModal()">Back</button>
-	  </div>
+    	<div class="buttons">
+			<button class="button button-icon ion-ios-arrow-left" ng-click="closeModal()">
+	      	</button>
+	    </div>
       <h1 class="title">{{headerToEdit}}</h1>
     </ion-header-bar>
 
@@ -115,16 +136,20 @@
 			    			<span class="input-label">Calories</span>	
 			    			<input type="number" ng-model="foodCal.value">
 			    		</label>
-			    		<button class="button button-block button-calm" ng-click="addNewEntry()">Add new</button>
+			    		<button class="button button-block" ng-click="addNewEntry()">Add new</button>
 			    		<ion-list>
 							<ion-item class="item item-divider">
 					    		Recently used
 					    	</ion-item>
 					    	<ion-item class="item item-button-right" ng-repeat="entry in arrayList | filter:foodName.name" >
 				    		{{entry.foodName}} ({{entry.foodCal}} kcal)
-				    			<button class="button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
+				    			<!-- <button class="button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
 				    				<i class="icon ion-android-add" ></i>
-				    			</button>
+				    			</button> -->
+				    			<!-- <div class="buttons">
+									<button class="button ion-ios-plus-empty list-button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
+							      	</button>
+							    </div>
 				    		</ion-item>
 						</ion-list>
 			    	</div>
@@ -150,6 +175,48 @@
 			</ion-view>
 		</ion-tab>
 	</ion-tabs>    
+    
+  </ion-modal-view>
+</script> --> -->
+
+<script id="meals-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+    	<div class="buttons">
+			<button class="button button-icon ion-ios-arrow-left" ng-click="closeModal()">
+	      	</button>
+	    </div>
+      <h1 class="title">{{headerToEdit}}</h1>
+    </ion-header-bar>
+
+	<ion-content>
+		<div class="list list-inset">
+			<label class="item item-input">		
+			    <input type="text" ng-model="foodName.name" placeholder="Food item">
+			    <i class="icon ion-search placeholder-icon"></i>
+			</label>
+			<label class="item item-input">	
+			    <span class="input-label">Calories (kcal)</span>	
+			    <input type="number" ng-model="foodCal.value">
+			</label>
+			<button class="button button-block" ng-click="addNewEntry()">Add new</button>
+			    <ion-list>
+					<ion-item class="item item-divider">
+					    Recently used
+					</ion-item>
+					<ion-item class="item item-button-right" ng-repeat="entry in arrayList | filter:foodName.name" >
+				    	{{entry.foodName}} ({{entry.foodCal}} kcal)
+				    			<!-- <button class="button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
+				    				<i class="icon ion-android-add" ></i>
+				    			</button> -->
+				    	<div class="buttons">
+							<button class="button ion-ios-plus-empty list-button" ng-click="addNewEntryByFiltered(entry.foodName,entry.foodCal)">
+							</button>
+						</div>
+				    </ion-item>
+				</ion-list>
+		</div>
+	</ion-content>
     
   </ion-modal-view>
 </script>
