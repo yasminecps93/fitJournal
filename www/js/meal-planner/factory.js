@@ -21,10 +21,10 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			//  	alert("opened db ");
+			//  	console.log("opened db ");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS mealPlanner_list_try (id integer primary key autoincrement, created_at date, dateName string, no_of_entries integer)";
@@ -32,22 +32,22 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 			  runQuery(query,[],function(res) {
 			      console.log("table created mealPlanner");
-			 //     alert("table created for meal date");
+			 //     console.log("table created for meal date");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table for meal date"+err);
+			      console.log("error creating table for meal date"+err);
 			   }); 
 
 			  try{
 			  	runQuery(query_meals,[],function(res) {
 			      console.log("table created ");
-			  //    alert("table created for meal type");
+			  //    console.log("table created for meal type");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table for meal type"+err);
+			      console.log("error creating table for meal type"+err);
 			   }); 
 			  }catch(e){
-			  	alert("ERROR in try for creating table "+e.message);
+			  	console.log("ERROR in try for creating table "+e.message);
 			  }
 			  
 			   
@@ -72,7 +72,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllMealPlanner "+e.message);
+				console.log("Error in getAllMealPlanner "+e.message);
 			}
 			
 		}
@@ -94,7 +94,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in ddNewMealPlanner "+e.message);
+				console.log("Error in ddNewMealPlanner "+e.message);
 			}
 			
 		}
@@ -111,7 +111,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				}
 				return mealPlanner;
 			}catch(e){
-				alert("Error in getMealPlanner "+e.message);
+				console.log("Error in getMealPlanner "+e.message);
 			}
 			
 		}
@@ -123,12 +123,12 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "DELETE from mealPlanner_list_try";
 				runQuery(query,[],function(response){
 				//Success Callback
-			//	alert("deleted");
+			//	console.log("deleted");
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in runQuery delete");
+					console.log("Error in runQuery delete");
 					console.log(error);
 					deferred.reject(error);
 				});
@@ -136,7 +136,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				return deferred.promise;
 
 			}catch(e){
-				alert("Cannot delete "+e.message);
+				console.log("Cannot delete "+e.message);
 			}
 		}
 
@@ -146,18 +146,18 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));
 		}
 
-		//-------------------------------------------------------
-		//---------------ENTRY FACTORY-----------------------
-		//-------------------------------------------------------
+//---------------------------------------------------------------//
+//-----------------------ENTRY FACTORY---------------------------//
+//---------------------------------------------------------------//
 		function getAllEntries(dateName_id){
 
 			var deferred = $q.defer();
@@ -176,7 +176,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllEntries "+e.message);
+				console.log("Error in getAllEntries "+e.message);
 			}
 		}
 
@@ -186,19 +186,19 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "INSERT INTO meals_list_try (dateName_id, mealType, foodName, foodCal) VALUES (?,?,?,?)";
 				runQuery(query,[dateName_id, mealType, foodName, foodCal],function(response){
 					//Success Callback
-				//	alert("entry added successfully - "+dateName_id+", "+mealType+", "+foodName+", "+foodCal);
+				//	console.log("entry added successfully - "+dateName_id+", "+mealType+", "+foodName+", "+foodCal);
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("error in entering")
+					console.log("error in entering")
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewEntry "+e.message);
+				console.log("Error in addNewEntry "+e.message);
 			}
 			
 		}
@@ -209,19 +209,19 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 				var query = "DELETE FROM meals_list_try WHERE id = ?";
 				runQuery(query,[id],function(response){
 					//Success Callback
-				//	alert("deleteEntry Success");
+				//	console.log("deleteEntry Success");
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("deleteEntry error");
+					console.log("deleteEntry error");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in deleteEntry "+e.message);
+				console.log("Error in deleteEntry "+e.message);
 			}
 			
 		}
@@ -246,7 +246,7 @@ mealPlannerModule.factory('MealsService',['$cordovaSQLite','$ionicPlatform','$q'
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllEntries "+e.message);
+				console.log("Error in getAllEntries "+e.message);
 			}
 		}
 	}

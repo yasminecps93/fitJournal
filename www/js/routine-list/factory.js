@@ -17,19 +17,19 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-		//	  	alert("opened db ");
+		//	  	console.log("opened db ");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS routines_list (id integer primary key autoincrement, name string , no_of_entries integer)";
 			  runQuery(query,[],function(res) {
 			      console.log("table created ");
-			//      alert("table created ");
+			//      console.log("table created ");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table "+err);
+			      console.log("error creating table "+err);
 			   }); 
 			   
 		  }.bind(this));
@@ -108,10 +108,10 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));

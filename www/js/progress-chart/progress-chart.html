@@ -1,0 +1,36 @@
+<ion-view >
+	<ion-header-bar>
+		<div class="buttons">
+			<button class="button button-icon ion-ios-arrow-left" ui-sref="main-page">
+	      	</button>
+	    </div>
+		<h1 class="title">Progress Chart</h1>
+	</ion-header-bar>
+	<ion-content class="main-content">
+		 <div class="card">
+	        <div class="item item-divider">
+	            Weight
+	        </div>
+	        <div class="item item-text-wrap">
+	             <canvas id="weightChart"></canvas>
+	        </div>
+	    </div>
+	    <div class="list list-inset">
+
+		    <div>
+		      <select id="unitC" ng-model="measurement.name"  ng-change="fetchMeasurement(measurement.name)">
+			      <option ng-repeat="option in units.option" value="{{option}}">{{option}}</option>
+			  </select>
+		    </div>
+		</div>
+	   	
+	    <div class="card">
+	        <div class="item item-divider">
+	            {{measurement.name}}
+	        </div>
+	        <div class="item item-text-wrap">
+	             <canvas id="measurementChart"></canvas>
+	        </div>
+	    </div>
+	</ion-content>
+</ion-view>

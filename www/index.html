@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html ng-app="myApp" ng-controller='settingCtrl'>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -8,11 +8,7 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <!--link href="css/animate.css" rel="stylesheet"-->
     <link rel="stylesheet" href="lib/angular-gridster/dist/angular-gridster.css"/>
-    <!-- <link href="css/color-theme.css" rel="stylesheet"> -->
-    <!-- <link href="css/beige.css" rel="stylesheet"> -->
-    <!-- <link href="css/green.css" rel="stylesheet"> -->
-    <!-- <link href="css/dark.css" rel="stylesheet"> -->
-    <link href="css/purple.css" rel="stylesheet">
+    <link href="{{stylePath}}" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -26,11 +22,14 @@
     <script src="lib/angular-gridster/dist/detect-element-resize.js"></script>
     <script src="lib/angular-gridster/dist/jquery.resize.js"></script>
     <script src="lib/angular-gridster/dist/angular-gridster.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/angular-chart.min.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="js/progress-chart/controller.js"></script>
     <script src="js/routine-list/controller.js"></script>
     <script src="js/routine-list/factory.js"></script>
 
@@ -110,8 +109,8 @@
               <a class="item item-icon-left side-menu" href="#/profile" ng-click="closePopover()"><i class="icon ion-person"></i>Profile details</a>
               <a class="item item-icon-left side-menu" ui-sref="routinesList" ng-click="closePopover()"><i class="icon ion-clipboard"></i>Fitness routine</a>
               <a class="item item-icon-left side-menu" ui-sref="mealPlanner" ng-click="closePopover()"><i class="icon ion-calendar"></i>Meal planner</a>
-              <a class="item item-icon-left side-menu"><i class="icon ion-stats-bars"></i>Progress chart</a>
-              <a class="item item-icon-left side-menu"><i class="icon ion-gear-b"></i>Settings</a>
+              <a class="item item-icon-left side-menu" ui-sref="progressChart"><i class="icon ion-stats-bars"></i>Progress chart</a>
+              <a class="item item-icon-left side-menu" ui-sref="setting" ng-click="closePopover()"><i class="icon ion-gear-b"></i>Colour theme</a>
           </div>
         </ion-content>
       </ion-popover-view>
@@ -136,7 +135,45 @@
       </ion-view>
     </script>
 
-    
+    <script id="setting.html" type="text/ng-template">
+      <ion-view>
+        <ion-header-bar>
+          <div class="buttons">
+              <button class="button button-icon ion-ios-arrow-left" ui-sref="main-page">
+              </button>
+          </div>
+          <h1 class="title">Colour themes</h1>
+        </ion-header-bar>
+        <ion-content class="main-content">
+          <ion-list>
+            <ion-item id="red" class="item item-icon-right" ng-click="addTheme('css/red.css')">
+              Red
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+            <ion-item id="beige" class="item item-icon-right" ng-click="addTheme('css/beige.css')">
+              Beige
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+            <ion-item id="green" class="item item-icon-right" ng-click="addTheme('css/green.css')">
+              Green
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+            <ion-item id="blue" class="item item-icon-right" ng-click="addTheme('css/blue.css')">
+              Blue
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+            <ion-item id="purple" class="item item-icon-right" ng-click="addTheme('css/purple.css')">
+              Purple
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+            <ion-item id="Dark" class="item item-icon-right" ng-click="addTheme('css/dark.css')">
+              Dark
+              <i class="icon ion-ios-circle-filled"></i>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-view>
+    </script>
     
   </body>
 </html>

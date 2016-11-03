@@ -67,14 +67,14 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 				RoutinesService.addNewRoutine($scope.newRoutine.name)
 				.then(function(response){
 					$scope.newRoutine.name = '';
-			//		alert("New Routine has been added.");
+					alert("Saved");
 					fetchRoutines();
 				},function(error){
-					alert("Error in adding new routine");
+					console.log("Error in adding new routine");
 				});
 			}else
 			{
-				alert('Please enter the name of the routine.');
+				console.log('Please enter the name of the routine.');
 			}
 		}
 
@@ -94,6 +94,7 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 			}else
 			{
 				$scope.message = "No routines created till now.";
+				$scope.routinesList = [];
 			}
 		}
 
@@ -110,9 +111,9 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 				RoutinesService.deleteRoutine(id)
 				.then(function(response){
 					$scope.routinesList.splice(index,1);
-			//		alert("Routine has been succesfully deleted.");
+			//		console.log("Routine has been succesfully deleted.");
 				},function(error){
-					alert("Error in adding new routine");
+					console.log("Error in adding new routine");
 				});
 			}
 		}

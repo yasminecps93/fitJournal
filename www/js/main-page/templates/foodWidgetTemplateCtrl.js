@@ -22,7 +22,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	    		outCal : 0,
 	    		totalCalories : 0
 	    	}
-	    	$scope.isFirstTime = true;
+	    	$scope.checkedCalorieService = false;
 			$scope.showExtra = false;
 			$scope.dateExist= false;
 			$scope.isAdded= false;
@@ -117,7 +117,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				}
 					
 			}catch(e){
-				alert("Error in checkExistingMealPlanner controller "+e.message);
+				console.log("Error in checkExistingMealPlanner controller "+e.message);
 			}
 		}
 
@@ -128,6 +128,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
       				$scope.calories.outCal = $scope.caloriesArray[0].caloriesOut;
       				$scope.calories.totalCalories = $scope.caloriesArray[0].caloriesTotal;
       				$scope.tempIDCalories = $scope.caloriesArray[0].id;
+      				$scope.checkedCalorieService = true;
       				console.log("totalCal: "+$scope.calories.totalCalories+", inCal: "+$scope.calories.inCal+", outCal: "+$scope.calories.outCal);
       			}else{
       				console.log($scope.numericDate+"!="+ $scope.caloriesArray[0].created_at);
@@ -156,12 +157,12 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 
 		$scope.openModal = function(index){
 			if(index == 1){
-				$scope.isFirstTime = true;
+				$scope.checkedCalorieService = false;
 				$scope.modal1.show();
 				currentDate();
 			}else{
 				if($scope.date_id<0){
-					alert("cDate is empty, check currentDate function");
+					console.log("cDate is empty, check currentDate function");
 				}else{
 					$scope.modal2.show();
 					$scope.foodName={
@@ -233,18 +234,18 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					}
 				}else
 				{
-					alert("No dates created till now.");
+					console.log("No dates created till now.");
 					currentDate();
 				}
 			}catch(e){
-				alert("Error in fetchMealPlannerSuccessCB controller "+e.message);
+				console.log("Error in fetchMealPlannerSuccessCB controller "+e.message);
 			}
 			
 		}
 
 		function fetchMealPlannerErrorCB(error)
 		{
-			alert("Some error occurred in fetchMealPlanner");
+			console.log("Some error occurred in fetchMealPlanner");
 		}
 
 		function addNewMealPlanner()
@@ -259,14 +260,14 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 						fetchMeals();	
 						console.log("Added new meal date");
 					},function(error){
-						alert("Error in adding new MealPlanner");
+						console.log("Error in adding new MealPlanner");
 					});
 				}else
 				{
-					alert('cDate is empty check currentDate function');
+					console.log('cDate is empty check currentDate function');
 				}
 			}catch(e){
-				alert("Error in addNewMealPlanner controller "+e.message);
+				console.log("Error in addNewMealPlanner controller "+e.message);
 			}
 			
 		}
@@ -285,7 +286,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				MealsService.getAllEntriesForArray()
 				.then(fetchEntriesForArraySuccessCB,fetchMealPlannerErrorCB);
 			}catch(e){
-				alert("Error in fetchEntries "+ e.message);
+				console.log("Error in fetchEntries "+ e.message);
 			}
 			
 		}
@@ -346,21 +347,24 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					}
 
 					$scope.totalCal = $scope.breakfastCal + $scope.lunchCal + $scope.dinnerCal + $scope.snackCal;
-					if($scope.isFirstTime == true){
-						$scope.isFirstTime = false;
-					}else{
-						console.log("in here---------------------")
+					if($scope.checkedCalorieService == true){
 						updateCalories();
 					}
 					
 					$scope.dateExist = false;
 				}else
 				{
-					alert("No entries created till now.");
+					console.log("No entries created till now.");
+					$scope.entriesList = [];
+					$scope.breakfastList=[];
+					$scope.lunchList=[];
+					$scope.dinnerList=[];
+					$scope.snackList=[];
+					$scope.totalCal = 0;
 				}
 
 			}catch(e){
-				alert("Error in fetchEntries controller "+e.message);
+				console.log("Error in fetchEntries controller "+e.message);
 			}	
 		}
 
@@ -376,11 +380,11 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
-						alert("Error in delete new entry");
+						console.log("Error in delete new entry");
 					});
 				}
 			}catch(e){
-				alert("Error in deleteBreakfast "+e.message);
+				console.log("Error in deleteBreakfast "+e.message);
 			}
 			
 		}
@@ -397,11 +401,11 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					//	alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
-						alert("Error in adding new entry");
+						console.log("Error in adding new entry");
 					});
 				}
 			}catch(e){
-				alert("Error in deleteLunch "+e.message);
+				console.log("Error in deleteLunch "+e.message);
 			}
 			
 		}
@@ -418,11 +422,11 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
-						alert("Error in adding new entry");
+						console.log("Error in adding new entry");
 					});
 				}
 			}catch(e){
-				alert("Error in deleteDinner "+e.message);
+				console.log("Error in deleteDinner "+e.message);
 			}
 			
 		}
@@ -439,11 +443,11 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				//		alert("Entry has been succesfully deleted.");
 						fetchEntries();
 					},function(error){
-						alert("Error in adding new entry");
+						console.log("Error in adding new entry");
 					});
 				}
 			}catch(e){
-				alert("Error in deleteSnack "+e.message);
+				console.log("Error in deleteSnack "+e.message);
 			}
 			
 		}
@@ -455,23 +459,24 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				if($scope.foodName.name!= '' && $scope.headerToEdit!=''){
 				MealsService.addNewEntry($scope.date_id,$scope.headerToEdit,$scope.foodName.name,$scope.foodCal.value)
 				.then(function(response){
-					alert("New Entry has been added. "+ $scope.date_id);
+					console.log("New Entry has been added. "+ $scope.date_id);
 					$scope.foodName={
 					name: ''
 					};
 					$scope.foodCal={
 						value:0
 					};
+					alert("Saved");
 					fetchEntries();
 				},function(error){
-					alert("Error in adding new entry");
+					console.log("Error in adding new entry");
 				});
 				}else
 					{
-						alert('Please enter food name.');
+						console.log('Please enter food name.');
 					}
 			}catch(e){
-				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
+				console.log("cannot enter addNewEntry function" + e.code +", "+e.message);
 			}
 			
 		}
@@ -496,7 +501,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					}
 				}
 			}catch(e){
-				alert(e.message);
+				console.log(e.message);
 			}
 				
 		}
@@ -509,7 +514,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 				if(foodName!= '' && $scope.headerToEdit!=''){
 				MealsService.addNewEntry($scope.date_id,$scope.headerToEdit,foodName,foodCal)
 				.then(function(response){
-
+					alert("Saved");
 					$scope.foodName={
 					name: ''
 					};
@@ -518,14 +523,14 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 					};
 					fetchEntries();
 				},function(error){
-					alert("Error in adding new entry");
+					console.log("Error in adding new entry");
 				});
 				}else
 					{
-						alert('Please enter a food name.');
+						console.log('Please enter a food name.');
 					}
 			}catch(e){
-				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
+				console.log("cannot enter addNewEntry function" + e.code +", "+e.message);
 			}
 			
 		}
@@ -537,7 +542,7 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		        CaloriesWidgetService.getLastEntry()
 		        .then(fetchCaloriesSuccessCB,fetchCaloriesErrorCB);
 		      }catch(e){
-		        alert("Error in fetch getLastEntry controller FoodWidget "+e.message);
+		        console.log("Error in fetch getLastEntry controller FoodWidget "+e.message);
 		      }
       	}
 
@@ -563,18 +568,18 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	          checkCaloriesDate();
 	        }else
 	        {
-	          alert("No calories created till now.");
+	          console.log("No calories created till now.");
 	          addNewRowToCaloriesTable();
 	        }
 	      }catch(e){
-	        alert("Error in fetchCaloriesSuccessCB controller "+e.message);
+	        console.log("Error in fetchCaloriesSuccessCB controller "+e.message);
 	      }
 	      
 	    }
 
 	    function fetchCaloriesErrorCB(error)
 	    {
-	      alert("Some error occurred in fetchCaloriesErrorCB");
+	      console.log("Some error occurred in fetchCaloriesErrorCB");
 	    }
 
 	    function addNewRowToCaloriesTable(){
@@ -583,10 +588,10 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		    	.then(function(response){
 		    		getLastEntry();
 		    	},function(error){
-		    		alert("Error in adding new row to calories table");
+		    		console.log("Error in adding new row to calories table");
 		    	});
 	    	}catch(e){
-	    		alert("Error in addNewRowToCaloriesTable controller "+e.message);
+	    		console.log("Error in addNewRowToCaloriesTable controller "+e.message);
 	    	}
 	    	
 	    }
@@ -601,10 +606,10 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 	    			getLastEntry();
 	    			$rootScope.$broadcast('updateCaloriesInWidget');
 	    		},function(error){
-		    		alert("Error in updating calories table");
+		    		console.log("Error in updating calories table");
 	    		})
 	    	}catch(e){
-	    		alert("Error in updateCalories controller "+e.message);
+	    		console.log("Error in updateCalories controller "+e.message);
 
 	    	}
 	    }

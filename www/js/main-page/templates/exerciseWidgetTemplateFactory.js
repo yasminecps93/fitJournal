@@ -21,7 +21,7 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS exerciselog_list (id integer primary key autoincrement, created_at date, exercise_name string, reps double, unit string, sets double, calOut double)";
@@ -34,7 +34,7 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 			   }); 
 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
@@ -50,14 +50,14 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 					lastEntryArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get last entry");
+					console.log("Error in get last entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getLastEntryTable "+e.message);
+				console.log("Error in getLastEntryTable "+e.message);
 			}
 		}
 
@@ -71,14 +71,14 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 					exerciseLogArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get all exercises");
+					console.log("Error in get all exercises");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllExercisesTable "+e.message);
+				console.log("Error in getAllExercisesTable "+e.message);
 			}
 		}
 
@@ -91,14 +91,14 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in add new entry");
+					console.log("Error in add new entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewExerciseTable "+e.message);
+				console.log("Error in addNewExerciseTable "+e.message);
 			}
 		}
 
@@ -111,14 +111,14 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in deleting exercise");
+					console.log("Error in deleting exercise");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in deleteExerciseTable "+e.message);
+				console.log("Error in deleteExerciseTable "+e.message);
 			}
 		}
 
@@ -132,10 +132,10 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));

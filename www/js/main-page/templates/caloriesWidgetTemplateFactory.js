@@ -20,7 +20,7 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS calories_list (id integer primary key autoincrement, created_at date, calories_in double, calories_out double, calories_total double)";
@@ -33,7 +33,7 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 			   }); 
 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
@@ -49,14 +49,14 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 					caloriesArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get all calories");
+					console.log("Error in get all calories");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllCaloriesTable "+e.message);
+				console.log("Error in getAllCaloriesTable "+e.message);
 			}
 		
 		}
@@ -71,14 +71,14 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 					caloriesArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get last entry");
+					console.log("Error in get last entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getLastEntryTable "+e.message);
+				console.log("Error in getLastEntryTable "+e.message);
 			}
 		
 		}
@@ -92,14 +92,14 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in add new row");
+					console.log("Error in add new row");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewRowTable "+e.message);
+				console.log("Error in addNewRowTable "+e.message);
 
 			}
 		}
@@ -114,13 +114,13 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in updating calories");
+					console.log("Error in updating calories");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in update calories "+e.message);
+				console.log("Error in update calories "+e.message);
 			}
 		}
 
@@ -134,10 +134,10 @@ caloriesWidgetModule.factory('CaloriesWidgetService',['$cordovaSQLite','$ionicPl
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));

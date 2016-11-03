@@ -21,38 +21,38 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			//  	alert("opened db ");
+			//  	console.log("opened db ");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db " + e.message);
+			  	console.log("Error in opening db " + e.message);
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS profiledata_list (id integer primary key autoincrement, current_date string, current_weight double, weight_unit string, goal_weight double, goal_date string, total_weight_loss double, weekly_weight_loss double)";
-			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, current_weight double, weight_unit string)";
+			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at date, current_date string, current_weight double, weight_unit string)";
 			  try{
 				  	runQuery(query,[],function(res) {
 				      console.log("table created ");
-				 //     alert("table created ");
+				 //     console.log("table created ");
 				   }, function (err) {
 				      console.log(err);
-				      alert("error creating table "+err);
+				      console.log("error creating table "+err);
 				   }); 
 			   
 			  }catch(e){
-			  	alert("Error creating table"+e.message);
+			  	console.log("Error creating table"+e.message);
 			  }
 
 			  try{
 				  	runQuery(query_weight,[],function(res) {
 				      console.log("table created");
-				//      alert("table created for query_weight");
+				//      console.log("table created for query_weight");
 				   }, function (err) {
 				      console.log(err);
-				      alert("error creating table for query_weight"+err);
+				      console.log("error creating table for query_weight"+err);
 				   }); 
 			   
 			  }catch(e){
-			  	alert("Error creating table for query_weight"+e.message);
+			  	console.log("Error creating table for query_weight"+e.message);
 			  }
 			  
 		  }.bind(this));
@@ -77,7 +77,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				});
 				return deferred.promise;
 			}catch(e){
-			  	alert("Error in getAllWeight "+e.message);
+			  	console.log("Error in getAllWeight "+e.message);
 			}
 		}
 
@@ -90,13 +90,13 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in changing weight");
+					console.log("Error in changing weight");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in updatingWeightTable "+e.message);
+				console.log("Error in updatingWeightTable "+e.message);
 			}
 		}
 
@@ -104,20 +104,20 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		function addNewWeight(current_date, current_weight, weight_unit){
 			
 			var deferred = $q.defer();
-			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (datetime(),?,?,?)";
+			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (date('now','localtime'),?,?,?)";
 			try{
 				runQuery(query,[current_date,current_weight, weight_unit],function(response){
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in adding weight");
+					console.log("Error in adding weight");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in insertWeightTable "+e.message);
+				console.log("Error in insertWeightTable "+e.message);
 			}
 		}
 
@@ -140,7 +140,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				});
 				return deferred.promise;
 			}catch(e){
-			  	alert("Error in getAllProfileData "+e.message);
+			  	console.log("Error in getAllProfileData "+e.message);
 			}
 		}
 
@@ -153,13 +153,13 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in changing profile data");
+					console.log("Error in changing profile data");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in updatingProfileDataTable "+e.message);
+				console.log("Error in updatingProfileDataTable "+e.message);
 			}
 		}
 
@@ -178,7 +178,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewProfileData "+e.message);
+				console.log("Error in addNewProfileData "+e.message);
 			}
 			
 		}
@@ -190,10 +190,10 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			  //    alert("success in runQuery function "+res);
+			  //    console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));
@@ -213,7 +213,7 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		// 		}
 		// 		return profiledata;
 		// 	}catch(e){
-		// 		alert("Error in getProfileData "+e.message);
+		// 		console.log("Error in getProfileData "+e.message);
 		// 	}
 				
 		// }
@@ -224,19 +224,19 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		// 		var query = "DELETE * FROM profiledata_list";
 		// 		runQuery(query,[],function(response){
 		// 			//Success Callback
-		// 	//		alert("deleteEntry Success");
+		// 	//		console.log("deleteEntry Success");
 		// 			console.log(response);
 		// 			deferred.resolve(response);
 		// 		},function(error){
 		// 			//Error Callback
-		// 			alert("deleteEntry error");
+		// 			console.log("deleteEntry error");
 		// 			console.log(error);
 		// 			deferred.reject(error);
 		// 		});
 
 		// 		return deferred.promise;
 		// 	}catch(e){
-		// 		alert("Error in deleteEntry "+e.message);
+		// 		console.log("Error in deleteEntry "+e.message);
 		// 	}
 			
 		// }

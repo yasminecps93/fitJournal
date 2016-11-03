@@ -94,7 +94,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
             }
           }
         }catch(e){
-          alert("Error in check weight controller "+e.message);
+          console.log("Error in check weight controller "+e.message);
         }
     }
 
@@ -112,7 +112,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 			}
 		  }
         }catch(e){
-          alert("Error in check weight controller "+e.message);
+          console.log("Error in check weight controller "+e.message);
         }
     }
 
@@ -175,7 +175,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 				ProfileService.getAllProfileData()
 				.then(fetchProfileDataSuccessCB,fetchProfileDataErrorCB);
 			}catch(e){
-				alert("Error in fetchProfileData controller "+e.message);
+				console.log("Error in fetchProfileData controller "+e.message);
 			}
 			
 		}
@@ -218,7 +218,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 					$scope.message = "No ProfileData created till now.";
 				}
 			}catch(e){
-				alert("Error in fetchProfileDataSuccessCB controller "+e.message);
+				console.log("Error in fetchProfileDataSuccessCB controller "+e.message);
 			}
 			
 		}
@@ -226,7 +226,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 		function fetchProfileDataErrorCB(error)
 		{
 			$scope.loadingProfileData = false;
-			alert("Some error occurred in fetching ProfileData");
+			console.log("Some error occurred in fetching ProfileData");
 		}
 
 		function addNewProfileData()
@@ -235,27 +235,27 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
 				if($scope.weight.current> 0 && $scope.weight.second > 0 && $scope.goalDate!='' && $scope.dateExistProfileData==false){
 					ProfileService.addNewProfileData($scope.cDate, $scope.weight.current, $scope.wUnit.name, $scope.weight.second, $scope.goalDate, $scope.tWeight, $scope.wwl)
 					.then(function(response){
-						alert("New ProfileData saved. "+$scope.weight.current+', '+$scope.dateExistProfileData);
+						alert("Saved");
 						fetchProfileData();
 					},function(error){
-						alert("Error in adding new ProfileData ");
+						console.log("Error in adding new ProfileData ");
 					});
 				}else if($scope.weight.current> 0 && $scope.weight.second > 0 && $scope.goalDate!='' && $scope.dateExistProfileData==true){
 		          ProfileService.updateProfileData( $scope.weight.current, $scope.wUnit.name, $scope.weight.second, $scope.goalDate, $scope.tWeight, $scope.wwl, $scope.tempIDProfile)
 		           .then(function(response){
 		            $scope.dateExistProfileData=false;
-		            alert("Updated ProfileData saved. "+$scope.weight.current+', '+$scope.dateExistProfileData);
+		            alert("Updated");
 		            fetchProfileData();
 		          },function(error){
-		            alert("Error in updating new ProfileData");
+		            console.log("Error in updating new ProfileData");
 		          });
 		        }else
 				{
-					alert('Some are empty. ');
+					alert('Empty inputs!');
 				}
 			}
 			catch(e){
-				alert("Error in addNewProfileData controller "+e.message);
+				console.log("Error in addNewProfileData controller "+e.message);
 			}
 		}
 
@@ -268,7 +268,7 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
         ProfileService.getAllWeight()
         .then(fetchSuccessCB,fetchErrorCB);
       }catch(e){
-        alert("Error in fetch weight controller "+e.message);
+        console.log("Error in fetch weight controller "+e.message);
       }
     }
 
@@ -298,14 +298,14 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
           $scope.message = "No Weight created till now.";
         }
       }catch(e){
-        alert("Error in fetchSuccessCB controller "+e.message);
+        console.log("Error in fetchSuccessCB controller "+e.message);
       }
       
     }
 
     function fetchErrorCB(error)
     {
-      alert("Some error occurred in fetching Weight");
+      console.log("Some error occurred in fetching Weight");
     }
 
     function addNewWeight(){
@@ -314,27 +314,27 @@ profileDetailsModule.controller('ProfileDetailsCtrl', ['$scope','$cordovaSQLite'
       
           ProfileService.addNewWeight($scope.cDate,$scope.weight.current,$scope.wUnit.name)
           .then(function(response){
-            alert("New weight saved. "+$scope.weight.current+', '+$scope.dateExistWeight);
+            console.log("New weight saved. "+$scope.weight.current+', '+$scope.dateExistWeight);
             fetchWeight();
           },function(error){
-            alert("Error in adding new Weight");
+            console.log("Error in adding new Weight");
           });
         }else if($scope.weight.current> 0 && $scope.dateExistWeight==true){
           ProfileService.updateWeight($scope.weight.current, $scope.wUnit.name, $scope.tempIDWeight)
            .then(function(response){
-            alert("Updated weight saved. "+$scope.weight.current+', '+$scope.dateExistWeight);
+            console.log("Updated weight saved. "+$scope.weight.current+', '+$scope.dateExistWeight);
             $scope.dateExistWeight=false;
             fetchWeight();
           },function(error){
-            alert("Error in updating new Weight");
+            console.log("Error in updating new Weight");
           });
         }else
         {
-          alert('Empty input, '+$scope.weight.current+', '+$scope.dateExistWeight);
+          console.log('Empty input, '+$scope.weight.current+', '+$scope.dateExistWeight);
         }
       }
       catch(e){
-        alert("Error in add weight controller "+e.message);
+        console.log("Error in add weight controller "+e.message);
       }
     }
 		

@@ -16,18 +16,18 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			 
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			  //	alert("opened db");
+			  //	console.log("opened db");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db" + e.message);
+			  	console.log("Error in opening db" + e.message);
 			  }
 			
-			   var query = "CREATE TABLE IF NOT EXISTS exercise_entries (id integer primary key autoincrement, routine_id integer , created_at datetime, exeName string, exeNumber double, exeUnit string, exeSet double, exeCal double)";
+			   var query = "CREATE TABLE IF NOT EXISTS exercise_entries (id integer primary key autoincrement, routine_id integer , created_at date, exeName string, exeNumber double, exeUnit string, exeSet double, exeCal double)";
 			    runQuery(query,[],function(res) {
-			 //     alert("table created ");
+			 //     console.log("table created ");
 			    }, function (err) {
 			      console.log(err);
-			       alert("error creating table ");
+			       console.log("error creating table ");
 			    });
 		  }.bind(this));
 		}
@@ -50,15 +50,15 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 
 		function addNewEntry(routineId,exeName, exeNumber, exeUnit, exeSet, exeCal) {
 			var deferred = $q.defer();
-			var query = "INSERT INTO exercise_entries (routine_id, created_at, exeName, exeNumber, exeUnit, exeSet, exeCal) VALUES (?,datetime(),?,?,?,?,?)";
+			var query = "INSERT INTO exercise_entries (routine_id, created_at, exeName, exeNumber, exeUnit, exeSet, exeCal) VALUES (?,date('now','localtime'),?,?,?,?,?)";
 			runQuery(query,[routineId,exeName, exeNumber, exeUnit, exeSet, exeCal],function(response){
 				//Success Callback
-			//	alert("entry added successfully - "+exeUnit);
+			//	console.log("entry added successfully - "+exeUnit);
 				console.log(response);
 				deferred.resolve(response);
 			},function(error){
 				//Error Callback
-				alert("error in entering")
+				console.log("error in entering")
 				console.log(error);
 				deferred.reject(error);
 			});
@@ -71,12 +71,12 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			var query = "DELETE FROM exercise_entries WHERE id = ?";
 			runQuery(query,[id],function(response){
 				//Success Callback
-			//	alert("deleteEntry Success");
+			//	console.log("deleteEntry Success");
 				console.log(response);
 				deferred.resolve(response);
 			},function(error){
 				//Error Callback
-				alert("deleteEntry error");
+				console.log("deleteEntry error");
 				console.log(error);
 				deferred.reject(error);
 			});
@@ -88,10 +88,10 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 		{
 		  $ionicPlatform.ready(function() {		  
 			    $cordovaSQLite.execute(db, query,dataArray).then(function(res) {
-			//      alert("runQuery successfully");
+			//      console.log("runQuery successfully");
 			      successCb(res);
 			    }, function (err) {
-			    	alert("runQuery failed");
+			    	console.log("runQuery failed");
 			      errorCb(err);
 			    });
 		  }.bind(this));

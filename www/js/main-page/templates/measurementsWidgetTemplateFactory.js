@@ -4,16 +4,17 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
 		var bodyPartMeasurementArray;
-	//	var bodyPartArray;
-
+		var measurementItemArray;
+		var specificEntryArray;
 		return{
 			initDB:initDB,
 			getAllBodyPartMeasurements:getAllBodyPartMeasurements,
 			updateEntry:updateEntry,
 			updateBodyPartName:updateBodyPartName,
 			addNewEntry:addNewEntry,
-			deleteBodyPartMeasurements:deleteBodyPartMeasurements
-		//	getAll:getAll
+			deleteBodyPartMeasurements:deleteBodyPartMeasurements,
+		    getFilteredEntriesForArray:getFilteredEntriesForArray,
+		    getSpecificEntry:getSpecificEntry
 		}
 
 		function initDB(){
@@ -23,7 +24,7 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS bodypart_list (id integer primary key autoincrement, created_at date, bodypart_name string, measurement double, unit string)";
@@ -36,7 +37,7 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 			   }); 
 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
@@ -53,37 +54,16 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 					bodyPartMeasurementArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get all bodyPart");
+					console.log("Error in get all bodyPart");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllBodyPartTable "+e.message);
+				console.log("Error in getAllBodyPartTable "+e.message);
 			}
 		}
-
-		// function getAll(){
-		// 	try{
-		// 		var deferred = $q.defer();
-		// 		var query = "SELECT * from bodypart_list";
-		// 		runQuery(query,[],function(response){
-		// 			//Success Callback
-		// 			console.log(response);
-		// 			bodyPartArray = response.rows;
-		// 			deferred.resolve(response);
-		// 		},function(error){
-		// 			alert("Error in get all bodyPart");
-		// 			console.log(error);
-		// 			deferred.reject(error);
-		// 		});
-
-		// 		return deferred.promise;
-		// 	}catch(e){
-		// 		alert("Error in getAllBodyPartTable "+e.message);
-		// 	}
-		// }
 
 
 		function updateEntry(measurement,unit,id){
@@ -96,13 +76,13 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in updating entry");
+					console.log("Error in updating entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in update entry "+e.message);
+				console.log("Error in update entry "+e.message);
 			}
 		}
 
@@ -116,13 +96,13 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in updating name");
+					console.log("Error in updating name");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in update body part name "+e.message);
+				console.log("Error in update body part name "+e.message);
 			}
 		}
 
@@ -136,14 +116,14 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in add new entry");
+					console.log("Error in add new entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewEntryTable "+e.message);
+				console.log("Error in addNewEntryTable "+e.message);
 
 			}
 		}
@@ -157,14 +137,14 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in deleting bodyPart");
+					console.log("Error in deleting bodyPart");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in deleteBodyPartTable "+e.message);
+				console.log("Error in deleteBodyPartTable "+e.message);
 			}
 		}
 
@@ -179,12 +159,60 @@ measurementsWidgetModule.factory('MeasurementsWidgetService', ['$cordovaSQLite',
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));
 		}
+
+//---------------------------------------------------------------------//
+//-----------------------------FOR CHART-------------------------------//
+//---------------------------------------------------------------------//
+		function getFilteredEntriesForArray(){
+
+			var deferred = $q.defer();
+			var query = "SELECT DISTINCT bodypart_name from bodypart_list";
+			try{
+				runQuery(query,[],function(response){
+				//Success Callback
+				console.log(response);
+				measurementItemArray = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in getFilteredEntriesForArray "+e.message);
+			}
+		}
+
+		function getSpecificEntry(bodypart_name){
+
+			var deferred = $q.defer();
+			var query = "SELECT * from bodypart_list WHERE bodypart_name = ?";
+			try{
+				runQuery(query,[bodypart_name],function(response){
+				//Success Callback
+				console.log(response);
+				specificEntryArray = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in getFilteredEntriesForArray "+e.message);
+			}
+		}
+
 }]);

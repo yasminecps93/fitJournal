@@ -235,3 +235,34 @@ img{
 	width: 100%;
 	border-radius: 20px;
 }
+
+/*Settings page*/
+#red i{
+	color: #D91E18;
+}
+
+#beige i{
+	color: #FFA07A;
+}
+
+#green i{
+	color: #00BFA2;
+}
+
+#blue i{
+	color: #4B77BE;
+}
+
+#purple i{
+	color: #663399;
+}
+
+#dark i{
+	color: #34495E;
+}
+
+#unitC{
+	
+	width: 50%;
+	height: 40px;
+}

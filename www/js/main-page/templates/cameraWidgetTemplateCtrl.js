@@ -102,7 +102,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
         CameraWidgetService.getAllEntry($scope.cDate)
         .then(fetchSuccessCB,fetchErrorCB);
       }catch(e){
-        alert("Error in fetch fetchAllImage controller "+e.message);
+        console.log("Error in fetch fetchAllImage controller "+e.message);
       }
 	}
 
@@ -134,27 +134,27 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
           		break;
           	}
           }
-          alert("response.rows.length "+response.rows.length);
+          console.log("response.rows.length "+response.rows.length);
           $scope.dateExist = true;
         }else
         {
-          alert("No images created for today till now.");
+          console.log("No images created for today till now.");
           $scope.dateExist = false;
         }
       }catch(e){
-        alert("Error in fetchSuccessCB controller "+e.message);
+        console.log("Error in fetchSuccessCB controller "+e.message);
       }
       
     }
 
     function fetchErrorCB(error)
     {
-      alert("Some error occurred in fetchErrorCB");
+      console.log("Some error occurred in fetchErrorCB");
     }
 
     function checkForExisting(){
     	try{
-    		alert("$scope.dateExist = "+$scope.dateExist+", $scope.isExist = "+$scope.isExist);
+    		console.log("$scope.dateExist = "+$scope.dateExist+", $scope.isExist = "+$scope.isExist);
     		if($scope.dateExist==true){
     			if($scope.isExist == true){
 	    			updateEntry();
@@ -169,7 +169,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
     		}
     		
     	}catch(e){
-        	 alert("Error in checkForExisting controller "+e.message);
+        	 console.log("Error in checkForExisting controller "+e.message);
     	}
     }
 
@@ -178,39 +178,39 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
     		if($scope.image.file != ''){
     			CameraWidgetService.addNewImage($scope.widgetID,$scope.image.file,$scope.image.caption)
 	    		.then(function(response){
-	    			alert("saved");
+	    			alert("Saved");
 	    			fetchAllImage();
 	    			$scope.closeModal();
 	    		},function(error){
-	    			alert("addNewEntry error");
+	    			console.log("addNewEntry error");
 	    		});
     		}else{
-    			alert("Image file string is empty");
+    			console.log("Image file string is empty");
     		}
     		
     	}catch(e){
-          alert("Error in addNewEntry controller "+e.message);
+          console.log("Error in addNewEntry controller "+e.message);
     	}
     }
 
     function updateEntry(){
     	try{
-    		alert("updateEntry  "+$scope.tempID);
+    		console.log("updateEntry  "+$scope.tempID);
     		if($scope.image.file != ''){
     			CameraWidgetService.updateEntry($scope.image.file,$scope.image.caption,$scope.tempID)
 	    		.then(function(response){
-	    			alert("updated");
+	    			alert("Updated");
 	    			fetchAllImage();
 	    			$scope.closeModal();
 	    		},function(error){
-	    			alert("updateEntry error");
+	    			console.log("updateEntry error");
 	    		});
     		}else{
-    			alert("Image file string is empty");
+    			console.log("Image file string is empty");
     		}
     		
     	}catch(e){
-          alert("Error in updateEntry controller "+e.message);
+          console.log("Error in updateEntry controller "+e.message);
     	}
     }
 
@@ -235,7 +235,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
         //   	alert("$scope.image.file----"+$scope.image.file);
             $scope.openModal();
         }, function (err) {
-            alert("Error in getPicture of takePhoto");
+            console.log("Error in getPicture of takePhoto");
         });
     }
 
@@ -258,7 +258,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
            //     alert("$scope.image.file----"+$scope.image.file);
                 $scope.openModal();
              }, function (err) {
-             	alert("Error in getPicture of choosePhoto");
+             	console.log("Error in getPicture of choosePhoto");
             });
     }
 

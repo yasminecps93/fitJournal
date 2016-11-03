@@ -10,6 +10,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  	var maxLength = 0;
 	  	var newYPosition = 0;
 	  	var isDelete = "";
+	  	$scope.stylePath = "";
 		$scope.showFooter = false;
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
@@ -21,7 +22,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    function initData(){
 	    	$scope.widgetList=[];
 	    	MainService.initDB();
-	    	fetchWidget();
+	    	fetchWidget();	
 	    }
 
 	    function initMethods(){
@@ -33,9 +34,14 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    	$scope.addCaloriesWidget = addCaloriesWidget;
 	    	$scope.addWidgetTemplate = addWidgetTemplate;
 	    	$scope.deleteWidget = deleteWidget;
-	    	$scope.removeDirective = removeDirective;
 	    }
 	    
+//-----------------------------------------------------------------------------//
+//--------------------------------THEME----------------------------------------//
+//-----------------------------------------------------------------------------//
+		
+		
+
 	    function calculateLastWidgetPosition(){
 	    	var temp = 0;
 	    	newYPosition = 0;
@@ -56,15 +62,19 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    	calculateLastWidgetPosition();
 	    	console.log(newYPosition);
 	    	try{
-	      		MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
-				.then(function(response){
-				fetchWidget();
-				},function(error){
-					alert("Error in changing template");
-				});
-	      	}catch(e){
-	      		alert("Error in addWeightTemplate "+e.message);
-	      	}
+		      		MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
+					.then(function(response)
+					{
+						fetchWidget();
+					},function(error)
+					{
+						console.log("Error in changing template");
+					});
+	      		}
+	      		catch(e)
+	      		{
+	      			console.log("Error in addWeightTemplate "+e.message);
+	    		}
 	    }
 	   	
 	   	function addMeasurementsWidget(){
@@ -74,24 +84,24 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
-					alert("Error in changing template");
+					console.log("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addMeasurementsTemplate "+e.message);
+	      		console.log("Error in addMeasurementsTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addFoodWidget(){
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 4, "<food-widget></food-widget>")
+	      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 3, "<food-widget></food-widget>")
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
-					alert("Error in changing template");
+					console.log("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addFoodTemplate "+e.message);
+	      		console.log("Error in addFoodTemplate "+e.message);
 	      	}
 	   	}
 
@@ -102,10 +112,10 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
-					alert("Error in changing template");
+					console.log("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addExerciseTemplate "+e.message);
+	      		console.log("Error in addExerciseTemplate "+e.message);
 	      	}
 	   	}
 
@@ -118,24 +128,24 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
-					alert("Error in changing template");
+					console.log("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addCameraTemplate "+e.message);
+	      		console.log("Error in addCameraTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addCaloriesWidget(){
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Calories Counter",newYPosition,0, 2, 2, "<calories-widget></calories-widget>")
+	      		MainService.addNewWidget("Calories Counter",newYPosition,0, 3, 2, "<calories-widget></calories-widget>")
 				.then(function(response){
 				 	fetchWidget();
 				},function(error){
-					alert("Error in changing template");
+					console.log("Error in changing template");
 				});
 	      	}catch(e){
-	      		alert("Error in addCaloriesTemplate "+e.message);
+	      		console.log("Error in addCaloriesTemplate "+e.message);
 	      	}
 	   	}
 	  	
@@ -144,7 +154,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				MainService.getAllWidget()
 				.then(fetchSuccessCB,fetchErrorCB);
 			}catch(e){
-				alert("Error in fetchWidget controller "+e.message);
+				console.log("Error in fetchWidget controller "+e.message);
 			}
 			
 		}
@@ -159,20 +169,20 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 							MainService.addNewWidget($scope.widgetList[i].title,$scope.widgetList[i].row,$scope.widgetList[i].col, $scope.widgetList[i].sizeX, $scope.widgetList[i].sizeY, $scope.widgetList[i].directives)
 							.then(function(response){
 							},function(error){
-								alert("Error in changing template");
+								console.log("Error in changing template");
 							});
 						}
 					}catch(e){
-						alert(e.message);
+						console.log(e.message);
 					}
 					
 				},function(error){
-					alert("Error in dropping table ");
+					console.log("Error in dropping table ");
 				});
 				
 			}
 			catch(e){
-				alert("Error in addWidgetTemplate controller "+e.message);
+				console.log("Error in addWidgetTemplate controller "+e.message);
 			}
 		}
 
@@ -184,29 +194,18 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				{	
 					MainService.deleteWidget(id)
 					.then(function(response){
-						// removeDirective(function(){
-						// 	fetchWidget();
-						// });
-						// if(index!=$scope.widgetList.length){
-							removeDirective();
-						// }
+							$window.location.reload(true);
 						console.log("in delete success");
-						 fetchWidget();
-					//	removeDirective();
 					},function(error){
-						alert("Error in delete widget");
+						console.log("Error in delete widget");
 					});	
 				}
 			}catch(e){
-				alert("Error in deleteWidget "+e.message);
+				console.log("Error in deleteWidget "+e.message);
 			}
 			
 		}
 
-		 function removeDirective() {
-		    $rootScope.$emit('destroyDirective');
-		   // $window.location.reload(true);
-		  };
 
 		function fetchSuccessCB(response)
 		{
@@ -231,17 +230,17 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 					
 				}else
 				{
-					alert("No widgets created till now."); 
+					console.log("No widgets created till now."); 
 				}
 			}catch(e){
-				alert("Error in fetchSuccessCB controller "+e.message);
+				console.log("Error in fetchSuccessCB controller "+e.message);
 			}
 			
 		}
 
 		function fetchErrorCB(error)
 		{
-			alert("Some error occurred in fetching Widgets");
+			console.log("Some error occurred in fetching Widgets");
 		}
 
 	    $scope.gridsterOpts = {
@@ -304,16 +303,8 @@ mainPageModule.directive('compileDirective', function($compile,$rootScope) {
              		 return attr.directive;
             	}, function(val) {
             	if (val) {
-            		// $rootScope.$on('destroyDirective',function(){
-            		// 	console.log("delete val= "+val);
-		          		// var directive1 = $compile(angular.element(val))(scope);
-			           //  element.remove(directive1);
-            		// });
-		            //  	console.log("val= "+val);
-		            //  	var item = 'item' + uniqueId++;
-		                var directive = $compile(angular.element(val))(scope);
-		                element.append(directive);
-		             //   element.find('compile-directive').attr('id',item);
+		            var directive = $compile(angular.element(val))(scope);
+		            element.append(directive);
 		         }
             	});
           	}
@@ -324,14 +315,7 @@ mainPageModule.directive('weightWidget',
 	function($compile,$rootScope){
 	  
 	  	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
+	  	
 	    }
 	   return({
 	   	controller: 'WeightWidgetCtrl',
@@ -346,14 +330,7 @@ mainPageModule.directive('weightWidget',
 mainPageModule.directive('measurementsWidget',
   function($compile,$rootScope){
   	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
+	 
 	}
   return{
   	controller: 'MeasurementsWidgetCtrl',
@@ -366,14 +343,7 @@ mainPageModule.directive('measurementsWidget',
 mainPageModule.directive('foodWidget',
   function($compile,$rootScope){
   	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
+	  
 	}
   return{
   	controller: 'FoodWidgetCtrl',
@@ -386,14 +356,7 @@ mainPageModule.directive('foodWidget',
 mainPageModule.directive('exerciseWidget',
   function($compile,$rootScope){
   	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
+	  	
 	}
   return{
   	controller: 'ExerciseWidgetCtrl',
@@ -404,18 +367,9 @@ mainPageModule.directive('exerciseWidget',
 });
 
 mainPageModule.directive('cameraWidget',
-  function($compile,$rootScope,UniqueIdService){
+  function($compile,$rootScope){
   	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
-	  	//	scope.unique_ID = UniqueIdService.getUniqueId();
-	  	//	console.log("scope.unique_ID = "+scope.unique_ID);
+	  	
 	}
   return{
   	controller: 'CameraWidgetCtrl',
@@ -430,14 +384,7 @@ mainPageModule.directive('cameraWidget',
 mainPageModule.directive('caloriesWidget',
   function($compile,$rootScope){
   	function link(scope, element, attributes,controller) {
-	  		// $rootScope.$on('destroyDirective', function () {
-	    //     element.html('');
-	  		// 	console.log("deleted");
-	    //   });
-	  		// scope.remove = function(){
-	  		// 	element.html('');
-	  		// 	console.log("deleted");
-	  		// };
+	  	
 	}
   return{
   	controller: 'CaloriesWidgetCtrl',
@@ -447,11 +394,3 @@ mainPageModule.directive('caloriesWidget',
   }
 });
 
-mainPageModule.service("UniqueIdService", function(){
-
-    var nextId = 1;
-
-    this.getUniqueId = function(){
-        return nextId++;
-    }
-});

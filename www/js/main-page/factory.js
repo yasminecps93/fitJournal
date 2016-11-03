@@ -4,12 +4,15 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
 		var widgetList;
+		var themeList;
 		return{
 			initDB:initDB,
 			getAllWidget:getAllWidget,
 			addNewWidget:addNewWidget,
 			deleteWidget:deleteWidget,
-			deleteTable:deleteTable
+			deleteTable:deleteTable,
+			getChosenTheme:getChosenTheme,
+			addTheme:addTheme
 		}
 
 		function initDB(){
@@ -24,20 +27,75 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS widget_list_try1 (id integer primary key autoincrement, title string, row integer, col integer, sizeX integer, sizeY integer, directives string)";
-
+			  var theme_query = "CREATE TABLE IF NOT EXISTS theme_list (id integer primary key autoincrement, theme string)";
 			  try{
 			  	runQuery(query,[],function(res) {
 			      console.log("table created ");
 			//      alert("table created for widget");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table "+err);
+			      console.log("error creating table "+err);
 			   }); 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
+			  }
+
+			  try{
+			  	runQuery(theme_query,[],function(res) {
+			      console.log("table created ");
+			//      alert("table created for widget");
+			   }, function (err) {
+			      console.log(err);
+			      console.log("error creating table "+err);
+			   }); 
+
+			  }catch(e){
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
+		}
+
+		function getChosenTheme(){
+			var deferred = $q.defer();
+			var query = "SELECT * from theme_list WHERE id=(SELECT MAX(id) from theme_list)";
+			try{
+				runQuery(query,[],function(response){
+				//Success Callback
+				console.log(response);
+				themeList = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in getAllWidget "+e.message);
+			}
+		}
+
+		function addTheme(theme){
+			var deferred = $q.defer();
+			var query = "INSERT INTO theme_list (theme) VALUES (?)";
+			try{
+				runQuery(query,[theme],function(response){
+				//Success Callback
+			//	console.log("directives "+directives);
+				console.log(response);
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in addTheme "+e.message);
+			}
 		}
 
 		function getAllWidget(){
@@ -57,7 +115,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllWidget "+e.message);
+				console.log("Error in getAllWidget "+e.message);
 			}
 			
 		}
@@ -68,7 +126,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 			try{
 				runQuery(query,[title,row,col,sizeX,sizeY,directives],function(response){
 				//Success Callback
-			//	alert("directives "+directives);
+			//	console.log("directives "+directives);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
@@ -79,7 +137,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewWidget "+e.message);
+				console.log("Error in addNewWidget "+e.message);
 			}
 		}
 
@@ -99,7 +157,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in deleteWidget "+e.message);
+				console.log("Error in deleteWidget "+e.message);
 			}
 			
 		}
@@ -110,7 +168,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 				var query = "DELETE from widget_list_try1";
 				runQuery(query,[],function(response){
 					//Success Callback
-				//	alert("Table dropped");
+				//	console.log("Table dropped");
 					alterTable();
 					console.log(response);
 					deferred.resolve(response);
@@ -122,7 +180,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in deleteTable "+e.message);
+				console.log("Error in deleteTable "+e.message);
 			}
 			
 		}
@@ -133,7 +191,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 				var query = "DELETE from sqlite_sequence where name='widget_list_try1'";
 				runQuery(query,[],function(response){
 					//Success Callback
-				//	alert("Table dropped");
+				//	console.log("Table dropped");
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
@@ -144,7 +202,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in alterTable "+e.message);
+				console.log("Error in alterTable "+e.message);
 			}
 			
 		}
@@ -155,10 +213,10 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			 //     alert("success in runQuery function "+res);
+			 //     console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));

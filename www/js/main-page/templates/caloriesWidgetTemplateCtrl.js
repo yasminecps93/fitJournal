@@ -55,7 +55,7 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 		        CaloriesWidgetService.getLastEntry()
 		        .then(fetchSuccessCB,fetchErrorCB);
 		      }catch(e){
-		        alert("Error in fetch getLastEntry controller CaloriesWidget"+e.message);
+		        console.log("Error in fetch getLastEntry controller CaloriesWidget"+e.message);
 		      }
       	}
 
@@ -81,17 +81,17 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	          checkDate();
 	        }else
 	        {
-	          alert("No calories created till now.");
+	          console.log("No calories created till now.");
 	        }
 	      }catch(e){
-	        alert("Error in fetchSuccessCB controller "+e.message);
+	        console.log("Error in fetchSuccessCB controller "+e.message);
 	      }
 	      
 	    }
 
 	    function fetchErrorCB(error)
 	    {
-	      alert("Some error occurred in fetchErrorCB");
+	      console.log("Some error occurred in fetchErrorCB");
 	    }
 
 	    

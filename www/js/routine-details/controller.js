@@ -110,17 +110,17 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				RoutineService.addNewEntry($scope.routineId,$scope.exeName.name,$scope.exeNumber.number,$scope.exeUnit.name,$scope.exeSet.set,$scope.exeCal.value)
 				.then(function(response){
 				//	$scope.newEntry.value = 0;
-				//	alert("New Entry has been added.");
+					alert("Saved");
 					fetchEntries();
 				},function(error){
-					alert("Error in adding new entry");
+					console.log("Error in adding new entry");
 				});
 				}else
 					{
 						alert('Please enter a positive value.');
 					}
 			}catch(e){
-				alert("cannot enter addNewEntry function" + e.code +", "+e.message);
+				console.log("cannot enter addNewEntry function" + e.code +", "+e.message);
 			}
 			
 		}
@@ -148,6 +148,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 			}else
 			{
 				$scope.message = "No entries created till now.";
+				$scope.entriesList = [];
 			}
 		}
 
@@ -164,9 +165,9 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				RoutineService.deleteEntry(id)
 				.then(function(response){
 					$scope.entriesList.splice(index,1);
-				//	alert("Entry has been succesfully deleted.");
+				//	console.log("Entry has been succesfully deleted.");
 				},function(error){
-					alert("Error in adding new entry");
+					console.log("Error in adding new entry");
 				});
 			}
 		}

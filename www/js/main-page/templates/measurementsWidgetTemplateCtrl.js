@@ -196,7 +196,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
           }
          
         }catch(e){
-          alert("Error in check date controller "+e.message);
+          console.log("Error in check date controller "+e.message);
         }
       }
 
@@ -209,7 +209,7 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
         MeasurementsWidgetService.getAllBodyPartMeasurements()
         .then(fetchBodyPartSuccessCB,fetchBodyPartErrorCB);
       }catch(e){
-        alert("Error in fetch AllBodyPartMeasurements controller "+e.message);
+        console.log("Error in fetch AllBodyPartMeasurements controller "+e.message);
       }
     }
 
@@ -237,17 +237,18 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
           
         }else
         {
-          alert("No body parts created till now.");
+          console.log("No body parts created till now.");
+          $scope.bodyPartMeasurementArray =[]; 
         }
       }catch(e){
-        alert("Error in fetchBodyPartSuccessCB controller "+e.message);
+        console.log("Error in fetchBodyPartSuccessCB controller "+e.message);
       }
       
     }
 
     function fetchBodyPartErrorCB(error)
     {
-      alert("Some error occurred in fetchBodyPartErrorCB");
+      console.log("Some error occurred in fetchBodyPartErrorCB");
     }
 
     function addNewBodyPart()
@@ -275,18 +276,18 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
             MeasurementsWidgetService.addNewEntry($scope.bodypart.name, $scope.measurement.num, $scope.mUnit.name)
             .then(function(response){
               $scope.bodypart.name = "";
-              alert("Added new body part");
+              alert("Saved");
               fetchAllBodyPartMeasurements(); 
             },function(error){
-              alert("Error in adding new BodyPart");
+              console.log("Error in adding new BodyPart");
             });
           } 
         }else
         {
-          alert('Empty input.');
+          alert('Empty inputs!');
         }
       }catch(e){
-        alert("Error in addNewBodyPart controller "+e.message);
+        console.log("Error in addNewBodyPart controller "+e.message);
       }
       
     }
@@ -298,36 +299,36 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
             console.log("nameChange = true, dateExist = true");
             MeasurementsWidgetService.updateEntry($scope.measurement.num, $scope.mUnit.name, $scope.tempIDMeasurements)
             .then(function(response){
-              alert("Success in updateEntry--246");
+              alert("Updated");
               $scope.dateExist = false;
 
               MeasurementsWidgetService.updateBodyPartName($scope.newValue.name, $scope.tempArray[0].name)
               .then(function(response){
-                alert("Success in updateBodyPartName--251");
+                alert("Updated");
                fetchAllBodyPartMeasurements();
               },function(error){
-                alert("Error in updateBodyPartName--254");
+                console.log("Error in updateBodyPartName--254");
               });
 
             },function(error){
-              alert("Error in updateEntry--258");
+              console.log("Error in updateEntry--258");
             });
           }else{
             console.log("nameChange = true, dateExist = false");
             MeasurementsWidgetService.addNewEntry($scope.newValue.name, $scope.measurement.num, $scope.mUnit.name)
             .then(function(response){
-              alert("Success in addNewEntry--263");
+              alert("Saved");
 
               MeasurementsWidgetService.updateBodyPartName($scope.newValue.name, $scope.tempArray[0].name)
               .then(function(response){
-                alert("Success in updateBodyPartName--267");
+                alert("Updated");
                 fetchAllBodyPartMeasurements();
               },function(error){
-                alert("Error in updateBodyPartName--270");
+                console.log("Error in updateBodyPartName--270");
               });
 
             },function(error){
-              alert("Error in addNewEntry--274");
+              console.log("Error in addNewEntry--274");
             });
           }
           $scope.nameChange = false;
@@ -336,26 +337,26 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
             console.log("nameChange = false, dateExist = true");
             MeasurementsWidgetService.updateEntry($scope.measurement.num, $scope.mUnit.name, $scope.tempIDMeasurements)
             .then(function(response){
-              alert("Success in updateEntry--282");
+              alert("Updated");
               $scope.dateExist = false;
               fetchAllBodyPartMeasurements();
             },function(error){
-              alert("Error in updateEntry--286");
+              console.log("Error in updateEntry--286");
             });
           }else{
             console.log("nameChange = false, dateExist = false");
             MeasurementsWidgetService.addNewEntry($scope.tempArray[0].name, $scope.measurement.num, $scope.mUnit.name)
             .then(function(response){
-              alert("Success in addNewEntry--291");
+              alert("Saved");
              fetchAllBodyPartMeasurements();
             },function(error){
-              alert("Error in addNewEntry--294");
+              console.log("Error in addNewEntry--294");
             });
           }
         }
        
       }catch(e){
-        alert("Error in addNewEntry controller "+e.message);
+        console.log("Error in addNewEntry controller "+e.message);
       }
     }
 
@@ -364,14 +365,14 @@ measurementsWidgetModule.controller('MeasurementsWidgetCtrl',['$scope','$state',
         if(index>-1){
           MeasurementsWidgetService.deleteBodyPartMeasurements(bodypart_name)
           .then(function(response){
-            alert("Delete body part successful");
+            console.log("Delete body part successful");
             fetchAllBodyPartMeasurements();
           },function(error){
-            alert("Error in deleting body part");
+            console.log("Error in deleting body part");
           });
         }
       }catch(e){
-        alert("Error in deleteBodyPart controller "+e.message);
+        console.log("Error in deleteBodyPart controller "+e.message);
       }
       
     }

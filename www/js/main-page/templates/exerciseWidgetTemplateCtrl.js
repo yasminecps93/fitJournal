@@ -43,7 +43,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				value: 0
 			};
 	    	$scope.dateExist = false;
-			$scope.isFirstTime = true;
+			$scope.checkedCaloriesService == false;
 			$scope.choseRoutine = false;
 			$scope.openWidget = true;
 			console.log("initData~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
@@ -274,13 +274,14 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				}
 			}else
 			{
-				alert("No routines created till now.");
+				console.log("No routines created till now.");
+
 			}
 		}
 
 		function fetchRoutineListErrorCB(error)
 		{
-			alert("Some error occurred in fetching Routines List");
+			console.log("Some error occurred in fetching Routines List");
 		}
 
 		function getExercisesFromRoutine(id){
@@ -294,6 +295,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		{
 			if(response && response.rows && response.rows.length > 0)
 			{
+
 				for(var i=0;i<response.rows.length;i++)
 				{
 					$scope.exerciseLogArray.push({
@@ -309,13 +311,13 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				saveLog();
 			}else
 			{
-				alert("No entries created till now.");
+				console.log("No entries created till now.");
 			}
 		}
 
 		function fetchEntriesErrorCB(error)
 		{
-			alert("Some error occurred in fetching Routines List");
+			console.log("Some error occurred in fetching Routines List");
 		}
 //---------------------------------------------------------------------------------//
 //------------------------------LAST ENTRY FUNCTIONS-------------------------------//
@@ -353,13 +355,13 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				}
 			}else
 			{
-				alert("No entries created till now.");
+				console.log("No entries created till now.");
 			}
 		}
 
 		function fetchLastErrorCB(error)
 		{
-			alert("Some error occurred in fetching last entry");
+			console.log("Some error occurred in fetching last entry");
 		}
 
 //---------------------------------------------------------------------------------//
@@ -391,14 +393,13 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					$scope.totalCal = $scope.totalCal+ response.rows.item(i).calOut;
 					
 				}
-				if($scope.isFirstTime == true){
-					$scope.isFirstTime = false;
-				}else{
+				if($scope.checkedCaloriesService == true){
 					updateCalories();
 				}
 			}else
 			{
-				alert("No entries created till now.");
+				console.log("No entries created till now.");
+				$scope.totalCal=0;
 			}
 			console.log("getExerciseLog~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 			if($scope.choseRoutine ==true){
@@ -411,7 +412,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 
 		function fetchLogErrorCB(error)
 		{
-			alert("Some error occurred in fetching log exercises");
+			console.log("Some error occurred in fetching log exercises");
 		}
 
 		function saveLog(){
@@ -429,7 +430,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					addNewLog();
 				}
 			}catch(e){
-				alert("Error in addDeleteLog controller "+e.message);
+				console.log("Error in addDeleteLog controller "+e.message);
 			}
 		}
 
@@ -443,7 +444,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						.then(function(response){
 							counter++;
 							if(counter == $scope.exerciseLogArray.length){
-								alert("Saved");
+								console.log("Saved");
 								$scope.openWidget = true;
 								getExerciseLog();
 							}
@@ -454,7 +455,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				}
 				
 			}catch(e){
-				alert("Error in addNewLog controller "+e.message);
+				console.log("Error in addNewLog controller "+e.message);
 			}
 		}
 
@@ -467,7 +468,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					saveLog();
 				}
 			}catch(e){
-				alert("Error in deleteExercise controller");
+				console.log("Error in deleteExercise controller");
 			}
 
 		}
@@ -495,7 +496,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					alert('Empty inputs!');
 				}
 			}catch(e){
-				alert("Error in addNewExercise controller "+e.message);
+				console.log("Error in addNewExercise controller "+e.message);
 			}	
 		}
 
@@ -518,7 +519,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					alert('Empty inputs!');
 				}
 			}catch(e){
-				alert("Error in addNewExercise controller "+e.message);
+				console.log("Error in addNewExercise controller "+e.message);
 			}	
 		}
 
@@ -530,7 +531,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		        CaloriesWidgetService.getLastEntry()
 		        .then(fetchCaloriesSuccessCB,fetchCaloriesErrorCB);
 		      }catch(e){
-		        alert("Error in fetch getLastEntryCalories controller "+e.message);
+		        console.log("Error in fetch getLastEntryCalories controller "+e.message);
 		      }
       	}
 
@@ -559,6 +560,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
       				$scope.calories.outCal = $scope.caloriesArray[0].caloriesOut;
       				$scope.calories.totalCalories = $scope.caloriesArray[0].caloriesTotal;
       				$scope.tempIDCalories = $scope.caloriesArray[0].id;
+      				$scope.checkedCaloriesService = true;
 	          }else{
 	          	
 	          	console.log("in cDate if else "+$scope.cDate+" != "+$scope.caloriesArray[0].cDate);
@@ -566,19 +568,19 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 	          }
 	        }else
 	        {
-	          alert("No calories created till now.");
+	          console.log("No calories created till now.");
 	          console.log("in No calories created till now else");
 	          addNewRowToCaloriesTable();
 	        }
 	      }catch(e){
-	        alert("Error in fetchCaloriesSuccessCB controller "+e.message);
+	        console.log("Error in fetchCaloriesSuccessCB controller "+e.message);
 	      }
 	      
 	    }
 
 	    function fetchCaloriesErrorCB(error)
 	    {
-	      alert("Some error occurred in fetchCaloriesErrorCB");
+	      console.log("Some error occurred in fetchCaloriesErrorCB");
 	    }
 
 	    function addNewRowToCaloriesTable(){
@@ -588,10 +590,10 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		    		
 		    		getLastEntryCalories();
 		    	},function(error){
-		    		alert("Error in adding new row to calories table");
+		    		console.log("Error in adding new row to calories table");
 		    	});
 	    	}catch(e){
-	    		alert("Error in addNewRowToCaloriesTable controller "+e.message);
+	    		console.log("Error in addNewRowToCaloriesTable controller "+e.message);
 	    	}
 	    	
 	    }
@@ -606,10 +608,10 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 	    			getLastEntryCalories();
 	    			$rootScope.$broadcast('updateCaloriesInWidget');
 	    		},function(error){
-		    		alert("Error in updating calories table");
+		    		console.log("Error in updating calories table");
 	    		})
 	    	}catch(e){
-	    		alert("Error in updateCalories controller "+e.message);
+	    		console.log("Error in updateCalories controller "+e.message);
 
 	    	}
 	    }

@@ -19,7 +19,7 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
 			  var query = "CREATE TABLE IF NOT EXISTS image_list (id integer primary key autoincrement, created_at date, widget_id integer, image_file string, caption string)";
@@ -32,7 +32,7 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 			   }); 
 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
@@ -48,14 +48,14 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 					imageArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in get last entry");
+					console.log("Error in get last entry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getLastEntryTable "+e.message);
+				console.log("Error in getLastEntryTable "+e.message);
 			}
 		}
 
@@ -68,14 +68,14 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 					console.log(response);
 					deferred.resolve(response);
 				},function(error){
-					alert("Error in add new row");
+					console.log("Error in add new row");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in addNewImageTable "+e.message);
+				console.log("Error in addNewImageTable "+e.message);
 
 			}
 		}
@@ -90,13 +90,13 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in updating image");
+					console.log("Error in updating image");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in update image "+e.message);
+				console.log("Error in update image "+e.message);
 			}
 		}
 
@@ -110,10 +110,10 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));

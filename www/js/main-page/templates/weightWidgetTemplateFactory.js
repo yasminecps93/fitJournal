@@ -16,24 +16,24 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			//  	alert("opened db ");
+			//  	console.log("opened db ");
 			  }
 			  catch(e) { 
-			  	alert("Error in opening db");
+			  	console.log("Error in opening db");
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at datetime, current_date string, current_weight double, weight_unit string)";
+			  var query = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at date, current_date string, current_weight double, weight_unit string)";
 
 			  try{
 			  	runQuery(query,[],function(res) {
 			      console.log("table created ");
-			      alert("table created for widget");
+			      console.log("table created for widget");
 			   }, function (err) {
 			      console.log(err);
-			      alert("error creating table "+err);
+			      console.log("error creating table "+err);
 			   }); 
 			  }catch(e){
-			  	alert(e.message);
+			  	console.log(e.message);
 			  }
 
 		  }.bind(this));
@@ -56,7 +56,7 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 
 				return deferred.promise;
 			}catch(e){
-				alert("Error in getAllWeight "+e.message);
+				console.log("Error in getAllWeight "+e.message);
 			}
 		}
 
@@ -66,40 +66,40 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 			try{
 				runQuery(query,[current_weight,id],function(response){
 				//Success Callback
-			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
+			//	console.log("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in changing weight");
+					console.log("Error in changing weight");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in insertWeightTable "+e.message);
+				console.log("Error in insertWeightTable "+e.message);
 			}
 		}
 
 		function addNewWeight(current_date, current_weight, weight_unit){
 			
 			var deferred = $q.defer();
-			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (datetime(),?,?,?)";
+			var query = "INSERT INTO weight_list (created_at, current_date, current_weight, weight_unit) VALUES (date('now','localtime'),?,?,?)";
 			try{
 				runQuery(query,[current_date, current_weight, weight_unit],function(response){
 				//Success Callback
-			//	alert("New weight has been added. "+today_weight+", "+ weight_unit);
+			//	console.log("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					alert("Error in adding weight");
+					console.log("Error in adding weight");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				alert("Error in insertWeightTable "+e.message);
+				console.log("Error in insertWeightTable "+e.message);
 			}
 		}
 
@@ -113,10 +113,10 @@ weightWidgetModule.factory('WeightWidgetService', ['$cordovaSQLite','$ionicPlatf
 		
 		  		$cordovaSQLite.execute(db, query, dataArray).then(function(res) {
 			      successCb(res);
-			//      alert("success in runQuery function "+res);
+			//      console.log("success in runQuery function "+res);
 			    }, function (err) {
 			      errorCb(err);
-			      alert("error in runQuery function "+err);
+			      console.log("error in runQuery function "+err);
 			    });
 
 		  }.bind(this));
