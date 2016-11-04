@@ -72,6 +72,7 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 				{
 					console.log("No entries created till now.");
 					$scope.weight=[];
+					alert("There are no weight entries at the moment!");
 				}
 			},function(error){
 				console.log("Error in getting response");
@@ -113,6 +114,7 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 				{
 					console.log("No entries created till now.");
 					$scope.measurementItemArray=[];
+					alert("There are no items at the moment, please add values to the Measurements Widget to draw the graph.");
 				}
 			},function(error){
 				console.log("Error in getting response");

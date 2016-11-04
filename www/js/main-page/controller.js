@@ -443,7 +443,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    $scope.onHold = function(){
 	    	if($scope.editModeOn == false){
 	    		 $cordovaVibration.vibrate(300);
-		    	 alert("Edit mode on!"); 
+		    	 alert("Edit mode on! You can now move and resize your widgets. Move the widget by dragging the header."); 
 		    	 angular.element(document.querySelectorAll(".gridster-item")).addClass("add-border-class");
 		    	 $scope.gridsterOpts = {
 		    	 	resizable: {
@@ -534,7 +534,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  		}
   		}
 
-  		
+
 	}
 ]);
 
