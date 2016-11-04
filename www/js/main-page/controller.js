@@ -12,6 +12,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  	var isDelete = "";
 	  	$scope.stylePath = "";
 		$scope.showFooter = false;
+		$scope.editModeOn = false;
 		$scope.isExist = false; //to check if this widget already exist
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
@@ -340,7 +341,8 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 				{	
 					MainService.deleteWidget(id)
 					.then(function(response){
-							$window.location.reload(true);
+						fetchWidget();
+						$window.location.reload(true);
 						console.log("in delete success");
 					},function(error){
 						console.log("Error in delete widget");
@@ -417,7 +419,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	        maxSizeY: null, // maximum row height of an item
 	        saveGridItemCalculatedHeightInMobile: false, // grid item height in mobile display. true- to use the calculated height by sizeY given
 	        resizable: {
-	           enabled: true,
+	           enabled: false,
 	           handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
 	           start: function(event, $element, widget) {}, // optional callback fired when resize is started,
 	           resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
@@ -426,7 +428,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	           } // optional callback fired when item is finished resizing
 	        },
 	        draggable: {
-	           enabled: true, // whether dragging items is supported
+	           enabled: false, // whether dragging items is supported
 	           handle: '.widget-header', // optional selector for drag handle
 	           scrollSensitivity: 20, // Distance in pixels from the edge of the viewport after which the viewport should scroll, relative to pointer
 	           scrollSpeed: 15, // Speed at which the window should scroll once the mouse pointer gets within scrollSensitivity distance
@@ -437,6 +439,42 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	           } // optional callback fired when item is finished dragging
 	        }
 	    };
+
+	    $scope.onHold = function(){
+	    	if($scope.editModeOn == false){
+	    		 $cordovaVibration.vibrate(300);
+		    	 alert("Edit mode on!"); 
+		    	 angular.element(document.querySelectorAll(".gridster-item")).addClass("add-border-class");
+		    	 $scope.gridsterOpts = {
+		    	 	resizable: {
+		           		enabled: true
+		           	},
+		           	draggable: {
+		           		enabled: true
+		           	}
+		    	 }
+		    	 $scope.editModeOn = true;
+	    	}
+	    	
+	    }
+
+	    $scope.onTap = function(){
+	    	if($scope.editModeOn == true){
+	    		alert("Edit mode off!");
+		    	angular.element(document.querySelectorAll(".gridster-item")).removeClass("add-border-class");
+		    	$scope.gridsterOpts = {
+		    	 	resizable: {
+		           		enabled: false
+		           	},
+		           	draggable: {
+		           		enabled: false
+		           	}
+		    	}
+		    	$scope.editModeOn = false;
+	    	}
+	    }
+
+	    
 //----------------------------------------------------------------------------------------//
 //----------------------------------POPUP-------------------------------------------------//
 //----------------------------------------------------------------------------------------//
@@ -495,6 +533,8 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  			imagepopup.close();
 	  		}
   		}
+
+  		
 	}
 ]);
 

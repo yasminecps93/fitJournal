@@ -39,6 +39,7 @@
   -moz-transition-delay: 50ms;
   -o-transition-delay: 50ms;
   transition-delay: 50ms;
+
 }
 .gridster-loaded .gridster-preview-holder {
   display: none;
@@ -112,28 +113,29 @@
 }
 .handle-e {
   cursor: e-resize;
-  width: 20px;
+  width: 30px;
   bottom: 0;
   right: 1px;
   top: 0;
+
 }
 .handle-s {
   cursor: s-resize;
-  height: 20px;
+  height: 30px;
   right: 0;
   bottom: 1px;
   left: 0;
 }
 .handle-n {
   cursor: n-resize;
-  height: 20px;
+  height: 30px;
   right: 0;
   top: 1px;
   left: 0;
 }
 .handle-w {
   cursor: w-resize;
-  width: 20px;
+  width: 30px;
   left: 1px;
   top: 0;
   bottom: 0;

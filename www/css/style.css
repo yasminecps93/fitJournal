@@ -278,7 +278,7 @@ img{
 
 .main-page-content{
 	font-family: 'normalFonts';
-	background-image: url("geometry.jpg");
+	background-image: url("Crumpled.jpg");
 }
 
 .main-content, .card{
@@ -290,8 +290,13 @@ img{
 .widget-content{
 	padding: 5px;
 	text-align: center;
+	
 }
 
 .widget-content #custom{
 	text-align: left !important;
+}
+
+.add-border-class{
+	border: 3px dotted #36D7B7;
 }

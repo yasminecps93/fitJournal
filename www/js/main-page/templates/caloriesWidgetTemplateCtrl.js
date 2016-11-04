@@ -66,7 +66,7 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	        {
 	          
 	          $scope.caloriesArray = [];
-	       		console.log("in calories widget ctrl number of rows for calories is "+response.rows.length);
+	       	  console.log("in calories widget ctrl number of rows for calories is "+response.rows.length);
 	          for(var i=0;i<response.rows.length;i++)
 	          {
 	            $scope.caloriesArray.push

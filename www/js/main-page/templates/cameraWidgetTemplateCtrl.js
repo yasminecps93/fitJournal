@@ -23,7 +23,6 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 
 	    	CameraWidgetService.initDB();
 	    	currentDate();
-	    	
 	    }
 
 	    function initMethods(){
