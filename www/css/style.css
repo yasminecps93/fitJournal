@@ -283,8 +283,6 @@ img{
 
 .main-content, .card{
 	font-family: 'normalFonts';
-/*	background-color: #F2F1EF !important; */
-/*	padding-top: 30px */
 }
 
 .widget-content{
@@ -295,6 +293,7 @@ img{
 
 .widget-content #custom{
 	text-align: left !important;
+	font-size: 17px;
 }
 
 .add-border-class{
