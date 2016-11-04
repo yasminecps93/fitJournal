@@ -1,7 +1,7 @@
 var mainPageModule = angular.module('MainPage',['ngCordova','ionic','gridster']);
 
-mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration','$window',
-	function($rootScope,$scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration,$window){
+mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQLite','$ionicPlatform','MainService', '$cordovaVibration','$window','$ionicPopup',
+	function($rootScope,$scope,$state,$cordovaSQLite,$ionicPlatform,MainService,$cordovaVibration,$window,$ionicPopup){
 
 		initData();
 	  	initMethods();
@@ -12,6 +12,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  	var isDelete = "";
 	  	$scope.stylePath = "";
 		$scope.showFooter = false;
+		$scope.isExist = false; //to check if this widget already exist
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
 	    };   
@@ -59,10 +60,22 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    }
 
 	   	function addWeightWidget(){
+	   		if($scope.widgetList.length>0)
+	   		{
+	   			for(var i=0; i<$scope.widgetList.length; i++)
+	   			{
+	   				if($scope.widgetList[i].title == "Weight"){
+	   					$scope.isExist = true;
+	   					break;
+	   				}
+	   			}
+	   		}
 	    	calculateLastWidgetPosition();
 	    	console.log(newYPosition);
-	    	try{
-		      		MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
+	    	try{	
+	    		if($scope.isExist == false)
+	    		{
+	    			MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
 					.then(function(response)
 					{
 						fetchWidget();
@@ -70,85 +83,218 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 					{
 						console.log("Error in changing template");
 					});
-	      		}
-	      		catch(e)
-	      		{
-	      			console.log("Error in addWeightTemplate "+e.message);
+	    		}else
+	    		{
+	    			alert("This widget already exists!");
+	    			$scope.isExist = false;
 	    		}
+	      	}
+	      	catch(e)
+	      	{
+	      		console.log("Error in addWeightTemplate "+e.message);
+	    	}
+	    		
 	    }
 	   	
 	   	function addMeasurementsWidget(){
+	   		if($scope.widgetList.length>0)
+	   		{
+	   			for(var i=0; i<$scope.widgetList.length; i++)
+	   			{
+	   				if($scope.widgetList[i].title == "Measurements"){
+	   					$scope.isExist = true;
+	   					break;
+	   				}
+	   			}
+	   		}
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Measurements",newYPosition,0, 3, 1, "<measurements-widget></measurements-widget>")
-				.then(function(response){
-				 	fetchWidget();
-				},function(error){
-					console.log("Error in changing template");
-				});
+	      		if($scope.isExist == false)
+	    		{
+		      		MainService.addNewWidget("Measurements",newYPosition,0, 3, 1, "<measurements-widget></measurements-widget>")
+					.then(function(response){
+					 	fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+				}else
+				{
+					alert("This widget already exists!");
+	    			$scope.isExist = false;
+				}
 	      	}catch(e){
 	      		console.log("Error in addMeasurementsTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addFoodWidget(){
+	   		if($scope.widgetList.length>0)
+	   		{
+	   			for(var i=0; i<$scope.widgetList.length; i++)
+	   			{
+	   				if($scope.widgetList[i].title == "Food Intake")
+	   				{
+	   					$scope.isExist = true;
+	   					break;
+	   				}
+	   			}
+	   		}
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 3, "<food-widget></food-widget>")
-				.then(function(response){
-				 	fetchWidget();
-				},function(error){
-					console.log("Error in changing template");
-				});
+	      		if($scope.isExist == false)
+	    		{
+		      		MainService.addNewWidget("Food Intake",newYPosition,0, 3, 3, "<food-widget></food-widget>")
+					.then(function(response){
+					 	fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+				}else{
+					alert("This widget already exists!");
+	    			$scope.isExist = false;
+				}
 	      	}catch(e){
 	      		console.log("Error in addFoodTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addExerciseWidget(){
+	   		if($scope.widgetList.length>0)
+	   		{
+	   			for(var i=0; i<$scope.widgetList.length; i++)
+	   			{
+	   				if($scope.widgetList[i].title == "Exercise Log")
+	   				{
+	   					$scope.isExist = true;
+	   					break;
+	   				}
+	   			}
+	   		}
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Calories Counter",newYPosition,0, 2, 2, "<exercise-widget></exercise-widget>")
-				.then(function(response){
-				 	fetchWidget();
-				},function(error){
-					console.log("Error in changing template");
-				});
+	      		if($scope.isExist == false)
+	    		{
+		      		MainService.addNewWidget("Exercise Log",newYPosition,0, 2, 2, "<exercise-widget></exercise-widget>")
+					.then(function(response){
+					 	fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+				}else{
+					alert("This widget already exists!");
+	    			$scope.isExist = false;
+				}
 	      	}catch(e){
 	      		console.log("Error in addExerciseTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addCameraWidget(){
-	   		$scope.idIndex++;
+	   		$scope.isEmpty = false; //for empty input
+	   		if($scope.header.name != ""){
+	   			if($scope.widgetList.length>0)
+		   		{	
+		   			for(var i=0; i<$scope.widgetList.length; i++)
+		   			{
+		   				if($scope.widgetList[i].title == $scope.header.name && $scope.widgetList[i].directives == "<camera-widget></camera-widget>")
+		   				{
+		   					$scope.isExist = true;
+		   					break;
+		   				}
+		   			}
+		   		}
+	   		}else{
+	   			alert("Empty inputs!");
+	   			$scope.isEmpty = true;
+	   		}
+	   		
 	   		calculateLastWidgetPosition();
 	      	try{
-	      	//	MainService.addNewWidget("Image",newYPosition,0, 4, 6, "<camera-widget ng-attr-id="{{$scope.idIndex}}"></camera-widget>")
-	      		MainService.addNewWidget("Image",newYPosition,0, 4, 4, "<camera-widget></camera-widget>")
-				.then(function(response){
-				 	fetchWidget();
-				},function(error){
-					console.log("Error in changing template");
-				});
+	      		if($scope.isExist == false && $scope.isEmpty == false){
+	      			MainService.addNewWidget($scope.header.name,newYPosition,0, 4, 4, "<camera-widget></camera-widget>")
+					.then(function(response){
+					 	fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+	      		}else if ($scope.isExist == true && $scope.isEmpty == false){
+	   				alert("This header already exists!");
+	   				$scope.isExist = false;
+	   			}
+	      		
 	      	}catch(e){
 	      		console.log("Error in addCameraTemplate "+e.message);
 	      	}
 	   	}
 
 	   	function addCaloriesWidget(){
+	   		if($scope.widgetList.length>0)
+	   		{
+	   			for(var i=0; i<$scope.widgetList.length; i++)
+	   			{
+	   				if($scope.widgetList[i].title == "Exercise Log")
+	   				{
+	   					$scope.isExist = true;
+	   					break;
+	   				}
+	   			}
+	   		}
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		MainService.addNewWidget("Calories Counter",newYPosition,0, 3, 2, "<calories-widget></calories-widget>")
-				.then(function(response){
-				 	fetchWidget();
-				},function(error){
-					console.log("Error in changing template");
-				});
+	      		if($scope.isExist == false)
+	    		{
+		      		MainService.addNewWidget("Calories Counter",newYPosition,0, 3, 2, "<calories-widget></calories-widget>")
+					.then(function(response){
+					 	fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+				}else{
+					alert("This widget already exists!");
+	    			$scope.isExist = false;
+				}
 	      	}catch(e){
 	      		console.log("Error in addCaloriesTemplate "+e.message);
 	      	}
 	   	}
 	  	
+	   	function addCustomWidget(){
+	   		$scope.isEmpty = false; //for empty input
+	   		if($scope.header.name != ""){
+	   			if($scope.widgetList.length>0)
+		   		{	
+		   			for(var i=0; i<$scope.widgetList.length; i++)
+		   			{
+		   				if($scope.widgetList[i].title == $scope.header.name && $scope.widgetList[i].directives == "<custom-widget></custom-widget>")
+		   				{
+		   					$scope.isExist = true;
+		   					break;
+		   				}
+		   			}
+		   		}
+	   		}else{
+	   			alert("Empty inputs!");
+	   			$scope.isEmpty = true;
+	   		}
+	   		calculateLastWidgetPosition();
+	   		try{
+	   			if($scope.isExist == false && $scope.isEmpty == false){
+	   				MainService.addNewWidget($scope.header.name,newYPosition,0, 2, 2, "<custom-widget></custom-widget>")
+					.then(function(response){
+						fetchWidget();
+					},function(error){
+						console.log("Error in changing template");
+					});
+	   			}else if($scope.isExist == true && $scope.isEmpty == false){
+	   				alert("This header already exists!");
+	   				$scope.isExist = false;
+	   			}
+	   			
+	   		}catch(e){
+	   			console.log("Error in addCustomWidget "+e.message);
+	   		}
+	   	}
+
 	  	function fetchWidget() {
 			try{
 				MainService.getAllWidget()
@@ -243,6 +389,10 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 			console.log("Some error occurred in fetching Widgets");
 		}
 
+
+//----------------------------------------------------------------------------------------//
+//------------------------------GRIDSTER CONFIG-------------------------------------------//
+//----------------------------------------------------------------------------------------//
 	    $scope.gridsterOpts = {
 	        columns: 4, // the width of the grid, in columns
 	        pushing: true, // whether to push other items out of the way on move or resize
@@ -287,10 +437,70 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	           } // optional callback fired when item is finished dragging
 	        }
 	    };
-
+//----------------------------------------------------------------------------------------//
+//----------------------------------POPUP-------------------------------------------------//
+//----------------------------------------------------------------------------------------//
+	$scope.showPopup = function(){
+  			$scope.header = {
+				name: ''
+			};
+			
+  			$scope.data={}
+  			var entrypopup = $ionicPopup.show({
+  				templateUrl:'add-header-popup.html',
+  				title: 'Enter header name',
+  				scope: $scope,
+  				buttons:[
+  				{
+  					text: 'Cancel', onTap:
+  					function(e){ return true;}
+  				},{
+  					text:'Save',
+  					type:'button-positive',
+  					onTap:function(e){
+  						addCustomWidget();
+  					}
+  				}
+  				]
+  			});
+  			$scope.closePopup = function(){
+	  			entrypopup.close();
+	  		}
+  		}
 	   
+	   $scope.showImagePopup = function(){
+  			$scope.header = {
+				name: ''
+			};
+			
+  			$scope.data={}
+  			var imagepopup = $ionicPopup.show({
+  				templateUrl:'add-header-popup.html',
+  				title: 'Enter header name',
+  				scope: $scope,
+  				buttons:[
+  				{
+  					text: 'Cancel', onTap:
+  					function(e){ return true;}
+  				},{
+  					text:'Save',
+  					type:'button-positive',
+  					onTap:function(e){
+  						addCameraWidget();
+  					}
+  				}
+  				]
+  			});
+  			$scope.closePopup = function(){
+	  			imagepopup.close();
+	  		}
+  		}
 	}
 ]);
+
+//----------------------------------------------------------------------------------------//
+//----------------------------------DIRECTIVES--------------------------------------------//
+//----------------------------------------------------------------------------------------//
 
 mainPageModule.directive('compileDirective', function($compile,$rootScope) {
         var uniqueId = 0;
@@ -391,6 +601,19 @@ mainPageModule.directive('caloriesWidget',
   	link: link,
     replace: false,
     templateUrl:'js/main-page/templates/caloriesWidgetTemplate.html'
+  }
+});
+
+mainPageModule.directive('customWidget',
+  function($compile,$rootScope){
+  	function link(scope, element, attributes,controller) {
+	  	
+	}
+  return{
+  	controller: 'CustomWidgetCtrl',
+  	link: link,
+    replace: false,
+    templateUrl:'js/main-page/templates/customWidgetTemplate.html'
   }
 });
 

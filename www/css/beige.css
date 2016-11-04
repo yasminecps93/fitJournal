@@ -4,15 +4,10 @@ ion-header-bar{
 }
 
 .main-page-content{
-	font-family: 'normalFonts';
+
 	background-color: rgba(255,160,122,0.05) !important;
 }
 
-.main-content{
-	font-family: 'normalFonts'
-	background-color: #F2F1EF !important; 
-/*	padding-top: 30px */
-}
 
 ion-footer-bar{
 	background-color:  #FFA07A !important;
@@ -88,8 +83,6 @@ select{
 
 .widget-content{
 	background-color: rgba(255,160,122,0.5);
-	padding: 5px;
-	text-align: center;
 }
 
 .widget-content .item{

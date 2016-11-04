@@ -174,6 +174,15 @@ textarea{
 	padding: 10px;
 	width: 100%;
 	font-size: 20px;
+	line-height: 30px;
+}
+
+#customTextarea{
+	padding: 5px;
+	width: 100%;
+	height: 100%;
+	font-size: 17px;
+	line-height: 25px;
 }
 
 .bottom-button{
@@ -262,7 +271,27 @@ img{
 }
 
 #unitC{
-	
+	font-family: 'normalFonts';
 	width: 50%;
 	height: 40px;
+}
+
+.main-page-content{
+	font-family: 'normalFonts';
+	background-image: url("geometry.jpg");
+}
+
+.main-content, .card{
+	font-family: 'normalFonts';
+/*	background-color: #F2F1EF !important; */
+/*	padding-top: 30px */
+}
+
+.widget-content{
+	padding: 5px;
+	text-align: center;
+}
+
+.widget-content #custom{
+	text-align: left !important;
 }

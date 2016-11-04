@@ -1,17 +1,16 @@
-var cameraWidgetModule = angular.module('CameraWidget');
+var customWidgetModule = angular.module('CustomWidget');
 
-cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatform','$q',
+customWidgetModule.factory('CustomWidgetService', ['$cordovaSQLite','$ionicPlatform','$q',
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
-		var imageArray;
-		var headerArray;
+		var customArray;
+
 		return{
 			initDB:initDB,
 			getAllEntry:getAllEntry,
-			addNewImage:addNewImage,
+			addNewEntry:addNewEntry,
 			updateEntry:updateEntry,
-			deleteEntry:deleteEntry,
-			getAllHeaders:getAllHeaders
+			deleteEntry:deleteEntry
 		}
 
 		function initDB(){
@@ -24,13 +23,13 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 			  	console.log("Error in opening db");
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS image_list (id integer primary key autoincrement, created_at date, widget_header string, image_file string, caption string)";
+			  var query = "CREATE TABLE IF NOT EXISTS custom_list (id integer primary key autoincrement, header string, text string)";
 
 			  try{
 			  	runQuery(query,[],function(res) {
-			      console.log("table created image_list");
+			      console.log("table created custom_list");
 			   }, function (err) {
-			      console.log("table image_list error "+err);
+			      console.log("table custom_list error "+err);
 			   }); 
 
 			  }catch(e){
@@ -40,53 +39,32 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 		  }.bind(this));
 		}
 
-		function getAllEntry(cDate){
+		function getAllEntry(){
 			try{
 				var deferred = $q.defer();
-		 		var query = "SELECT * from image_list WHERE created_at = ?";
-				runQuery(query,[cDate],function(response){
-					//Success Callback
-					console.log(response);
-					imageArray = response.rows;
-					deferred.resolve(response);
-				},function(error){
-					console.log("Error in get last entry");
-					console.log(error);
-					deferred.reject(error);
-				});
-
-				return deferred.promise;
-			}catch(e){
-				console.log("Error in getLastEntryTable "+e.message);
-			}
-		}
-
-		function getAllHeaders(){
-			try{
-				var deferred = $q.defer();
-		 		var query = "SELECT * from image_list";
+		 		var query = "SELECT * from custom_list";
 				runQuery(query,[],function(response){
 					//Success Callback
 					console.log(response);
-					headerArray = response.rows;
+					customArray = response.rows;
 					deferred.resolve(response);
 				},function(error){
-					console.log("Error in get all header");
+					console.log("Error in gettingentry");
 					console.log(error);
 					deferred.reject(error);
 				});
 
 				return deferred.promise;
 			}catch(e){
-				console.log("Error in getAllHeadersTable "+e.message);
+				console.log("Error in getAllEntry "+e.message);
 			}
 		}
 
-		function addNewImage(widget_header, image_file, caption){
+		function addNewEntry(header, text){
 			try{
 				var deferred = $q.defer();
-				var query = "INSERT INTO image_list (created_at, widget_header, image_file, caption) VALUES (date('now','localtime'),?,?,?)";
-				runQuery(query,[widget_header, image_file, caption],function(response){
+				var query = "INSERT INTO custom_list (header, text) VALUES (?,?)";
+				runQuery(query,[header, text],function(response){
 					//Success Callback
 					console.log(response);
 					deferred.resolve(response);
@@ -98,34 +76,34 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 
 				return deferred.promise;
 			}catch(e){
-				console.log("Error in addNewImageTable "+e.message);
+				console.log("Error in addNewEntry "+e.message);
 
 			}
 		}
 
-		function updateEntry(image_file, caption,id){
+		function updateEntry(text,id){
 			var deferred = $q.defer();
-			var query = "UPDATE image_list SET image_file = ?, caption = ? WHERE id = ?";
+			var query = "UPDATE custom_list SET text = ? WHERE id = ?";
 			try{
-				runQuery(query,[image_file, caption, id],function(response){
+				runQuery(query,[text, id],function(response){
 		
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					console.log("Error in updating image");
+					console.log("Error in updating text");
 					console.log(error);
 					deferred.reject(error);
 				});
 				return deferred.promise;
 			}catch(e){
-				console.log("Error in update image "+e.message);
+				console.log("Error in update text "+e.message);
 			}
 		}
 
 		function deleteEntry(header){
 			var deferred = $q.defer();
-			var query = "DELETE from image_list WHERE header = ?";
+			var query = "DELETE from custom_list WHERE header = ?";
 			try{
 				runQuery(query,[header],function(response){
 		
@@ -161,4 +139,5 @@ cameraWidgetModule.factory('CameraWidgetService', ['$cordovaSQLite','$ionicPlatf
 
 		  }.bind(this));
 		}
+
 }]);

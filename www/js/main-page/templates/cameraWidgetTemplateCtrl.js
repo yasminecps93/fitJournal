@@ -13,11 +13,13 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    	$scope.tempID = -1;
 	    	$scope.imageArray = [];
 
+        $scope.widget={
+          header:""
+        }
 	    	$scope.image={
 	    		file:"",
 	    		caption:""
 	    	}
-	    	$scope.widgetID = -1;
 
 	    	CameraWidgetService.initDB();
 	    	currentDate();
@@ -29,13 +31,14 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    	$scope.checkForExisting = checkForExisting;
 	    	$scope.addNewEntry = addNewEntry;
 	    	$scope.updateEntry = updateEntry;
+        $scope.deleteEntry = deleteEntry;
 	    }
 
-	    $scope.getID = function(id)
-  		{
-  			$scope.widgetID = id;
-  			console.log("widgetID---"+$scope.widgetID);
-  		}
+	    $scope.getTitle = function(name)
+      {
+        $scope.widget.header = name;
+        console.log("widget header---"+$scope.widget.header);
+      }
 //---------------------------------------------------------------------------------//
 //---------------------------MODAL FUNCTIONS---------------------------------------//
 //---------------------------------------------------------------------------------//
@@ -83,6 +86,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 //---------------------------------------------------------------------------------//
 
      function currentDate(){
+
           var month = new Date().getMonth() + 1;
           var date = new Date().getDate();
           if(date<10){
@@ -99,6 +103,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	
 	function fetchAllImage(){
 		try{
+        console.log("in fetchAllImage");
         CameraWidgetService.getAllEntry($scope.cDate)
         .then(fetchSuccessCB,fetchErrorCB);
       }catch(e){
@@ -111,22 +116,23 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
       try{
         if(response && response.rows && response.rows.length > 0)
         {
-          
+          console.log("in response");
           $scope.imageArray = [];
-       	  var lastID = response.rows.length-1;
+       	  //var lastID = response.rows.length-1;
           for(var i=0;i<response.rows.length;i++)
           {
             $scope.imageArray.push
             ({
               id:response.rows.item(i).id,
               cDate:response.rows.item(i).created_at,
-              widgetID:response.rows.item(i).widget_id,
+              widgetHeader:response.rows.item(i).widget_header,
               imageFile:response.rows.item(i).image_file,
               caption:response.rows.item(i).caption
             });
           }
           for(var j= 0;j<response.rows.length;j++){
-          	if($scope.widgetID == response.rows.item(j).widget_id){
+            console.log(response.rows.item(j).widget_header);
+          	if($scope.widget.header == response.rows.item(j).widget_header){
           		$scope.tempID = response.rows.item(j).id;
           		$scope.image.file = response.rows.item(j).image_file;        
           		$scope.image.caption = response.rows.item(j).caption;
@@ -134,7 +140,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
           		break;
           	}
           }
-          console.log("response.rows.length "+response.rows.length);
+          
           $scope.dateExist = true;
         }else
         {
@@ -176,7 +182,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
     function addNewEntry(){
     	try{
     		if($scope.image.file != ''){
-    			CameraWidgetService.addNewImage($scope.widgetID,$scope.image.file,$scope.image.caption)
+    			CameraWidgetService.addNewImage($scope.widget.header,$scope.image.file,$scope.image.caption)
 	    		.then(function(response){
 	    			alert("Saved");
 	    			fetchAllImage();
@@ -212,6 +218,20 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
     	}catch(e){
           console.log("Error in updateEntry controller "+e.message);
     	}
+    }
+
+     function deleteEntry(name){
+      try{
+        CameraWidgetService.deleteEntry(name)
+        .then(function(response){
+          fetchAllImage();
+        },function(error){
+          console.log("deleteEntry error");
+        });
+      }catch(e){
+        console.log("Error in deleteEntry controller "+e.message);
+      }
+
     }
 
 //---------------------------------------------------------------------------------//

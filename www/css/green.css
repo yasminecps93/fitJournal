@@ -4,15 +4,14 @@ ion-header-bar{
 }
 
 .main-page-content{
-	font-family: 'normalFonts';
+	/*font-family: 'normalFonts';*/
 	background-color: rgba(0,191,162,0.05) !important;
 }
-
+/*
 .main-content{
 	font-family: 'normalFonts'
 	background-color: #F2F1EF !important; 
-/*	padding-top: 30px */
-}
+}*/
 
 ion-footer-bar{
 	background-color:  #00BFA2 !important;

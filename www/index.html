@@ -52,6 +52,8 @@
     <script src="js/main-page/templates/cameraWidgetTemplateFactory.js"></script>
     <script src="js/main-page/templates/caloriesWidgetTemplateCtrl.js"></script>
     <script src="js/main-page/templates/caloriesWidgetTemplateFactory.js"></script>
+    <script src="js/main-page/templates/customWidgetTemplateCtrl.js"></script>
+    <script src="js/main-page/templates/customWidgetTemplateFactory.js"></script>
 
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/javaScripts.js"></script>
@@ -128,8 +130,9 @@
             
           </ion-slide>
           <ion-slide>
-            <a class="button button-clear widget-button" ng-click="addCameraWidget()"><img class="widget-icon" src="img/photo-camera.svg" alt=""></img>Images</a>
+            <a class="button button-clear widget-button" ng-click="showImagePopup()"><img class="widget-icon" src="img/photo-camera.svg" alt=""></img>Images</a>
             <a class="button button-clear widget-button" ng-click="addCaloriesWidget()"><img class="widget-icon" src="img/calories.svg" alt=""></img>Calories Counter</a>
+            <a class="button button-clear widget-button" ng-click="showPopup()"><img class="widget-icon" src="img/interface.svg" alt=""></img>Blank</a>
           </ion-slide>
         </ion-slide-box>
       </ion-view>
@@ -175,5 +178,12 @@
       </ion-view>
     </script>
     
+    <script type="text/ng-template" id="add-header-popup.html">
+      <label class="item item-input item-stacked-label">
+          <span class="input-label">Header</span>
+          <input type="text" ng-model="header.name"/>
+      </label>
+    </script>
+
   </body>
 </html>

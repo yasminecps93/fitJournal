@@ -112,28 +112,28 @@
 }
 .handle-e {
   cursor: e-resize;
-  width: 30px;
+  width: 20px;
   bottom: 0;
   right: 1px;
   top: 0;
 }
 .handle-s {
   cursor: s-resize;
-  height: 30px;
+  height: 20px;
   right: 0;
   bottom: 1px;
   left: 0;
 }
 .handle-n {
   cursor: n-resize;
-  height: 30px;
+  height: 20px;
   right: 0;
   top: 1px;
   left: 0;
 }
 .handle-w {
   cursor: w-resize;
-  width: 30px;
+  width: 20px;
   left: 1px;
   top: 0;
   bottom: 0;
