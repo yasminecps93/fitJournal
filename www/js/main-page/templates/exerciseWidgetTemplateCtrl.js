@@ -206,7 +206,9 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 					$scope.exeCal = {
 						value: $scope.exerciseLogArray[i].exeCal
 					};
+					
       			}
+      			
       		}
       	}
         $scope.data={}
@@ -217,7 +219,8 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
           buttons:[
           {
             text: 'Cancel', onTap:
-            function(e){ return true;}
+            function(e){ 
+            	return true;}
           },{
             text:'OK',
             type:'button-positive',
@@ -308,6 +311,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 						exeCal:response.rows.item(i).exeCal,
 					});
 				}
+				
 				saveLog();
 			}else
 			{
@@ -403,10 +407,9 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			}
 			console.log("getExerciseLog~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 			if($scope.choseRoutine ==true){
+				$scope.choseRoutine = false;
 				RoutineService.getAllEntries($scope.tempIDRoutine)
 				.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
-				$scope.choseRoutine = false;
-				
 			}
 		}
 

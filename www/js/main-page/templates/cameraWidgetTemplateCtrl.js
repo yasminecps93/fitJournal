@@ -12,7 +12,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    	$scope.isExist = false;
 	    	$scope.tempID = -1;
 	    	$scope.imageArray = [];
-
+        $scope.tempArray = [];
         $scope.widget={
           header:""
         }
@@ -52,11 +52,25 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 
     $scope.openModal = function(){   
         $scope.modal.show();
+        $scope.isSaved = false;
       //  checkDate();
     };
 
     $scope.closeModal = function() {
       $scope.modal.hide();
+      if($scope.isSaved == false){
+        if($scope.tempArray.length>0){
+          $scope.image.file = $scope.tempArray[0].imageFile;
+          $scope.image.caption = $scope.tempArray[0].caption;
+        }else{
+          $scope.image.file = "";
+          $scope.image.caption = "";
+        }
+        
+      }else{
+        currentDate();
+      }
+      
     };
 
     $scope.$on('$destroy', function(){
@@ -117,6 +131,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
         {
           console.log("in response");
           $scope.imageArray = [];
+          $scope.tempArray = [];
        	  //var lastID = response.rows.length-1;
           for(var i=0;i<response.rows.length;i++)
           {
@@ -136,7 +151,16 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
           		$scope.image.file = response.rows.item(j).image_file;        
           		$scope.image.caption = response.rows.item(j).caption;
           		$scope.isExist=true;
-          		break;
+          		
+              $scope.tempArray.push
+              ({
+                id:response.rows.item(j).id,
+                widgetHeader:response.rows.item(j).widget_header,
+                imageFile:response.rows.item(j).image_file,
+                caption:response.rows.item(j).caption
+              });
+              break;
+              
           	}
           }
           
@@ -185,6 +209,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 	    		.then(function(response){
 	    			alert("Saved");
 	    			fetchAllImage();
+            $scope.isSaved = true;
 	    			$scope.closeModal();
 	    		},function(error){
 	    			console.log("addNewEntry error");

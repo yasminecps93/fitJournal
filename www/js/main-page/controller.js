@@ -233,7 +233,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		{
 	   			for(var i=0; i<$scope.widgetList.length; i++)
 	   			{
-	   				if($scope.widgetList[i].title == "Exercise Log")
+	   				if($scope.widgetList[i].title == "Calories Counter")
 	   				{
 	   					$scope.isExist = true;
 	   					break;

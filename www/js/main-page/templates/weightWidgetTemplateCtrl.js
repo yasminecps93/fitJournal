@@ -47,6 +47,7 @@ weightWidgetModule.controller('WeightWidgetCtrl',['$scope','$state','$cordovaSQL
 
     $scope.closeModal = function() {
       $scope.modal.hide();
+      fetchWeight();
     };
 
     $scope.$on('$destroy', function(){

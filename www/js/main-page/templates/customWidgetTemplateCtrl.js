@@ -53,6 +53,7 @@ customWidgetModule.controller('CustomWidgetCtrl',['$scope','$state','$cordovaSQL
 
     $scope.closeModal = function() {
       $scope.modal.hide();
+      fetchAllEntry();
     };
 
     $scope.$on('$destroy', function(){

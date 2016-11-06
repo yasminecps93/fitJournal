@@ -15,7 +15,7 @@
     <ion-item ng-show="loadingRoutines">
      	<ion-spinner icon="spiral"></ion-spinner>
     </ion-item>
-    <ion-item ng-repeat="entry in entriesList track by $index">
+    <ion-item ng-repeat="entry in entriesList track by $index" ng-click="showUpdatePopup(entry.id)">
       <div class = "row">
          <div class = "col col-50">{{entry.exeName}}</div>
          <div class = "col">{{entry.exeSet}} x</div>
@@ -34,6 +34,29 @@
 </ion-view>
 
 <script type="text/ng-template" id="add-exercise-popup.html">
+  <label class="item item-input item-stacked-label">
+      <span class="input-label">Exercise name</span>
+      <input type="text" ng-model="exeName.name"/>
+  </label>
+  <label class="item item-input item-stacked-label p-item">
+      <span class="input-label">Unit</span>
+      <input type="Number" ng-model="exeNumber.number"/>
+  </label>
+    <select id="unitE" ng-model="exeUnit.name">
+      <option ng-repeat="option in units.option" value="{{option.name}}">{{option.name}}</option>
+    </select>
+     
+  <label class="item item-input item-stacked-label">
+      <span class="input-label">Sets</span>
+      <input type="Number" ng-model="exeSet.set"/>
+  </label>
+  <label class="item item-input item-stacked-label">
+      <span class="input-label">Calories burn</span>
+      <input type="Number" ng-model="exeCal.value"/>
+  </label>
+</script>
+
+<script type="text/ng-template" id="update-entry-popup.html">
   <label class="item item-input item-stacked-label">
       <span class="input-label">Exercise name</span>
       <input type="text" ng-model="exeName.name"/>

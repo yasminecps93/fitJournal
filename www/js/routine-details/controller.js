@@ -6,47 +6,6 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 		initData();
 		initMethods();
 
-  		$scope.showPopup = function(){
-  			$scope.exeUnit = {
-				name: 'reps'
-			};
-			$scope.exeName = {
-				name: ''
-			};
-			$scope.exeNumber = {
-				number: 0
-			};
-			$scope.exeSet = {
-				set: 0
-			};
-			$scope.exeCal = {
-				value: 0
-			};
-  			$scope.data={}
-  			var entrypopup = $ionicPopup.show({
-  				templateUrl:'add-exercise-popup.html',
-  				title: 'Enter new entry',
-  				scope: $scope,
-  				buttons:[
-  				{
-  					text: 'Cancel', onTap:
-  					function(e){ return true;}
-  				},{
-  					text:'Save',
-  					type:'button-positive',
-  					onTap:function(e){
-  						addNewEntry();
-  					}
-  				}
-  				]
-  			});
-  			$scope.closePopup = function(){
-	  			entrypopup.close();
-	  		}
-  		}
-
-  		
-
 		function initData(){
 			
 			$scope.units={
@@ -89,17 +48,112 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 			$scope.addNewEntry = addNewEntry;
 			$scope.toggleEdit = toggleEdit;
 			$scope.deleteEntry = deleteEntry;
-		}
-
-		function fetchEntries() {
-			$scope.loadingEntries = true;
-			RoutineService.getAllEntries($scope.routineId)
-			.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
+			$scope.editExercise = editExercise;
 		}
 
 		function toggleEdit() {
 			$scope.shouldShowDelete = !$scope.shouldShowDelete;
 			$scope.editButtonLabel = $scope.shouldShowDelete ? "Done" : "Edit";
+		}
+
+//---------------------------------------------------------------------------------------//
+//--------------------------------POPUP FUNCTIONS----------------------------------------//
+//---------------------------------------------------------------------------------------//
+  		$scope.showPopup = function(){
+  			$scope.exeUnit = {
+				name: 'reps'
+			};
+			$scope.exeName = {
+				name: ''
+			};
+			$scope.exeNumber = {
+				number: 0
+			};
+			$scope.exeSet = {
+				set: 0
+			};
+			$scope.exeCal = {
+				value: 0
+			};
+  			$scope.data={}
+  			var entrypopup = $ionicPopup.show({
+  				templateUrl:'add-exercise-popup.html',
+  				title: 'Enter new entry',
+  				scope: $scope,
+  				buttons:[
+  				{
+  					text: 'Cancel', onTap:
+  					function(e){ return true;}
+  				},{
+  					text:'Save',
+  					type:'button-positive',
+  					onTap:function(e){
+  						addNewEntry();
+  					}
+  				}
+  				]
+  			});
+  			$scope.closePopup = function(){
+	  			entrypopup.close();
+	  		}
+  		}
+
+  		$scope.showUpdatePopup = function(index){
+      	if(index>-1){
+      		for(var i=0; i<$scope.entriesList.length; i++){
+	      			if($scope.entriesList[i].id==index){
+	      				$scope.exeUnit = {
+							name: $scope.entriesList[i].exeUnit
+						};
+						$scope.exeName = {
+							name: $scope.entriesList[i].exeName
+						};
+						$scope.exeNumber = {
+							number: $scope.entriesList[i].exeNumber
+						};
+						$scope.exeSet = {
+							set: $scope.entriesList[i].exeSet
+						};
+						$scope.exeCal = {
+							value: $scope.entriesList[i].exeCal
+						};
+					
+      				}
+      			
+      			}
+	      	}
+	        $scope.data={}
+	        var updatepopup = $ionicPopup.show({
+	          templateUrl:'update-entry-popup.html',
+	          title: 'Edit exercise',
+	          scope: $scope,
+	          buttons:[
+	          {
+	            text: 'Cancel', onTap:
+	            function(e){ 
+	            	return true;}
+	          },{
+	            text:'OK',
+	            type:'button-positive',
+	            onTap:function(e){
+	              editExercise(index);
+	            }
+	          }
+	          ]
+	        });
+			
+			 $scope.closeEntryPopup = function(){
+			    updatepopup.close();
+			  }  
+	      }
+//---------------------------------------------------------------------------------------//
+//--------------------------------ENTRIES FUNCTIONS--------------------------------------//
+//---------------------------------------------------------------------------------------//
+
+		function fetchEntries() {
+			$scope.loadingEntries = true;
+			RoutineService.getAllEntries($scope.routineId)
+			.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
 		}
 
 		function addNewEntry()
@@ -170,5 +224,23 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 					console.log("Error in adding new entry");
 				});
 			}
+		}
+
+		function editExercise(index){
+			try{
+				console.log("editExercise----"+index);
+				if($scope.exeName.name!='' && $scope.exeNumber.number>0 && $scope.exeSet.set>0){
+					RoutineService.updateEntry($scope.exeName.name, $scope.exeNumber.number, $scope.exeUnit.name, $scope.exeSet.set, $scope.exeCal.value, index)
+					.then(function(response){
+						fetchEntries();
+					},function(error){
+						console.log("Error in update entry");
+					})				
+				}else{
+					alert('Empty inputs!');
+				}
+			}catch(e){
+				console.log("Error in editExercise controller "+e.message);
+			}	
 		}
 }]);

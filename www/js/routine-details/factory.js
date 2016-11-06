@@ -8,7 +8,8 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			initDB:initDB,
 			getAllEntries: getAllEntries,
 			addNewEntry: addNewEntry,
-			deleteEntry: deleteEntry
+			deleteEntry: deleteEntry,
+			updateEntry:updateEntry
 		}
 
 		function initDB() {
@@ -82,6 +83,27 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			});
 
 			return deferred.promise;
+		}
+
+		function updateEntry(exeName, exeNumber, exeUnit, exeSet, exeCal, id){
+			var deferred = $q.defer();
+			var query = "UPDATE exercise_entries SET exeName = ?, exeNumber = ?, exeUnit = ?, exeSet = ?, exeCal = ? WHERE id = ?";
+			try{
+				runQuery(query,[exeName, exeNumber, exeUnit, exeSet, exeCal, id],function(response){
+				//Success Callback
+			//	console.log("New weight has been added. "+today_weight+", "+ weight_unit);
+				console.log(response);
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log("Error in changing entry");
+					console.log(error);
+					deferred.reject(error);
+				});
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in updateEntry "+e.message);
+			}
 		}
 
 		function runQuery(query,dataArray,successCb,errorCb)
