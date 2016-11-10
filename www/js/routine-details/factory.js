@@ -54,13 +54,12 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			var query = "INSERT INTO exercise_entries (routine_id, created_at, exeName, exeNumber, exeUnit, exeSet, exeCal) VALUES (?,date('now','localtime'),?,?,?,?,?)";
 			runQuery(query,[routineId,exeName, exeNumber, exeUnit, exeSet, exeCal],function(response){
 				//Success Callback
-			//	console.log("entry added successfully - "+exeUnit);
+			
 				console.log(response);
 				deferred.resolve(response);
 			},function(error){
 				//Error Callback
-				console.log("error in entering")
-				console.log(error);
+				console.log("error in entering "+error);
 				deferred.reject(error);
 			});
 
@@ -72,13 +71,12 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			var query = "DELETE FROM exercise_entries WHERE id = ?";
 			runQuery(query,[id],function(response){
 				//Success Callback
-			//	console.log("deleteEntry Success");
+			
 				console.log(response);
 				deferred.resolve(response);
 			},function(error){
 				//Error Callback
-				console.log("deleteEntry error");
-				console.log(error);
+				console.log("deleteEntry error "+error);
 				deferred.reject(error);
 			});
 
@@ -91,13 +89,11 @@ routineDetailsModule.factory('RoutineService',['$cordovaSQLite','$ionicPlatform'
 			try{
 				runQuery(query,[exeName, exeNumber, exeUnit, exeSet, exeCal, id],function(response){
 				//Success Callback
-			//	console.log("New weight has been added. "+today_weight+", "+ weight_unit);
 				console.log(response);
 				deferred.resolve(response);
 				},function(error){
 					//Error Callback
-					console.log("Error in changing entry");
-					console.log(error);
+					console.log("Error in changing entry "+error);
 					deferred.reject(error);
 				});
 				return deferred.promise;

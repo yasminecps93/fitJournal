@@ -5,13 +5,17 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 		var db;
 		var lastEntryArray;
 		var exerciseLogArray;
+		var exerciseItemArray;
+		var specificEntryArray;
 
 		return{
 			initDB:initDB,
 			getLastEntry:getLastEntry,
 			getAllExercises:getAllExercises,
 			addNewExercises:addNewExercises,
-			deleteExercises:deleteExercises
+			deleteExercises:deleteExercises,
+			getFilteredEntriesForArray:getFilteredEntriesForArray,
+			getSpecificEntry:getSpecificEntry
 		}
 
 		function initDB(){
@@ -140,5 +144,53 @@ exerciseWidgetModule.factory('ExerciseWidgetService', ['$cordovaSQLite','$ionicP
 
 		  }.bind(this));
 		}
+
+//---------------------------------------------------------------------//
+//-----------------------------FOR CHART-------------------------------//
+//---------------------------------------------------------------------//
+		function getFilteredEntriesForArray(){
+
+			var deferred = $q.defer();
+			var query = "SELECT DISTINCT exercise_name, unit from exerciselog_list";
+			try{
+				runQuery(query,[],function(response){
+				//Success Callback
+				console.log(response);
+				exerciseItemArray = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in getFilteredEntriesForArray "+e.message);
+			}
+		}
+
+		function getSpecificEntry(exercise_name, unit){
+
+			var deferred = $q.defer();
+			var query = "SELECT * from bodypart_list WHERE exercise_name = ? && unit = ?";
+			try{
+				runQuery(query,[exercise_name, unit],function(response){
+				//Success Callback
+				console.log(response);
+				specificEntryArray = response.rows;
+				deferred.resolve(response);
+				},function(error){
+					//Error Callback
+					console.log(error);
+					deferred.reject(error);
+				});
+
+				return deferred.promise;
+			}catch(e){
+				console.log("Error in getFilteredEntriesForArray "+e.message);
+			}
+		}
+
 
 }]);

@@ -16,7 +16,7 @@
 	    	</ion-item>
 	    	<ion-item ui-sref="routineDetails({id:routine.id})" class="item-icon-right" ng-repeat="routine in routinesList track by $index">
 	    		{{routine.name}}
-	    		<ion-delete-button class="ion-minus-circled" ng-click="deleteRoutine($index,routine.id)"></ion-delete-button>
+	    		<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,routine.id)"></ion-delete-button>
 	    		<i class="icon ion-ios-arrow-right"></i>
 	    	</ion-item>
 	   	</ion-list>

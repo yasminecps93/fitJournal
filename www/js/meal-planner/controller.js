@@ -1,7 +1,7 @@
 var mealPlannerModule = angular.module('MealPlanner',['ngCordova','ionic','ionic-datepicker']);
 
-mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','MealsService','$ionicModal','CaloriesWidgetService','$rootScope',
-	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,MealsService, $ionicModal, CaloriesWidgetService,$rootScope){
+mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','MealsService','$ionicModal','CaloriesWidgetService','$rootScope','$ionicPopup',
+	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,MealsService, $ionicModal, CaloriesWidgetService,$rootScope,$ionicPopup){
 
 		initData();
 		initMethods();
@@ -23,21 +23,21 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.dinnerCal = 0;
 			$scope.snackCal = 0;
 			$scope.cDate = '';
-			$scope.loadingEntries = false;
+			$scope.loadingEntries = false; //hide loader
 
-			$scope.dateExist= false;
-			$scope.isAdded= false;
-			$scope.headerToEdit = '';
-			$scope.shouldShowDelete = false;
-			$scope.editButtonLabel = "Edit";
-			$scope.mealPlannerList=[];
+			$scope.dateExist= false; //date is not found in db
+			$scope.isAdded= false; // not new entry
+			$scope.headerToEdit = '';  //to change the header of modal based on meal type
+			$scope.shouldShowDelete = false; //hide delete buttons
+			$scope.editButtonLabel = "Edit"; //text for toggle
+			$scope.mealPlannerList=[]; 
 			MealsService.initDB();
 			fetchMeals();
 		}
 
 		function initMethods() {
 			$scope.addNewMealPlanner = addNewMealPlanner;
-			$scope.checkExistingMealPlanner = checkExistingMealPlanner;
+			$scope.checkExistingMealPlanner = checkExistingMealPlanner; //check if there is entries for chosen date
 			$scope.toggleEdit = toggleEdit;
 			$scope.deleteBreakfast = deleteBreakfast;
 			$scope.deleteLunch = deleteLunch;
@@ -45,27 +45,16 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.deleteSnack = deleteSnack;
 			$scope.fetchEntries = fetchEntries;
 			$scope.addNewEntry = addNewEntry;
-			$scope.setAsBreakfast = setAsBreakfast;
-			$scope.setAsLunch = setAsLunch;
-			$scope.setAsDinner = setAsDinner;
-			$scope.setAsSnack = setAsSnack;
-			$scope.addNewEntryByFiltered = addNewEntryByFiltered;
-			$scope.getLastEntry = getLastEntry;
-			$scope.addNewRowToCaloriesTable = addNewRowToCaloriesTable;
-			$scope.updateCalories = updateCalories;
-			$scope.currentDate = currentDate;
-		//	$scope.deleteAllFromTable = deleteAllFromTable;
+			$scope.setAsBreakfast = setAsBreakfast; //set modal header to breakfast
+			$scope.setAsLunch = setAsLunch; //set modal header to lunch
+			$scope.setAsDinner = setAsDinner; //set modal header to dinner
+			$scope.setAsSnack = setAsSnack;  //set modal header to snack
+			$scope.addNewEntryByFiltered = addNewEntryByFiltered; //function for recent used data
+			$scope.getLastEntry = getLastEntry; //get the last entry in the calories table
+			$scope.addNewRowToCaloriesTable = addNewRowToCaloriesTable; //add a new row to the calories table
+			$scope.updateCalories = updateCalories; //update the calories
+			$scope.currentDate = currentDate; //get current date
 
-		}
-
-		function deleteAllFromTable(){
-			MealsService.deleteAllFromTable().then(function(response){
-					//$scope.newRoutine.name = '';
-			//		alert("Table has been cleared");
-				//	fetchMeals();
-				},function(error){
-					console.log("Error in clearing table");
-				});
 		}
 
 		function toggleEdit() {
@@ -86,13 +75,13 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		      var dateToString = "";
 		      var oneDay = 24*60*60*1000;
 		      var newDate = new Date(val);
-		      displayDate = function(){
-		      	$scope.checkedCaloriesService = false;
+		      displayDate = function(){ //to display formated chosen date in html
+		      	$scope.checkedCaloriesService = false;  //haven't check date in the calories table
 		        var i = new Date(val).getMonth();
 		        var month = monthsList[i];
 		        dateToString = new Date(val).getDate()+ " "+ month + " " + new Date(val).getFullYear();
 		        $scope.newDate.dateName =dateToString;  
-		        checkExistingMealPlanner(); 
+		        checkExistingMealPlanner(); //now check the meal planner table for entries of this date
 		        currentDate();
 		        console.log(dateToString);
 		      }
@@ -101,23 +90,22 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 		    }
 	  	};
 	  	function currentDate(){
-	  		//console.log("Checking calories date");
-	  		$scope.itsToday = false;
+	  		
+	  		$scope.itsToday = false; //is the chosen date == todays date
 	  		var monthsList= ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	  		var i = new Date().getMonth();
 		    var month = monthsList[i];
 		    var numericMonth = new Date().getMonth() + 1;
 	  		$scope.cDate = new Date().getDate()+ " "+ month + " " + new Date().getFullYear();
 	  		 var date = new Date().getDate();
-	          if(date<10){
+	          if(date<10){ //this is to format the date to be the same as the date allocated by db
 	          	$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-0" + new Date().getDate();
 	          }else{
 	          	$scope.numericDate = new Date().getFullYear()+ "-"+ numericMonth + "-" + new Date().getDate(); 
 	          }
 	  		if ($scope.cDate == $scope.newDate.dateName){
-	  			$scope.itsToday = true;
-	  		//	console.log("$scope.itsToday "+$scope.itsToday);
-	  			getLastEntry();
+	  			$scope.itsToday = true; //if today's date == chosen date 
+	  			getLastEntry(); //get last entry of calories table
 	  		}
 	  	}
 
@@ -132,9 +120,9 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 
 					for(var i=0; i<$scope.mealPlannerList.length; i++){
 						if($scope.newDate.dateName==$scope.mealPlannerList[i].dateName){
-							$scope.dateExist=true;
-							$scope.isAdded=false;
-							$scope.date_id=$scope.mealPlannerList[i].id;
+							$scope.dateExist=true; //date already exists
+							$scope.isAdded=false; //not new entry
+							$scope.date_id=$scope.mealPlannerList[i].id; //get the id 
 							fetchEntries();
 							break;
 						}
@@ -199,6 +187,29 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.headerToEdit = 'Snack';
 		}
 
+		$scope.showConfirm = function(index,id,meal) {
+		   var confirmPopup = $ionicPopup.confirm({
+		     title: 'Alert',
+		     template: 'Are you sure you want to delete this item?'
+		   });
+
+		   confirmPopup.then(function(res) {
+		     if(res) {
+		       if (meal == 'Breakfast'){
+		       		deleteBreakfast(index,id);
+		       }else if (meal == 'Lunch'){
+		       		deleteLunch(index,id);
+		       }else if (meal == 'Dinner'){
+		       		deleteDinner(index,id);
+		       }else if (meal == 'Snack'){
+		       		deleteSnack(index,id);
+		       }
+		     } else {
+		       console.log('You are not sure');
+		     }
+		   });
+		 };
+
 //-----------------------------------------------------------------------------------------------//
 //---------------------------------MEALS FUNCTIONS-----------------------------------------------//
 //-----------------------------------------------------------------------------------------------//		
@@ -224,10 +235,10 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							dateName:response.rows.item(i).dateName
 						});
 					}
-					if($scope.isAdded==true){
-						$scope.date_id=$scope.mealPlannerList[lastId].id;
+					if($scope.isAdded==true){ // if entry is new
+						$scope.date_id=$scope.mealPlannerList[lastId].id; //get latest id
 						fetchEntries();
-						$scope.isAdded=false;
+						$scope.isAdded=false; //reset flag
 					}
 				}else
 				{
@@ -269,9 +280,9 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			
 		}
 		
-//---------------------------------------------------------------------------------
-//------------------ENTRY CONTROLLER-------------------------------------------
-//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------//
+//------------------ENTRY CONTROLLER-----------------------------------------------//
+//---------------------------------------------------------------------------------//
 
 
 		function fetchEntries() {
@@ -281,7 +292,6 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			$scope.dinnerCal=0;
 			$scope.snackCal=0;
 			try{
-		//		alert("$scope.date_id is "+$scope.date_id);
 				MealsService.getAllEntries($scope.date_id)
 				.then(fetchEntriesSuccessCB,fetchMealPlannerErrorCB);
 				MealsService.getAllEntriesForArray()
@@ -313,52 +323,52 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 							foodCal:response.rows.item(i).foodCal
 						});
 
-						if(response.rows.item(i).mealType=="Breakfast"){
-							$scope.breakfastList.push({
+						if(response.rows.item(i).mealType=="Breakfast"){ 
+							$scope.breakfastList.push({ //add to breakfast array
 							id:response.rows.item(i).id,
 							mealType:response.rows.item(i).mealType,
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
-							$scope.breakfastCal = $scope.breakfastCal + response.rows.item(i).foodCal;
-						}else if(response.rows.item(i).mealType=="Lunch"){
-							$scope.lunchList.push({
+							$scope.breakfastCal = $scope.breakfastCal + response.rows.item(i).foodCal; //calculate total calories for breakfast
+						}else if(response.rows.item(i).mealType=="Lunch"){ 
+							$scope.lunchList.push({  //add to lunch array
 							id:response.rows.item(i).id,
 							mealType:response.rows.item(i).mealType,
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
-							$scope.lunchCal = $scope.lunchCal + response.rows.item(i).foodCal;
+							$scope.lunchCal = $scope.lunchCal + response.rows.item(i).foodCal; //calculate total calories for lunch
 						}else if(response.rows.item(i).mealType=="Dinner"){
-							$scope.dinnerList.push({
+							$scope.dinnerList.push({  //add to dinner array
 							id:response.rows.item(i).id,
 							mealType:response.rows.item(i).mealType,
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
-							$scope.dinnerCal = $scope.dinnerCal + response.rows.item(i).foodCal;
+							$scope.dinnerCal = $scope.dinnerCal + response.rows.item(i).foodCal;  //calculate total calories for dinner
 						}else if(response.rows.item(i).mealType=="Snack"){
-							$scope.snackList.push({
+							$scope.snackList.push({ //add to snack array
 							id:response.rows.item(i).id,
 							mealType:response.rows.item(i).mealType,
 							foodName:response.rows.item(i).foodName,
 							foodCal:response.rows.item(i).foodCal
 							});
-							$scope.snackCal = $scope.snackCal + response.rows.item(i).foodCal;
+							$scope.snackCal = $scope.snackCal + response.rows.item(i).foodCal; //calculate total calories for snack
 						}
 					}
-					$scope.totalCal = $scope.breakfastCal + $scope.lunchCal + $scope.dinnerCal + $scope.snackCal;
-					$scope.dateExist = false;
+					$scope.totalCal = $scope.breakfastCal + $scope.lunchCal + $scope.dinnerCal + $scope.snackCal; //calculate total calories of the date
+					$scope.dateExist = false; //reset flag
 					if($scope.checkedCaloriesService == true){
 						if($scope.itsToday==true){
-							updateCalories();
+							updateCalories(); //if calories row for today exist, update the calories
 						}
 					}
 					
 				}else
 				{
 					console.log("No entries created till now.");
-					$scope.entriesList = [];
+					$scope.entriesList = [];  //reset everything
 					$scope.breakfastList=[];
 					$scope.lunchList=[];
 					$scope.dinnerList=[];
@@ -490,9 +500,9 @@ mealPlannerModule.controller('MealPlannerListCtrl',['$scope','$cordovaSQLite','$
 			
 		}
 
-//-----------------------------------------------------------------------------------
-//------------------------FILTER ARRAY-----------------------------------------------
-//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------//
+//------------------------FILTER ARRAY-----------------------------------------------//
+//-----------------------------------------------------------------------------------//
 		function fetchEntriesForArraySuccessCB(response){
 				
 			try{

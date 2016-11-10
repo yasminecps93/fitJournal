@@ -21,7 +21,6 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			//  	console.log("opened db ");
 			  }
 			  catch(e) { 
 			  	console.log("Error in opening db " + e.message);
@@ -29,10 +28,11 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			
 			  var query = "CREATE TABLE IF NOT EXISTS profiledata_list (id integer primary key autoincrement, current_date string, current_weight double, weight_unit string, goal_weight double, goal_date string, total_weight_loss double, weekly_weight_loss double)";
 			  var query_weight = "CREATE TABLE IF NOT EXISTS weight_list (id integer primary key autoincrement, created_at date, current_date string, current_weight double, weight_unit string)";
-			  try{
+			  
+			  try{ //query for profiledata_list table
 				  	runQuery(query,[],function(res) {
 				      console.log("table created ");
-				 //     console.log("table created ");
+				 
 				   }, function (err) {
 				      console.log(err);
 				      console.log("error creating table "+err);
@@ -42,10 +42,9 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 			  	console.log("Error creating table"+e.message);
 			  }
 
-			  try{
+			  try{ //query for weight_list table
 				  	runQuery(query_weight,[],function(res) {
 				      console.log("table created");
-				//      console.log("table created for query_weight");
 				   }, function (err) {
 				      console.log(err);
 				      console.log("error creating table for query_weight"+err);
@@ -201,42 +200,4 @@ profileDetailsModule.factory('ProfileService',['$cordovaSQLite','$ionicPlatform'
 
 	}]);
 
-		// function getProfileData(id) {
-		// 	var profiledata;
-		// 	try{
-		// 		if(ProfileDataList){
-		// 			for(var i=0;i<ProfileDataList.length;i++)
-		// 			{
-		// 				if(ProfileDataList.item(i).id == id)
-		// 					profiledata = ProfileDataList.item(i);
-		// 			}
-		// 		}
-		// 		return profiledata;
-		// 	}catch(e){
-		// 		console.log("Error in getProfileData "+e.message);
-		// 	}
-				
-		// }
-
-		// function deleteEntry() {
-		// 	try{
-		// 		var deferred = $q.defer();
-		// 		var query = "DELETE * FROM profiledata_list";
-		// 		runQuery(query,[],function(response){
-		// 			//Success Callback
-		// 	//		console.log("deleteEntry Success");
-		// 			console.log(response);
-		// 			deferred.resolve(response);
-		// 		},function(error){
-		// 			//Error Callback
-		// 			console.log("deleteEntry error");
-		// 			console.log(error);
-		// 			deferred.reject(error);
-		// 		});
-
-		// 		return deferred.promise;
-		// 	}catch(e){
-		// 		console.log("Error in deleteEntry "+e.message);
-		// 	}
-			
-		// }
+	

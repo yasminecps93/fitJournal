@@ -41,7 +41,7 @@
 							   <div class = "col col-90">{{entry.foodName}}</div>
 							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
 							</div>
-				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteBreakfast($index,entry.id)"></ion-delete-button>
+				    		<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,entry.id,'Breakfast')"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
@@ -62,7 +62,7 @@
 							   <div class = "col col-90">{{entry.foodName}}</div>
 							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
 							</div>
-				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteLunch($index,entry.id)"></ion-delete-button>
+				    		<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,entry.id,'Lunch')"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list >
@@ -83,7 +83,7 @@
 							   <div class = "col col-90">{{entry.foodName}}</div>
 							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
 							</div>
-				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteDinner($index,entry.id)"></ion-delete-button>
+				    		<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,entry.id,'Dinner')"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	   	<ion-list>
@@ -105,7 +105,7 @@
 							   <div class = "col col-10">{{entry.foodCal}} kcal</div>
 							</div>
 				    		<!-- {{entry.foodName}}, {{entry.foodCal}} -->
-				    		<ion-delete-button class="ion-minus-circled" ng-click="deleteSnack($index,entry.id)"></ion-delete-button>
+				    		<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,entry.id,'Snack')"></ion-delete-button>
 				    	</ion-item>
 	   	</ion-list>
 	</ion-content>

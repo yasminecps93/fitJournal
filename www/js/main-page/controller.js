@@ -11,9 +11,10 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  	var newYPosition = 0;
 	  	var isDelete = "";
 	  	$scope.stylePath = "";
-		$scope.showFooter = false;
-		$scope.editModeOn = false;
+		$scope.showFooter = false; //hide footer
+		$scope.editModeOn = false; //edit mode off
 		$scope.isExist = false; //to check if this widget already exist
+
 	    $scope.toggleFooter = function(){
 	      $scope.showFooter = !$scope.showFooter;
 	    };   
@@ -39,7 +40,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    }
 	    
 //-----------------------------------------------------------------------------//
-//--------------------------------THEME----------------------------------------//
+//-----------------------------WIDGET FUNCTIONS--------------------------------//
 //-----------------------------------------------------------------------------//
 		
 		
@@ -61,20 +62,20 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	    }
 
 	   	function addWeightWidget(){
-	   		if($scope.widgetList.length>0)
-	   		{
+	   		if($scope.widgetList.length>0)  //if widget list is not empty
+	   		{ 
 	   			for(var i=0; i<$scope.widgetList.length; i++)
 	   			{
-	   				if($scope.widgetList[i].title == "Weight"){
+	   				if($scope.widgetList[i].title == "Weight"){ //check if the widget already exist
 	   					$scope.isExist = true;
 	   					break;
 	   				}
 	   			}
 	   		}
-	    	calculateLastWidgetPosition();
+	    	calculateLastWidgetPosition(); //get last position of widgets
 	    	console.log(newYPosition);
 	    	try{	
-	    		if($scope.isExist == false)
+	    		if($scope.isExist == false) //if weight widget not exist then add new
 	    		{
 	    			MainService.addNewWidget("Weight",newYPosition,0, 2, 2, "<weight-widget></weight-widget>")
 					.then(function(response)
@@ -192,8 +193,8 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 
 	   	function addCameraWidget(){
 	   		$scope.isEmpty = false; //for empty input
-	   		if($scope.header.name != ""){
-	   			if($scope.widgetList.length>0)
+	   		if($scope.header.name != ""){ //if header input is not empty
+	   			if($scope.widgetList.length>0) //check if the name exists for image widgets
 		   		{	
 		   			for(var i=0; i<$scope.widgetList.length; i++)
 		   			{
@@ -211,7 +212,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		
 	   		calculateLastWidgetPosition();
 	      	try{
-	      		if($scope.isExist == false && $scope.isEmpty == false){
+	      		if($scope.isExist == false && $scope.isEmpty == false){ //if its not exist and header not empty then add new
 	      			MainService.addNewWidget($scope.header.name,newYPosition,0, 4, 4, "<camera-widget></camera-widget>")
 					.then(function(response){
 					 	fetchWidget();
@@ -264,7 +265,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		if($scope.header.name != ""){
 	   			if($scope.widgetList.length>0)
 		   		{	
-		   			for(var i=0; i<$scope.widgetList.length; i++)
+		   			for(var i=0; i<$scope.widgetList.length; i++) //check is header name exists for custom widget
 		   			{
 		   				if($scope.widgetList[i].title == $scope.header.name && $scope.widgetList[i].directives == "<custom-widget></custom-widget>")
 		   				{
@@ -279,7 +280,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	   		}
 	   		calculateLastWidgetPosition();
 	   		try{
-	   			if($scope.isExist == false && $scope.isEmpty == false){
+	   			if($scope.isExist == false && $scope.isEmpty == false){ //if not exist yet and header input not empty then add new
 	   				MainService.addNewWidget($scope.header.name,newYPosition,0, 2, 2, "<custom-widget></custom-widget>")
 					.then(function(response){
 						fetchWidget();
@@ -309,7 +310,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 		function addWidgetTemplate()
 		{
 			try{
-				MainService.deleteTable()
+				MainService.deleteTable()  //clear the widget table and readd the list from array
 				.then(function(response){
 					try{
 						for(var i=0; i<$scope.widgetList.length; i++){
@@ -342,7 +343,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 					MainService.deleteWidget(id)
 					.then(function(response){
 						fetchWidget();
-						$window.location.reload(true);
+						$window.location.reload(true); //reload application to clear cache
 						console.log("in delete success");
 					},function(error){
 						console.log("Error in delete widget");
@@ -442,8 +443,8 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 
 	    $scope.onHold = function(){
 	    	if($scope.editModeOn == false){
-	    		 $cordovaVibration.vibrate(300);
-		    	 alert("Edit mode on! You can now move and resize your widgets. Move the widget by dragging the header."); 
+	    		 $cordovaVibration.vibrate(300); //for vibration
+		    //	 alert("Edit mode on! You can now move and resize your widgets. Move the widget by dragging the header."); 
 		    	 angular.element(document.querySelectorAll(".gridster-item")).addClass("add-border-class");
 		    	 $scope.gridsterOpts = {
 		    	 	resizable: {
@@ -460,7 +461,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 
 	    $scope.onTap = function(){
 	    	if($scope.editModeOn == true){
-	    		alert("Edit mode off!");
+	    	//	alert("Edit mode off!");
 		    	angular.element(document.querySelectorAll(".gridster-item")).removeClass("add-border-class");
 		    	$scope.gridsterOpts = {
 		    	 	resizable: {
@@ -478,7 +479,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 //----------------------------------------------------------------------------------------//
 //----------------------------------POPUP-------------------------------------------------//
 //----------------------------------------------------------------------------------------//
-	$scope.showPopup = function(){
+	$scope.showPopup = function(){ //for custom widget header 
   			$scope.header = {
 				name: ''
 			};
@@ -506,7 +507,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  		}
   		}
 	   
-	   $scope.showImagePopup = function(){
+	   $scope.showImagePopup = function(){ //for image widget header
   			$scope.header = {
 				name: ''
 			};
@@ -534,9 +535,7 @@ mainPageModule.controller('MainCtrl',['$rootScope','$scope','$state','$cordovaSQ
 	  		}
   		}
 
-
-	}
-]);
+}]);
 
 //----------------------------------------------------------------------------------------//
 //----------------------------------DIRECTIVES--------------------------------------------//

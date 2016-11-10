@@ -23,7 +23,7 @@
          <div class = "col col-20">{{entry.exeCal}} kcal</div>
       </div>
     	<!-- <strong>{{entry.exeName}}</strong> - {{entry.exeNumber}}, {{entry.exeUnit}}, {{entry.exeSet}}, {{entry.exeCal}} -->
-    	<ion-delete-button class="ion-minus-circled" ng-click="deleteEntry($index,entry.id)"></ion-delete-button>
+    	<ion-delete-button class="ion-minus-circled" ng-click="showConfirm($index,entry.id)"></ion-delete-button>
     </ion-item>
    </ion-list>
    

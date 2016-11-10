@@ -7,14 +7,14 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 		initMethods();
 
 		function initData(){
-			$scope.newRoutine = {
+			$scope.newRoutine = { //ng-model
 				name: ''
 			};
-			$scope.loadingRoutines = false;
-			$scope.shouldShowDelete = false;
-			$scope.editButtonLabel = "Edit";
-			RoutinesService.initDB();
-			fetchRoutines();
+			$scope.loadingRoutines = false; //for loader icon
+			$scope.shouldShowDelete = false; //toggle for delete buttons
+			$scope.editButtonLabel = "Edit"; //text for the toggle
+			RoutinesService.initDB(); //start database and create table
+			fetchRoutines(); //get previous routines
 		}
 
 		function initMethods() {
@@ -23,24 +23,37 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 			$scope.deleteRoutine = deleteRoutine;
 		}
 
-		$scope.showPopup = function(){
+		function toggleEdit() {
+			$scope.shouldShowDelete = !$scope.shouldShowDelete;
+			$scope.editButtonLabel = $scope.shouldShowDelete ? "Done" : "Edit";
+		}
+
+
+//------------------------------------------------------------------------//
+//--------------------------------POPUP-----------------------------------//
+//------------------------------------------------------------------------//
+
+		$scope.showPopup = function()
+		{
 			console.log("opened popup");
   			$scope.data={}
-  			var entrypopup = $ionicPopup.show({
+  			var entrypopup = $ionicPopup.show
+  			({
   				templateUrl:'add-routine-popup.html',
   				title: 'Enter routine name',
   				scope: $scope,
-  				buttons:[
-  				{
-  					text: 'Cancel', onTap:
-  					function(e){ return true;}
-  				},{
-  					text:'Save',
-  					type:'button-positive',
-  					onTap:function(e){
-  						addNewRoutine();
-  					}
-  				}
+  				buttons:
+  				[
+	  				{
+	  					text: 'Cancel', onTap:
+	  					function(e){ return true;}
+	  				},{
+	  					text:'Save',
+	  					type:'button-positive',
+	  					onTap:function(e){
+	  						addNewRoutine();
+	  					}
+	  				}
   				]
   			});
   			$scope.closePopup = function(){
@@ -48,27 +61,69 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 	  		}
   		}
 
+  		 $scope.showConfirm = function(index,id) {
+			   var confirmPopup = $ionicPopup.confirm({
+			     title: 'Alert',
+			     template: 'Are you sure you want to delete this item?'
+			   });
+
+			   confirmPopup.then(function(res) {
+			     if(res) {
+			       deleteRoutine(index,id);
+			     } else {
+			       console.log('You are not sure');
+			     }
+			   });
+		};
+
+//------------------------------------------------------------------------//
+//-------------------------ROUTINE FUNCTIONS------------------------------//
+//------------------------------------------------------------------------//
 		function fetchRoutines() {
-			$scope.loadingRoutines = true;
+			$scope.loadingRoutines = true; //show loader
 			RoutinesService.getAllRoutines()
 			.then(fetchRoutineListSuccessCB,fetchRoutineListErrorCB);
 		}
 
-		function toggleEdit() {
-			$scope.shouldShowDelete = !$scope.shouldShowDelete;
-			$scope.editButtonLabel = $scope.shouldShowDelete ? "Done" : "Edit";
+		//if fetchRoutines() is success
+		function fetchRoutineListSuccessCB(response)
+		{
+			$scope.loadingRoutines = false; //hide loader
+			if(response && response.rows && response.rows.length > 0)
+			{
+				$scope.routinesList = [];
+				for(var i=0;i<response.rows.length;i++)
+				{
+					$scope.routinesList.push({ //add items from database response to array
+						id:response.rows.item(i).id,
+						name:response.rows.item(i).name
+					});
+				}
+			}else
+			{
+				console.log("No routines created till now.");
+				$scope.routinesList = []; //clear array
+			}
 		}
+
+		//if fetchRoutines() is error
+		function fetchRoutineListErrorCB(error)
+		{
+			$scope.loadingRoutines = false; //hide loader
+			console.log("Some error occurred in fetching Routines List");
+		}
+
 
 		function addNewRoutine()
 		{
-
 			if($scope.newRoutine.name != '' && $scope.newRoutine.name.length > 0){
 
 				RoutinesService.addNewRoutine($scope.newRoutine.name)
-				.then(function(response){
-					$scope.newRoutine.name = '';
+				.then(function(response)
+				{
+					$scope.newRoutine.name = ''; //clear input field
 					alert("Saved");
-					fetchRoutines();
+					fetchRoutines(); //fetch new data
 				},function(error){
 					console.log("Error in adding new routine");
 				});
@@ -78,40 +133,14 @@ routinesListModule.controller('RoutinesListCtrl',['$scope','$cordovaSQLite','$io
 			}
 		}
 
-		function fetchRoutineListSuccessCB(response)
-		{
-			$scope.loadingRoutines = false;
-			if(response && response.rows && response.rows.length > 0)
-			{
-				$scope.routinesList = [];
-				for(var i=0;i<response.rows.length;i++)
-				{
-					$scope.routinesList.push({
-						id:response.rows.item(i).id,
-						name:response.rows.item(i).name
-					});
-				}
-			}else
-			{
-				$scope.message = "No routines created till now.";
-				$scope.routinesList = [];
-			}
-		}
-
-		function fetchRoutineListErrorCB(error)
-		{
-			$scope.loadingRoutines = false;
-			$scope.message = "Some error occurred in fetching Routines List";
-		}
-
-		function deleteRoutine(index,id)
+		function deleteRoutine(index,id) //index in array, id of item in database
 		{
 			if(index > -1)
 			{
 				RoutinesService.deleteRoutine(id)
 				.then(function(response){
-					$scope.routinesList.splice(index,1);
-			//		console.log("Routine has been succesfully deleted.");
+					$scope.routinesList.splice(index,1); //remove the item with this index and 
+														 //	remove the empty row
 				},function(error){
 					console.log("Error in adding new routine");
 				});

@@ -152,7 +152,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
           		$scope.image.caption = response.rows.item(j).caption;
           		$scope.isExist=true;
           		
-              $scope.tempArray.push
+              $scope.tempArray.push //for roleback purposes
               ({
                 id:response.rows.item(j).id,
                 widgetHeader:response.rows.item(j).widget_header,
@@ -261,7 +261,7 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
 //---------------------------------------------------------------------------------//
 //---------------------------------CAMERA FUNCTIONS--------------------------------//
 //---------------------------------------------------------------------------------//
-	$scope.takePhoto = function () {
+	$scope.takePhoto = function () { //for camera
         var options = {
             quality: 100,
             destinationType: Camera.DestinationType.FILE_URI,
@@ -275,15 +275,14 @@ cameraWidgetModule.controller('CameraWidgetCtrl',['$scope','$state','$cordovaSQL
         };
    
 		$cordovaCamera.getPicture(options).then(function (imageURI) {
-            $scope.image.file = imageURI;
-        //   	alert("$scope.image.file----"+$scope.image.file);
+            $scope.image.file = imageURI; //imageURI is the filepath
             $scope.openModal();
         }, function (err) {
             console.log("Error in getPicture of takePhoto");
         });
     }
 
-    $scope.choosePhoto = function () {
+    $scope.choosePhoto = function () { //for gallery
             var options = {
                 quality: 100,
                 destinationType: Camera.DestinationType.FILE_URI,

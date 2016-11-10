@@ -3,7 +3,8 @@ var routinesListModule = angular.module('RoutinesList');
 routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform','$q',
 	function($cordovaSQLite,$ionicPlatform,$q){
 		var db;
-		var routinesList;
+		var routinesList; //the array used in the controller
+
 		return {
 			initDB:initDB,
 			getAllRoutines: getAllRoutines,
@@ -26,9 +27,9 @@ routinesListModule.factory('RoutinesService',['$cordovaSQLite','$ionicPlatform',
 			  var query = "CREATE TABLE IF NOT EXISTS routines_list (id integer primary key autoincrement, name string , no_of_entries integer)";
 			  runQuery(query,[],function(res) {
 			      console.log("table created ");
-			//      console.log("table created ");
+			
 			   }, function (err) {
-			      console.log(err);
+			      
 			      console.log("error creating table "+err);
 			   }); 
 			   

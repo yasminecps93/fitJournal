@@ -1,7 +1,7 @@
 var foodWidgetModule = angular.module('FoodWidget',['ngCordova','ionic']);
 
-foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','CaloriesWidgetService','$ionicModal','$window','$rootScope',
-	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, CaloriesWidgetService, $ionicModal, $window, $rootScope){
+foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite','$ionicPlatform','MealsService','CaloriesWidgetService','$ionicModal','$window','$rootScope','$ionicPopup',
+	function($scope,$state,$cordovaSQLite,$ionicPlatform, MealsService, CaloriesWidgetService, $ionicModal, $window, $rootScope, $ionicPopup){
     
 	    initData();
 	    initMethods();
@@ -203,6 +203,30 @@ foodWidgetModule.controller('FoodWidgetCtrl',['$scope','$state','$cordovaSQLite'
 		function setAsSnack(){
 			$scope.headerToEdit = 'Snack';
 		}
+
+		$scope.showConfirm = function(index,id,meal) {
+		   var confirmPopup = $ionicPopup.confirm({
+		     title: 'Alert',
+		     template: 'Are you sure you want to delete this item?'
+		   });
+
+		   confirmPopup.then(function(res) {
+		     if(res) {
+		       if (meal == 'Breakfast'){
+		       		deleteBreakfast(index,id);
+		       }else if (meal == 'Lunch'){
+		       		deleteLunch(index,id);
+		       }else if (meal == 'Dinner'){
+		       		deleteDinner(index,id);
+		       }else if (meal == 'Snack'){
+		       		deleteSnack(index,id);
+		       }
+		     } else {
+		       console.log('You are not sure');
+		     }
+		   });
+		 };
+
 //------------------------------------------------------------------//
 //----------------------MEALS FUNCTIONS-----------------------------//
 //------------------------------------------------------------------//

@@ -16,7 +16,7 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	    	
 	    	CaloriesWidgetService.initDB();
 	    	currentDate();
-	    	$rootScope.$on('updateCaloriesInWidget',function(){
+	    	$rootScope.$on('updateCaloriesInWidget',function(){  //if event is heard from other controllers
 	    		console.log("calling updateCalories");
 	    		getLastEntry();
 	    	});
@@ -31,7 +31,7 @@ caloriesWidgetModule.controller('CaloriesWidgetCtrl',['$scope','$state','$cordov
 	    function currentDate(){
           var month = new Date().getMonth() + 1;
           var date = new Date().getDate();
-          if(date<10){
+          if(date<10){ //to format date to be same as the db date type
           	$scope.cDate = new Date().getFullYear()+ "-"+ month + "-0" + new Date().getDate();
           }else{
           	$scope.cDate = new Date().getFullYear()+ "-"+ month + "-" + new Date().getDate(); 

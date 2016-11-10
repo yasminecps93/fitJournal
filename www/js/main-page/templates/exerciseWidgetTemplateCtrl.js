@@ -21,10 +21,14 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 				option: [
 				  {name: 'reps'},
 				  {name: 'kilometers'},
+				  {name: 'meters'},
 				  {name: 'miles'},
 				  {name: 'rounds'},
-				  {name: 'seconds'},
-				  {name: 'minutes'}
+				  {name: 'laps'},
+				  {name: 'feet'},
+				  {name: 'hours'},
+				  {name: 'minutes'},
+				  {name: 'seconds'}
 				]
 			};
 			$scope.exeUnit = {
@@ -236,7 +240,20 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		  }  
       }
           
+      $scope.showConfirm = function(index) {
+		   var confirmPopup = $ionicPopup.confirm({
+		     title: 'Alert',
+		     template: 'Are you sure you want to delete this item?'
+		   });
 
+		   confirmPopup.then(function(res) {
+		     if(res) {
+		       deleteExercise(index);
+		     } else {
+		       console.log('You are not sure');
+		     }
+		   });
+		 };
      
 
 //---------------------------------------------------------------------------------//
@@ -378,7 +395,8 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 		}
 
 		function fetchLogSuccessCB(response)
-		{	$scope.exerciseLogArray=[];
+		{	
+			$scope.exerciseLogArray=[];
 
 			if(response && response.rows && response.rows.length > 0)
 			{
@@ -404,6 +422,7 @@ exerciseWidgetModule.controller('ExerciseWidgetCtrl',['$scope','$state','$cordov
 			{
 				console.log("No entries created till now.");
 				$scope.totalCal=0;
+				$scope.exerciseLogArray=[];
 			}
 			console.log("getExerciseLog~~~ choseRoutine = "+$scope.choseRoutine+", openWidget = "+$scope.openWidget);
 			if($scope.choseRoutine ==true){

@@ -12,10 +12,15 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				option: [
 				  {name: 'reps'},
 				  {name: 'kilometers'},
+				  {name: 'meters'},
 				  {name: 'miles'},
 				  {name: 'rounds'},
-				  {name: 'seconds'},
-				  {name: 'minutes'}
+				  {name: 'laps'},
+				  {name: 'feet'},
+				  {name: 'hours'},
+				  {name: 'minutes'},
+				  {name: 'seconds'}
+				  
 				]
 			};
 			$scope.exeUnit = {
@@ -34,14 +39,13 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 				value: 0
 			};
 
-			$scope.loadingEntries = false;
-			$scope.shouldShowDelete = false;
-			$scope.editButtonLabel = "Edit";
-			$scope.routineId = $stateParams['id'];
-			$scope.routineInfo = Routines.getRoutine($scope.routineId);
-			RoutineService.initDB();
-			fetchEntries();
-			console.log($scope.editButtonLabel);
+			$scope.loadingEntries = false; //hide loader
+			$scope.shouldShowDelete = false; //hide delete button
+			$scope.editButtonLabel = "Edit"; //text for toggle
+			$scope.routineId = $stateParams['id'];  //get the id of the routine passed from the previous page
+			$scope.routineInfo = Routines.getRoutine($scope.routineId); //get the exercises with that routine id from database
+			RoutineService.initDB(); //start the db and create tables
+			fetchEntries(); 
 		}
 
 		function initMethods() {
@@ -59,6 +63,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 //---------------------------------------------------------------------------------------//
 //--------------------------------POPUP FUNCTIONS----------------------------------------//
 //---------------------------------------------------------------------------------------//
+  		//for add new entry popup
   		$scope.showPopup = function(){
   			$scope.exeUnit = {
 				name: 'reps'
@@ -98,6 +103,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 	  		}
   		}
 
+  		//for update entry popup
   		$scope.showUpdatePopup = function(index){
       	if(index>-1){
       		for(var i=0; i<$scope.entriesList.length; i++){
@@ -146,6 +152,21 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 			    updatepopup.close();
 			  }  
 	      }
+
+	      $scope.showConfirm = function(index,id) {
+			   var confirmPopup = $ionicPopup.confirm({
+			     title: 'Alert',
+			     template: 'Are you sure you want to delete this item?'
+			   });
+
+			   confirmPopup.then(function(res) {
+			     if(res) {
+			       deleteEntry(index,id);
+			     } else {
+			       console.log('You are not sure');
+			     }
+			   });
+			 };
 //---------------------------------------------------------------------------------------//
 //--------------------------------ENTRIES FUNCTIONS--------------------------------------//
 //---------------------------------------------------------------------------------------//
@@ -156,16 +177,47 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 			.then(fetchEntriesSuccessCB,fetchEntriesErrorCB);
 		}
 
+		function fetchEntriesSuccessCB(response)
+		{
+			$scope.loadingRoutines = false;
+			if(response && response.rows && response.rows.length > 0)
+			{
+				console.log(response.rows.length)
+				$scope.entriesList = [];
+
+				for(var i=0;i<response.rows.length;i++)
+				{
+					$scope.entriesList.push({ //add to array from response given by db
+						id:response.rows.item(i).id,
+						created_at:response.rows.item(i).created_at,
+						exeName:response.rows.item(i).exeName,
+						exeNumber:response.rows.item(i).exeNumber,
+						exeUnit:response.rows.item(i).exeUnit,
+						exeSet:response.rows.item(i).exeSet,
+						exeCal:response.rows.item(i).exeCal,
+					});
+				}
+			}else
+			{
+				console.log("No entries created till now.");
+				$scope.entriesList = []; //clear array
+			}
+		}
+
+		function fetchEntriesErrorCB(error)
+		{
+			$scope.loadingRoutines = false;
+			console.log("Some error occurred in fetching Routines List");
+		}
+
 		function addNewEntry()
 		{
-			//try testing now
 			try{
 				if($scope.exeName.name!= '' && $scope.exeNumber.number!= ''&& $scope.exeSet.set!= ''){
 				RoutineService.addNewEntry($scope.routineId,$scope.exeName.name,$scope.exeNumber.number,$scope.exeUnit.name,$scope.exeSet.set,$scope.exeCal.value)
 				.then(function(response){
-				//	$scope.newEntry.value = 0;
 					alert("Saved");
-					fetchEntries();
+					fetchEntries(); //refresh the array
 				},function(error){
 					console.log("Error in adding new entry");
 				});
@@ -179,47 +231,14 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 			
 		}
 
-		function fetchEntriesSuccessCB(response)
-		{
-			$scope.loadingRoutines = false;
-			if(response && response.rows && response.rows.length > 0)
-			{
-				console.log(response.rows.length)
-				$scope.entriesList = [];
-
-				for(var i=0;i<response.rows.length;i++)
-				{
-					$scope.entriesList.push({
-						id:response.rows.item(i).id,
-						created_at:response.rows.item(i).created_at,
-						exeName:response.rows.item(i).exeName,
-						exeNumber:response.rows.item(i).exeNumber,
-						exeUnit:response.rows.item(i).exeUnit,
-						exeSet:response.rows.item(i).exeSet,
-						exeCal:response.rows.item(i).exeCal,
-					});
-				}
-			}else
-			{
-				$scope.message = "No entries created till now.";
-				$scope.entriesList = [];
-			}
-		}
-
-		function fetchEntriesErrorCB(error)
-		{
-			$scope.loadingRoutines = false;
-			$scope.message = "Some error occurred in fetching Routines List";
-		}
-
-		function deleteEntry(index,id)
+		function deleteEntry(index,id) //index of item in array and its id in the database
 		{
 			if(index > -1)
 			{
 				RoutineService.deleteEntry(id)
 				.then(function(response){
 					$scope.entriesList.splice(index,1);
-				//	console.log("Entry has been succesfully deleted.");
+				
 				},function(error){
 					console.log("Error in adding new entry");
 				});
@@ -228,7 +247,7 @@ routineDetailsModule.controller('RoutineDetailsCtrl',['$scope','$stateParams','$
 
 		function editExercise(index){
 			try{
-				console.log("editExercise----"+index);
+				
 				if($scope.exeName.name!='' && $scope.exeNumber.number>0 && $scope.exeSet.set>0){
 					RoutineService.updateEntry($scope.exeName.name, $scope.exeNumber.number, $scope.exeUnit.name, $scope.exeSet.set, $scope.exeCal.value, index)
 					.then(function(response){

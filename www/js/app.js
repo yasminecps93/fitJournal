@@ -47,6 +47,7 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
   $urlRouterProvider.otherwise('/main');
 })
 
+//configuration for the datepickers used in the application
 .config(function (ionicDatePickerProvider) {
     var datePickerObj = {
     inputDate: new Date(),
@@ -65,67 +66,80 @@ angular.module('myApp', ['ionic', 'ngCordova', 'ionic-datepicker', 'ProfileDetai
     ionicDatePickerProvider.configDatePicker(datePickerObj);
   })
 
-
+//controller for footer slider
 .controller('SlideboxCtrl', function($scope, $ionicSlideBoxDelegate){
   $scope.slideChanged=function(index){
     $scope.slideIndex = index;
   };
 })
 
+//controller for theme settings
 .controller('settingCtrl', ['$scope','MainService','$window',
   function($scope,MainService,$window){
     
     initData();
     $scope.stylePath = "css/beige.css";
 
-    function initData(){
-      MainService.initDB();
+    function initData()
+    {
+      MainService.initDB(); //open the database and create the table
       getTheme();
     }
     
-
-    function getTheme(){
+//get previous theme from database
+    function getTheme()
+    {
       try{
-        MainService.getChosenTheme()
-        .then(function(response){
-          try{
-            if(response && response.rows && response.rows.length > 0)
+          MainService.getChosenTheme()
+          .then(function(response){
+            try
             {
-              $scope.stylePath = response.rows.item(0).theme;
-              console.log($scope.stylePath);
-            }else
+              if(response && response.rows && response.rows.length > 0)
+              {
+                $scope.stylePath = response.rows.item(0).theme;
+                console.log($scope.stylePath);
+              }else
+              {
+                console.log("No themes created till now."); 
+                $scope.stylePath = "css/beige.css"; //set beige theme as default
+              }
+            }catch(e)
             {
-              console.log("No themes created till now."); 
-              $scope.stylePath = "css/beige.css";
+              console.log("Error in getTheme controller "+e.message);
             }
-          }catch(e){
-            console.log("Error in getTheme controller "+e.message);
-          }
-        },function(error){
-          console.log("Error in getting theme");
-        });
-      }catch(e){
-        alert("Error in getTheme controller "+e.message);
-      }
+          },function(error)
+          {
+            console.log("Error in getting theme");
+          });
+        }catch(e)
+        {
+          alert("Error in getTheme controller "+e.message);
+        }
       
     }
 
-    $scope.addTheme = function(style){
+//add the theme to the database
+    $scope.addTheme = function(style)
+    {
       try{
-        console.log(style);
+            console.log(style);
             MainService.addTheme(style)
-            .then(function(response){
-              getTheme();
-              window.location.reload(true);
-            },function(error){
+            .then(function(response)
+            {
+              getTheme(); //retrieve the themes again
+              window.location.reload(true); //reload the application to show the new color
+            },function(error)
+            {
               alert("Error in add theme");
-                });
-            }catch(e){
+            });
+          }catch(e)
+          {
               alert("Error in addTheme "+e.message);
-            }
-      }
-  }])
+          }
+    }
+}])
 
+//controller for side menu pop-over
 .controller('SideMenuCtrl', function($scope, $ionicPopover){
    $ionicPopover.fromTemplateUrl('side-menu.html', {
         scope: $scope,

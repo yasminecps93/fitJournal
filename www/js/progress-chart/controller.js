@@ -1,25 +1,25 @@
 var progressChartModule = angular.module('ProgressChart',['ngCordova','ionic','chart.js']);
 
-progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','WeightWidgetService','MeasurementsWidgetService',
-	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,WeightWidgetService,MeasurementsWidgetService){
+progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$ionicPlatform','ionicDatePicker','WeightWidgetService','MeasurementsWidgetService','ExerciseWidgetService',
+	function($scope,$cordovaSQLite,$ionicPlatform,ionicDatePicker,WeightWidgetService,MeasurementsWidgetService,ExerciseWidgetService){
 	
 	initData();
 	initMethods();
 	var ctx1 = document.getElementById('weightChart').getContext('2d');
 	var ctx2 = document.getElementById('measurementChart').getContext('2d');
-	
+
 
 	function initData(){
-		$scope.cDateWeight=[];
-		$scope.weight=[];
-		$scope.measurementItemArray=[];
-		$scope.cDateMeasurement=[];
-		$scope.measurement = [];
-
+		$scope.cDateWeight=[]; //put dates for labels
+		$scope.weight=[]; //put weight for plotting graph
+		$scope.measurementItemArray=[]; //put distinct items from measurements table 
+		$scope.cDateMeasurement=[]; //put dates for labels
+		$scope.measurement = []; //put measurements for plotting graph
 		
 		$scope.measurement ={
-			name:''
+			name:'Measurements'
 		}
+
 		WeightWidgetService.initDB();
 		MeasurementsWidgetService.initDB();
 		fetchWeight();
@@ -57,13 +57,14 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 						);
 						
 					}
-					var weightChart = new Chart(ctx1, {
+					var weightChart = new Chart(ctx1, 
+					{
 					  type: 'line',
 					  data: {
-					    labels:$scope.cDateWeight,
+					    labels:$scope.cDateWeight, //array
 					    datasets: [{
 					      label: 'weight',
-					      data: $scope.weight,
+					      data: $scope.weight, //array
 					      backgroundColor: "rgba(153,255,51,0.6)"
 					    }]
 					  }
@@ -116,7 +117,8 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 					$scope.measurementItemArray=[];
 					alert("There are no items at the moment, please add values to the Measurements Widget to draw the graph.");
 				}
-			},function(error){
+			},function(error)
+			{
 				console.log("Error in getting response");
 			});
 		}catch(e)
@@ -148,7 +150,8 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 						);
 
 					}
-					var measurementChart = new Chart(ctx2, {
+					var measurementChart = new Chart(ctx2, 
+					{
 					  type: 'line',
 					  data: {
 					    labels:$scope.cDateMeasurement,
@@ -174,6 +177,5 @@ progressChartModule.controller('ProgressChartCtrl',['$scope','$cordovaSQLite','$
 		}
 		
 	}
-	
 	
 }]);

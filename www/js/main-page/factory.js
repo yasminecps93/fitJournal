@@ -20,16 +20,16 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 		  
 			  try{
 			  	db = $cordovaSQLite.openDB({name:"myapp.db", location:1});
-			//  	alert("opened db ");
 			  }
 			  catch(e) { 
 			  	alert("Error in opening db");
 			  }
 			
-			  var query = "CREATE TABLE IF NOT EXISTS widget_list_try1 (id integer primary key autoincrement, title string, row integer, col integer, sizeX integer, sizeY integer, directives string)";
+			  var query = "CREATE TABLE IF NOT EXISTS widget_list (id integer primary key autoincrement, title string, row integer, col integer, sizeX integer, sizeY integer, directives string)";
 			  var theme_query = "CREATE TABLE IF NOT EXISTS theme_list (id integer primary key autoincrement, theme string)";
+			  
 			  try{
-			  	runQuery(query,[],function(res) {
+			  	runQuery(query,[],function(res) { //run query for widget_list
 			      console.log("table created ");
 			//      alert("table created for widget");
 			   }, function (err) {
@@ -41,7 +41,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 			  }
 
 			  try{
-			  	runQuery(theme_query,[],function(res) {
+			  	runQuery(theme_query,[],function(res) { //run query for theme_list
 			      console.log("table created ");
 			//      alert("table created for widget");
 			   }, function (err) {
@@ -56,6 +56,9 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 		  }.bind(this));
 		}
 
+//----------------------------------------------------------------------------------------//
+//--------------------------------------THEMES--------------------------------------------//
+//----------------------------------------------------------------------------------------//
 		function getChosenTheme(){
 			var deferred = $q.defer();
 			var query = "SELECT * from theme_list WHERE id=(SELECT MAX(id) from theme_list)";
@@ -98,9 +101,12 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 			}
 		}
 
+//----------------------------------------------------------------------------------------//
+//-------------------------------------WIDGETS--------------------------------------------//
+//----------------------------------------------------------------------------------------//
 		function getAllWidget(){
 			var deferred = $q.defer();
-			var query = "SELECT * from widget_list_try1";
+			var query = "SELECT * from widget_list";
 			try{
 				runQuery(query,[],function(response){
 				//Success Callback
@@ -122,7 +128,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 
 		function addNewWidget(title,row,col,sizeX, sizeY, directives){
 			var deferred = $q.defer();
-			var query = "INSERT INTO widget_list_try1 (title, row, col, sizeX, sizeY, directives) VALUES (?,?,?,?,?,?)";
+			var query = "INSERT INTO widget_list (title, row, col, sizeX, sizeY, directives) VALUES (?,?,?,?,?,?)";
 			try{
 				runQuery(query,[title,row,col,sizeX,sizeY,directives],function(response){
 				//Success Callback
@@ -144,7 +150,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 		function deleteWidget(id){
 			var deferred = $q.defer();
 			try{
-				var query = "DELETE FROM widget_list_try1 WHERE id = ?";
+				var query = "DELETE FROM widget_list WHERE id = ?";
 				runQuery(query,[id],function(response){
 					//Success Callback
 					console.log(response);
@@ -165,7 +171,7 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 		function deleteTable(){
 			var deferred = $q.defer();
 			try{
-				var query = "DELETE from widget_list_try1";
+				var query = "DELETE from widget_list";
 				runQuery(query,[],function(response){
 					//Success Callback
 				//	console.log("Table dropped");
@@ -185,10 +191,10 @@ mainPageModule.factory('MainService', ['$cordovaSQLite','$ionicPlatform','$q',
 			
 		}
 
-		function alterTable(){
+		function alterTable(){ //clear id sequence and start over
 			var deferred = $q.defer();
 			try{
-				var query = "DELETE from sqlite_sequence where name='widget_list_try1'";
+				var query = "DELETE from sqlite_sequence where name='widget_list'";
 				runQuery(query,[],function(response){
 					//Success Callback
 				//	console.log("Table dropped");
